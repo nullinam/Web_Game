@@ -1,77 +1,181 @@
-const SIZE = 5;
-const SOURCE = { row: 2, col: 0 };
-const TARGET = { row: 2, col: SIZE - 1 };
 const DIRECTIONS = ["N", "E", "S", "W"];
 const DELTA = { N: [-1, 0], E: [0, 1], S: [1, 0], W: [0, -1] };
 const OPPOSITE = { N: "S", E: "W", S: "N", W: "E" };
-const BEST_KEY = "playground.circuit-break.best.v1";
-const SHAPES = ["NE", "ES", "SW", "WN", "NS", "EW"];
-
-const route = [
-  [2, 0], [2, 1], [1, 1], [1, 2], [2, 2], [2, 3], [3, 3], [3, 4], [2, 4],
+const SHAPE_LIBRARY = [
+  ["N", "E"], ["E", "S"], ["S", "W"], ["W", "N"], // elbows
+  ["N", "S"], ["E", "W"], // straight pipes
+  ["N", "E", "W"], ["N", "E", "S"], ["E", "S", "W"], ["N", "S", "W"], // T pipes
+  ["N", "E", "S", "W"], // cross pipe
 ];
+const SIZE_KEY = "playground.circuit-break.size.v1";
+const BASE_OBSTACLES = { 5: 2, 6: 4, 7: 7, 8: 11 };
+const TERMINAL_COUNTS = { 5: [1, 1], 6: [1, 2], 7: [2, 1], 8: [2, 2] };
 
 function rotatePorts(ports, turns) {
   return ports.map((port) => DIRECTIONS[(DIRECTIONS.indexOf(port) + turns) % 4]);
 }
 
-function makeBoard() {
-  const path = new Map();
-  route.forEach(([row, col], index) => {
-    const ports = [];
-    if (index === 0) ports.push("W");
-    else {
-      const [prevRow, prevCol] = route[index - 1];
-      ports.push(Object.keys(DELTA).find((key) => row + DELTA[key][0] === prevRow && col + DELTA[key][1] === prevCol));
-    }
-    if (index === route.length - 1) ports.push("E");
-    else {
-      const [nextRow, nextCol] = route[index + 1];
-      ports.push(Object.keys(DELTA).find((key) => row + DELTA[key][0] === nextRow && col + DELTA[key][1] === nextCol));
-    }
-    path.set(`${row}-${col}`, ports);
-  });
-
-  let board;
-  do {
-    board = Array.from({ length: SIZE * SIZE }, (_, index) => {
-      const row = Math.floor(index / SIZE);
-      const col = index % SIZE;
-      const solution = path.get(`${row}-${col}`) || SHAPES[Math.floor(Math.random() * SHAPES.length)].split("");
-      const turns = Math.floor(Math.random() * 4);
-      const symmetricStraight = solution.length === 2 && DIRECTIONS.indexOf(solution[0]) % 2 === DIRECTIONS.indexOf(solution[1]) % 2;
-      return { row, col, ports: solution, turns: symmetricStraight ? turns % 2 * 2 : turns };
-    });
-  } while (findPowered(board).has(TARGET.row * SIZE + TARGET.col) && activePorts(board[TARGET.row * SIZE + TARGET.col]).includes("E"));
-  return board;
+function shuffled(values) {
+  const result = [...values];
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(Math.random() * (index + 1));
+    [result[index], result[swap]] = [result[swap], result[index]];
+  }
+  return result;
 }
 
-function activePorts(tile) { return rotatePorts(tile.ports, tile.turns); }
+function terminalRows(size, count, side) {
+  if (count === 1) return [Math.floor(size / 2)];
+  if (side === "source") return [1, size - 2];
+  return [Math.floor(size / 3), Math.ceil((size * 2) / 3)];
+}
 
-function findPowered(board) {
-  const startIndex = SOURCE.row * SIZE + SOURCE.col;
+function cellKey(row, col, size) { return row * size + col; }
+
+function neighborIndex(index, direction, size) {
+  const row = Math.floor(index / size) + DELTA[direction][0];
+  const col = index % size + DELTA[direction][1];
+  if (row < 0 || row >= size || col < 0 || col >= size) return -1;
+  return cellKey(row, col, size);
+}
+
+function isWalkableConnected(size, obstacles) {
+  const start = Array.from({ length: size * size }, (_, index) => index).find((index) => !obstacles.has(index));
+  const seen = new Set([start]);
+  const queue = [start];
+  while (queue.length) {
+    const current = queue.shift();
+    for (const direction of DIRECTIONS) {
+      const next = neighborIndex(current, direction, size);
+      if (next >= 0 && !obstacles.has(next) && !seen.has(next)) { seen.add(next); queue.push(next); }
+    }
+  }
+  return seen.size === size * size - obstacles.size;
+}
+
+function makeMazeTree(size, obstacles) {
+  const start = Math.floor(Math.random() * size * size);
+  if (obstacles.has(start)) return makeMazeTree(size, obstacles);
+  const seen = new Set([start]);
+  const tree = new Map(Array.from({ length: size * size }, (_, index) => [index, []]));
+  const stack = [start];
+  while (stack.length) {
+    const current = stack[stack.length - 1];
+    const options = shuffled(DIRECTIONS.map((direction) => ({ direction, index: neighborIndex(current, direction, size) }))
+      .filter(({ index }) => index >= 0 && !obstacles.has(index) && !seen.has(index)));
+    if (!options.length) { stack.pop(); continue; }
+    const { direction, index: next } = options[0];
+    seen.add(next);
+    tree.get(current).push({ index: next, direction });
+    tree.get(next).push({ index: current, direction: OPPOSITE[direction] });
+    stack.push(next);
+  }
+  return tree;
+}
+
+function getTreePath(tree, start, target) {
+  const parent = new Map([[start, null]]);
+  const queue = [start];
+  while (queue.length && !parent.has(target)) {
+    const current = queue.shift();
+    for (const edge of tree.get(current)) {
+      if (!parent.has(edge.index)) { parent.set(edge.index, { index: current, direction: edge.direction }); queue.push(edge.index); }
+    }
+  }
+  if (!parent.has(target)) return [];
+  const path = [];
+  let current = target;
+  while (current !== start) {
+    const step = parent.get(current);
+    path.push({ from: step.index, to: current, direction: step.direction });
+    current = step.index;
+  }
+  return path.reverse();
+}
+
+function activePorts(tile) { return tile ? rotatePorts(tile.ports, tile.turns) : []; }
+
+export function getPoweredPipes(board, size, sources) {
   const reached = new Set();
   const queue = [];
-  if (activePorts(board[startIndex]).includes("W")) {
-    reached.add(startIndex);
-    queue.push(startIndex);
+  for (const source of sources) {
+    const sourceIndex = cellKey(source.row, source.col, size);
+    if (activePorts(board[sourceIndex]).includes(source.side)) {
+      reached.add(sourceIndex);
+      queue.push(sourceIndex);
+    }
   }
   while (queue.length) {
     const current = queue.shift();
-    const tile = board[current];
-    for (const direction of activePorts(tile)) {
-      const [dr, dc] = DELTA[direction];
-      const row = tile.row + dr;
-      const col = tile.col + dc;
-      if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) continue;
-      const nextIndex = row * SIZE + col;
-      if (!reached.has(nextIndex) && activePorts(board[nextIndex]).includes(OPPOSITE[direction])) {
-        reached.add(nextIndex);
-        queue.push(nextIndex);
+    for (const direction of activePorts(board[current])) {
+      const next = neighborIndex(current, direction, size);
+      if (next >= 0 && board[next] && !reached.has(next) && activePorts(board[next]).includes(OPPOSITE[direction])) {
+        reached.add(next);
+        queue.push(next);
       }
     }
   }
   return reached;
+}
+
+export function createCircuitLevel(size, level) {
+  if (![5, 6, 7, 8].includes(size) || !Number.isInteger(level) || level < 1) throw new RangeError("Choose a board from 5×5 to 8×8 and a level of 1 or higher.");
+  const [sourceCount, outputCount] = TERMINAL_COUNTS[size];
+  const sources = terminalRows(size, sourceCount, "source").map((row) => ({ row, col: 0, side: "W", kind: "power" }));
+  const outputs = terminalRows(size, outputCount, "output").map((row) => ({ row, col: size - 1, side: "E", kind: "output" }));
+  const terminalCells = new Set([...sources, ...outputs].map(({ row, col }) => cellKey(row, col, size)));
+  const obstacleCount = Math.min(BASE_OBSTACLES[size] + Math.min(level - 1, 3), Math.floor(size * size * 0.24));
+  let board;
+  let obstacles;
+
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    const candidates = shuffled(Array.from({ length: size * size }, (_, index) => index).filter((index) => !terminalCells.has(index)));
+    obstacles = new Set(candidates.slice(0, obstacleCount));
+    if (!isWalkableConnected(size, obstacles)) continue;
+
+    const tree = makeMazeTree(size, obstacles);
+    const network = new Map();
+    const addPort = (index, direction) => {
+      if (!network.has(index)) network.set(index, new Set());
+      network.get(index).add(direction);
+    };
+    const terminals = [...sources, ...outputs];
+    const root = cellKey(terminals[0].row, terminals[0].col, size);
+    for (const terminal of terminals) {
+      const terminalIndex = cellKey(terminal.row, terminal.col, size);
+      for (const edge of getTreePath(tree, root, terminalIndex)) {
+        addPort(edge.from, edge.direction);
+        addPort(edge.to, OPPOSITE[edge.direction]);
+      }
+      addPort(terminalIndex, terminal.side);
+    }
+
+    board = Array.from({ length: size * size }, (_, index) => {
+      if (obstacles.has(index)) return null;
+      const solution = network.has(index)
+        ? [...network.get(index)]
+        : SHAPE_LIBRARY[Math.floor(Math.random() * SHAPE_LIBRARY.length)];
+      const turns = Math.floor(Math.random() * 4);
+      return { ports: solution, turns, isNetwork: network.has(index) };
+    });
+
+    // Start every puzzle dark: source tiles must face away from the power terminals.
+    if (sources.some((source) => activePorts(board[cellKey(source.row, source.col, size)]).includes(source.side))) continue;
+    if (outputs.every((output) => getPoweredPipes(board, size, sources).has(cellKey(output.row, output.col, size)))) continue;
+    break;
+  }
+
+  if (!board || sources.some((source) => activePorts(board[cellKey(source.row, source.col, size)]).includes(source.side))) {
+    return createCircuitLevel(size, level);
+  }
+  const pipeCount = board.filter(Boolean).length;
+  return {
+    size, level, board, sources, outputs, obstacles,
+    obstacleCount,
+    maxMoves: pipeCount * 3,
+    timeLimit: 180 + (size - 5) * 60,
+    routeTileCount: board.filter((tile) => tile?.isNetwork).length,
+  };
 }
 
 function formatTime(seconds) {
@@ -84,20 +188,25 @@ function pipeSvg(ports) {
   return `<svg viewBox="0 0 100 100" aria-hidden="true"><g>${paths}<circle cx="50" cy="50" r="7" /></g></svg>`;
 }
 
+function bestKey(size) { return `playground.circuit-break.best.${size}.v1`; }
+
 export function mountCircuitBreak(root, { onComplete }) {
-  let board = makeBoard();
+  const savedSize = Number(localStorage.getItem(SIZE_KEY));
+  let size = [5, 6, 7, 8].includes(savedSize) ? savedSize : 8;
+  let levelNumber = 1;
+  let level;
   let moves = 0;
-  let elapsed = 0;
+  let timeLeft = level.timeLimit;
   let finished = false;
   let timerId;
-  const best = Number(localStorage.getItem(BEST_KEY)) || null;
 
   root.innerHTML = `<div class="circuit-game">
-    <div class="circuit-game-top"><span class="eyebrow"><i class="status-dot"></i> LIVE PUZZLE</span><button class="circuit-new" data-circuit="new">New board ↻</button></div>
-    <div class="circuit-title-row"><div><h2>Circuit Break</h2><p>Rotate the pipes to power the receiver.</p></div><div class="circuit-best">BEST <strong>${best === null ? "—" : `${best} pts`}</strong></div></div>
-    <div class="circuit-hud"><div><span>MOVES</span><strong data-moves>0</strong></div><div><span>TIME</span><strong data-time>00:00</strong></div><div class="circuit-flow" data-flow><i></i> Find the path</div></div>
-    <div class="circuit-board-wrap"><div class="circuit-terminal source-terminal"><span>POWER</span><i>ϟ</i></div><div class="circuit-board" role="grid" aria-label="Circuit puzzle board">${board.map((tile, index) => `<button class="circuit-tile" role="gridcell" data-tile="${index}" aria-label="Pipe at row ${tile.row + 1}, column ${tile.col + 1}. Press to rotate clockwise.">${pipeSvg(activePorts(tile))}</button>`).join("")}</div><div class="circuit-terminal target-terminal"><span>CORE</span><i>◉</i></div></div>
-    <div class="circuit-instructions"><span><kbd>CLICK</kbd> rotate pipe</span><span><kbd>R</kbd> new board</span><span class="circuit-local-note">Score saves on this device</span></div>
+    <div class="circuit-game-top"><div class="eyebrow"><i class="status-dot"></i> CIRCUIT CHALLENGE</div><label class="circuit-size-label">BOARD <select data-size aria-label="Choose circuit board size">${[5, 6, 7, 8].map((value) => `<option value="${value}" ${value === size ? "selected" : ""}>${value} × ${value}</option>`).join("")}</select></label></div>
+    <div class="circuit-title-row"><div><h2>Circuit Break <span data-level>LEVEL 01</span></h2><p>Power every core. Keep the grid alive.</p></div><div class="circuit-best">BEST <strong data-best>—</strong></div></div>
+    <div class="circuit-objectives" data-objectives></div>
+    <div class="circuit-hud"><div><span>MOVES LEFT</span><strong data-moves></strong></div><div><span>TIME LEFT</span><strong data-time></strong></div><div class="circuit-flow" data-flow><i></i> Grid offline</div></div>
+    <div class="circuit-board-wrap"><div class="circuit-board" role="grid" aria-label="Circuit puzzle board"></div></div>
+    <div class="circuit-rules"><span><kbd>CLICK</kbd> rotate clockwise</span><span><kbd>R</kbd> restart level</span><span class="circuit-local-note">Score saves on this device</span></div>
     <div class="circuit-result" data-result hidden></div>
   </div>`;
 
@@ -105,70 +214,130 @@ export function mountCircuitBreak(root, { onComplete }) {
   const movesElement = root.querySelector("[data-moves]");
   const timeElement = root.querySelector("[data-time]");
   const flowElement = root.querySelector("[data-flow]");
+  const objectivesElement = root.querySelector("[data-objectives]");
   const resultElement = root.querySelector("[data-result]");
+  const bestElement = root.querySelector("[data-best]");
+  const levelElement = root.querySelector("[data-level]");
+  const timerValue = (seconds) => formatTime(Math.max(0, seconds));
 
-  function updatePower() {
-    const powered = findPowered(board);
-    boardElement.querySelectorAll("[data-tile]").forEach((button) => {
-      button.classList.toggle("powered", powered.has(Number(button.dataset.tile)));
-    });
-    const won = powered.has(TARGET.row * SIZE + TARGET.col) && activePorts(board[TARGET.row * SIZE + TARGET.col]).includes("E");
-    flowElement.classList.toggle("connected", won);
-    flowElement.innerHTML = won ? "<i>✓</i> Power restored" : `<i></i> ${powered.size ? `${powered.size} pipe${powered.size === 1 ? "" : "s"} powered` : "Find the path"}`;
-    if (won && !finished) finish();
+  function renderObjectives() {
+    const sources = level.sources.map((source, index) => `<span class="objective source-objective" data-source="${index}"><i>ϟ</i> POWER ${index + 1}</span>`).join("");
+    const outputs = level.outputs.map((output, index) => `<span class="objective output-objective" data-output="${index}"><i>◉</i> CORE ${index + 1}</span>`).join("");
+    objectivesElement.innerHTML = `<div class="objective-terminals">${sources}${outputs}</div><span class="obstacle-count">⬚ ${level.obstacleCount} obstacles</span>`;
   }
 
   function renderBoard() {
-    boardElement.innerHTML = board.map((tile, index) => `<button class="circuit-tile" role="gridcell" data-tile="${index}" aria-label="Pipe at row ${tile.row + 1}, column ${tile.col + 1}. Press to rotate clockwise.">${pipeSvg(activePorts(tile))}</button>`).join("");
-    movesElement.textContent = String(moves);
+    boardElement.style.setProperty("--board-size", level.size);
+    boardElement.innerHTML = level.board.map((tile, index) => {
+      if (!tile) return `<div class="circuit-obstacle" role="gridcell" aria-label="Blocked tile"><span>×</span></div>`;
+      const source = level.sources.find((terminal) => cellKey(terminal.row, terminal.col, size) === index);
+      const outputIndex = level.outputs.findIndex((terminal) => cellKey(terminal.row, terminal.col, size) === index);
+      const terminalClass = source ? " source-tile" : outputIndex >= 0 ? " output-tile" : "";
+      const marker = source ? `<span class="terminal-marker source-marker">ϟ</span>` : outputIndex >= 0 ? `<span class="terminal-marker output-marker">${outputIndex + 1}</span>` : "";
+      return `<button class="circuit-tile${terminalClass}" role="gridcell" data-tile="${index}" aria-label="${source ? "Power source" : outputIndex >= 0 ? `Core ${outputIndex + 1}` : "Pipe"}; click to rotate clockwise">${marker}${pipeSvg(activePorts(tile))}</button>`;
+    }).join("");
+    movesElement.textContent = `${level.maxMoves - moves} / ${level.maxMoves}`;
+    timeElement.textContent = timerValue(timeLeft);
+    levelElement.textContent = `LEVEL ${String(levelNumber).padStart(2, "0")}`;
+    bestElement.textContent = `${Number(localStorage.getItem(bestKey(size))) || 0} pts`;
+    renderObjectives();
     updatePower();
   }
 
-  function finish() {
+  function finish(won, reason = "") {
+    if (finished) return;
     finished = true;
     clearInterval(timerId);
-    const points = Math.max(25, 140 - moves * 4 - elapsed);
-    const previousBest = Number(localStorage.getItem(BEST_KEY)) || 0;
-    const nextBest = Math.max(previousBest, points);
-    localStorage.setItem(BEST_KEY, String(nextBest));
-    root.querySelector(".circuit-best strong").textContent = `${nextBest} pts`;
+    const timeBonus = Math.max(0, Math.floor(timeLeft / 3));
+    const moveBonus = Math.max(0, Math.floor((level.maxMoves - moves) / 2));
+    const points = won ? 100 + (size - 5) * 60 + levelNumber * 15 + timeBonus + moveBonus : 0;
+    if (won) {
+      const key = bestKey(size);
+      const previous = Number(localStorage.getItem(key)) || 0;
+      localStorage.setItem(key, String(Math.max(previous, points)));
+      bestElement.textContent = `${Math.max(previous, points)} pts`;
+      resultElement.innerHTML = `<div><span>ALL CORES ONLINE</span><strong>+${points} points</strong><small>${moves} / ${level.maxMoves} moves used · ${timerValue(timeLeft)} left · ${level.routeTileCount} connected pipes</small></div><button class="circuit-play-again" data-circuit="next">Next level ↗</button>`;
+      onComplete(points);
+    } else {
+      resultElement.innerHTML = `<div><span>GRID SHUTDOWN</span><strong>${reason}</strong><small>Level ${String(levelNumber).padStart(2, "0")} · ${moves} moves used</small></div><button class="circuit-play-again" data-circuit="retry">Retry level ↻</button>`;
+    }
     resultElement.hidden = false;
-    resultElement.innerHTML = `<div><span>GRID RESTORED</span><strong>+${points} points</strong><small>${moves} moves · ${formatTime(elapsed)}${points === nextBest && points > previousBest ? " · New best" : ""}</small></div><button class="circuit-play-again" data-circuit="new">Play again ↗</button>`;
-    onComplete(points);
+    flowElement.classList.toggle("failed", !won);
+    flowElement.innerHTML = won ? "<i>✓</i> All cores powered" : "<i>×</i> Grid offline";
   }
 
-  function reset() {
-    board = makeBoard();
+  function updatePower() {
+    const powered = getPoweredPipes(level.board, size, level.sources);
+    boardElement.querySelectorAll("[data-tile]").forEach((button) => {
+      button.classList.toggle("powered", powered.has(Number(button.dataset.tile)));
+    });
+    level.sources.forEach((source, index) => {
+      const tileIndex = cellKey(source.row, source.col, size);
+      objectivesElement.querySelector(`[data-source="${index}"]`)?.classList.toggle("online", powered.has(tileIndex));
+    });
+    level.outputs.forEach((output, index) => {
+      const tileIndex = cellKey(output.row, output.col, size);
+      objectivesElement.querySelector(`[data-output="${index}"]`)?.classList.toggle("online", powered.has(tileIndex) && activePorts(level.board[tileIndex]).includes(output.side));
+    });
+    const poweredOutputs = level.outputs.filter((output) => {
+      const index = cellKey(output.row, output.col, size);
+      return powered.has(index) && activePorts(level.board[index]).includes(output.side);
+    }).length;
+    const won = poweredOutputs === level.outputs.length;
+    flowElement.classList.toggle("connected", won);
+    flowElement.innerHTML = won ? "<i>✓</i> All cores online" : `<i></i> ${powered.size ? `${powered.size} pipes powered` : "Grid offline"} · ${poweredOutputs}/${level.outputs.length} cores`;
+    if (won) finish(true);
+  }
+
+  function stopTimer() { clearInterval(timerId); }
+
+  function startLevel(nextLevel = levelNumber) {
+    stopTimer();
+    levelNumber = nextLevel;
+    level = createCircuitLevel(size, levelNumber);
     moves = 0;
-    elapsed = 0;
+    timeLeft = level.timeLimit;
     finished = false;
     resultElement.hidden = true;
-    timeElement.textContent = "00:00";
+    flowElement.classList.remove("failed", "connected");
     renderBoard();
+    timerId = window.setInterval(() => {
+      if (finished) return;
+      timeLeft -= 1;
+      timeElement.textContent = timerValue(timeLeft);
+      if (timeLeft <= 0) finish(false, "Time expired");
+    }, 1000);
   }
 
   boardElement.addEventListener("click", (event) => {
     const button = event.target.closest("[data-tile]");
     if (!button || finished) return;
-    board[Number(button.dataset.tile)].turns = (board[Number(button.dataset.tile)].turns + 1) % 4;
+    const index = Number(button.dataset.tile);
+    level.board[index].turns = (level.board[index].turns + 1) % 4;
     moves += 1;
     renderBoard();
+    if (!finished && moves >= level.maxMoves) finish(false, "Move limit reached");
   });
 
-  root.addEventListener("click", (event) => { if (event.target.closest('[data-circuit="new"]')) reset(); });
+  root.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-circuit]")?.dataset.circuit;
+    if (action === "next") startLevel(levelNumber + 1);
+    if (action === "retry") startLevel(levelNumber);
+  });
+  root.querySelector("[data-size]").addEventListener("change", (event) => {
+    size = Number(event.target.value);
+    localStorage.setItem(SIZE_KEY, String(size));
+    startLevel(1);
+  });
+
   const onKey = (event) => {
-    if (event.key.toLowerCase() === "r" && root.isConnected && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) reset();
+    if (event.key.toLowerCase() === "r" && root.isConnected && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) startLevel(levelNumber);
   };
   document.addEventListener("keydown", onKey);
-  timerId = window.setInterval(() => {
-    if (finished || !root.isConnected) return;
-    elapsed += 1;
-    timeElement.textContent = formatTime(elapsed);
-  }, 1000);
-  updatePower();
+  startLevel(1);
 
   return () => {
-    clearInterval(timerId);
+    stopTimer();
     document.removeEventListener("keydown", onKey);
   };
 }

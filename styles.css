@@ -47,3 +47,31 @@
 .circuit-result>div small{font-size:8px;color:#939a91}
 .circuit-play-again{border-color:#384337;background:#1e281e;color:#c7ff69;white-space:nowrap}
 @media(max-width:480px){.game-dialog{padding:18px 13px}.circuit-board-wrap{padding:0 18px}.circuit-board{gap:3px;padding:5px}.circuit-tile{border-radius:4px}.circuit-terminal{width:18px;height:38px}.circuit-instructions{gap:6px;font-size:7px}.circuit-instructions kbd{font-size:6px;margin-right:1px}.circuit-flow{font-size:8px}.circuit-hud{gap:14px}}
+.game-dialog:has(.circuit-game){width:min(640px,calc(100vw - 30px));padding:23px}
+.circuit-game-top{margin-right:28px;align-items:center}
+.circuit-size-label{display:flex;align-items:center;gap:7px;color:#858d99;font-size:7px;font-weight:700;letter-spacing:.8px}
+.circuit-size-label select{appearance:none;border:1px solid #3a424e;border-radius:4px;background:#1a2029;color:#e3e8ef;padding:6px 20px 6px 8px;font:600 9px var(--display);background-image:linear-gradient(45deg,transparent 50%,#8e9bab 50%),linear-gradient(135deg,#8e9bab 50%,transparent 50%);background-position:calc(100% - 9px) 10px,calc(100% - 6px) 10px;background-size:3px 3px,3px 3px;background-repeat:no-repeat}
+.circuit-title-row h2 span{font:600 8px var(--font);letter-spacing:.8px;color:#9eb9d4;border:1px solid #354250;border-radius:4px;padding:4px 6px;vertical-align:middle;margin-left:5px}
+.circuit-objectives{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:14px 0 0}
+.objective-terminals{display:flex;flex-wrap:wrap;gap:5px}
+.objective{display:inline-flex;align-items:center;gap:5px;border:1px solid #323b45;border-radius:4px;background:#181e26;padding:5px 7px;color:#8b96a4;font-size:7px;letter-spacing:.6px;transition:.2s}
+.objective i{font-style:normal;font-size:10px;color:#8798a8}
+.source-objective.online{color:#d3ff9a;border-color:#536d3e;background:#202a1c}
+.source-objective.online i{color:#c7ff69}
+.output-objective.online{color:#c9eaff;border-color:#3f6684;background:#192631}
+.output-objective.online i{color:#8fc7ff}
+.obstacle-count{white-space:nowrap;color:#7f8792;font-size:7px}
+.circuit-board{grid-template-columns:repeat(var(--board-size),minmax(0,1fr));gap:5px}
+.circuit-obstacle{display:grid;place-items:center;border:1px solid #382e31;border-radius:5px;background:repeating-linear-gradient(135deg,#241c20,#241c20 5px,#1c171a 5px,#1c171a 10px);color:#a37078;font:500 16px var(--display);box-shadow:inset 0 0 12px #0005}
+.circuit-tile.source-tile{border-color:#556841;background:linear-gradient(145deg,#27311f,#1b241b)}
+.circuit-tile.output-tile{border-color:#3d607d;background:linear-gradient(145deg,#202d39,#18212a)}
+.terminal-marker{position:absolute;z-index:1;display:grid;place-items:center;width:15px;height:15px;border-radius:50%;font:700 8px var(--display);pointer-events:none}
+.source-marker{left:2px;top:2px;color:#17200f;background:#c7ff69}
+.output-marker{right:2px;top:2px;color:#102030;background:#8fc7ff}
+.circuit-tile{position:relative}
+.circuit-flow.failed{color:#f09aa1}
+.circuit-flow.failed i{width:auto;height:auto;background:none;color:#f09aa1}
+.circuit-rules{display:flex;align-items:center;gap:13px;margin:13px 0 0;color:#858c97;font-size:8px}
+.circuit-rules kbd{font:600 7px var(--font);padding:3px 4px;color:#c0c7d1;border:1px solid #343a44;border-radius:3px;margin-right:3px}
+.circuit-rules .circuit-local-note{margin-left:auto;color:#606976}
+@media(max-width:600px){.game-dialog:has(.circuit-game){padding:17px 12px}.circuit-board-wrap{padding:0 19px}.circuit-board{gap:3px;padding:5px}.circuit-tile{border-radius:3px}.circuit-terminal{width:18px;height:38px}.terminal-marker{width:11px;height:11px;font-size:6px}.circuit-rules{gap:6px;font-size:7px}.circuit-rules kbd{font-size:6px;margin-right:1px}.circuit-hud{gap:12px}}
