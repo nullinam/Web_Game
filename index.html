@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="description" content="Playground — a home for quick browser games, friendly competition, and multiplayer rooms." />
+    <title>Playground — game hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="Playground home"><span class="brand-mark"><span></span><span></span><span></span><span></span></span><span>playground<span class="brand-period">.</span></span></a>
+        <div class="sidebar-label">MENU</div>
+        <nav class="primary-nav">
+          <a class="nav-link active" href="#home" data-view="home"><span class="nav-icon">⌂</span>Home</a>
+          <a class="nav-link" href="#games" data-view="games"><span class="nav-icon">▦</span>All games<span class="nav-count">05</span></a>
+          <a class="nav-link" href="#rooms" data-view="rooms"><span class="nav-icon">◉</span>Multiplayer<span class="nav-ping"></span></a>
+          <a class="nav-link" href="#leaderboard" data-view="leaderboard"><span class="nav-icon">♧</span>Leaderboard</a>
+        </nav>
+        <div class="sidebar-label collection-label">YOUR SPACE</div>
+        <button class="nav-link nav-button" data-action="profile"><span class="nav-icon">◎</span>My profile</button>
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-event"><div class="event-glow"></div><span class="eyebrow">THIS WEEK</span><h3>Make your<br />next best run.</h3><p>Every round earns points. Every point moves you up.</p><button class="text-button" data-view-link="leaderboard">See rankings <span>↗</span></button></div>
+        <div class="sidebar-footer"><span class="status-dot"></span> Playground preview <span class="version">v0.1</span></div>
+      </aside>
+
+      <main class="main-content" id="home">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Playground</span><span class="crumb-sep">/</span><strong id="current-section">Home</strong></div>
+          <div class="topbar-actions"><div class="online-pill"><span class="status-dot"></span><span>Hub is ready</span></div><button class="icon-button" aria-label="Notifications" data-action="notifications">♧<i></i></button><button class="profile-chip" data-action="profile"><span class="avatar avatar-small">P</span><span class="profile-chip-name">Player</span><span class="chevron">⌄</span></button></div>
+        </header>
+
+        <div class="page-wrap">
+          <section class="welcome-row"><div><div class="eyebrow"><span class="eyebrow-line"></span> YOUR NEXT ROUND STARTS HERE</div><h1>Good games.<br /><span>Better company.</span></h1><p class="welcome-copy">Pick a game, chase a new high score, or bring your friends into the room.</p><div class="welcome-actions"><button class="button button-primary" data-view-link="games">Explore games <span>↗</span></button><button class="button button-quiet" data-view-link="rooms"><span class="play-icon">▶</span> Find a room</button></div></div>
+            <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="hero-sun"></div><div class="hero-cube cube-back"></div><div class="hero-cube cube-front"></div><div class="hero-spark spark-one">✳</div><div class="hero-spark spark-two">✦</div><div class="hero-caption"><span>READY WHEN YOU ARE</span><b>01 <i>/</i> 05</b></div></div>
+          </section>
+
+          <section class="stats-strip" aria-label="Your game stats"><div class="stat"><span class="stat-icon points-icon">✳</span><div><span class="stat-label">TOTAL POINTS</span><strong id="points-total">1,240</strong></div><span class="stat-delta">+120 this week</span></div><div class="stat"><span class="stat-icon rank-icon">↗</span><div><span class="stat-label">YOUR RANK</span><strong>#08 <small>of 128</small></strong></div><span class="rank-bar"><i></i></span></div><div class="stat"><span class="stat-icon streak-icon">ϟ</span><div><span class="stat-label">BEST STREAK</span><strong>06 <small>days</small></strong></div><span class="streak-tag">ON A ROLL</span></div><button class="stat stat-profile" data-action="profile"><span class="avatar">P</span><div><span class="stat-label">PLAYING AS</span><strong id="player-name">Player One</strong></div><span class="edit-mark">↗</span></button></section>
+
+          <section class="content-section games-section" id="games">
+            <div class="section-heading"><div><div class="eyebrow">FIND YOUR GAME</div><h2>Pick your next <span>favorite.</span></h2></div><div class="section-controls"><label class="search-box"><span>⌕</span><input id="game-search" type="search" placeholder="Search games" aria-label="Search games" /><kbd>/</kbd></label><button class="link-button" data-view-link="games">All games <span>↗</span></button></div></div>
+            <div class="filter-row" role="group" aria-label="Filter games"><button class="filter-chip active" data-filter="all">All <span>05</span></button><button class="filter-chip" data-filter="arcade">Arcade</button><button class="filter-chip" data-filter="competitive">Competitive</button><button class="filter-chip" data-filter="puzzle">Puzzle</button><button class="filter-chip" data-filter="multiplayer">Multiplayer</button></div>
+            <div class="game-grid" id="game-grid" aria-live="polite"></div>
+          </section>
+
+          <section class="lower-grid">
+            <section class="panel leaderboard-panel" id="leaderboard"><div class="panel-heading"><div><div class="eyebrow">THE REGULARS</div><h2>Top players</h2></div><button class="icon-link" data-view-link="leaderboard" aria-label="View leaderboard">↗</button></div><div class="leaderboard-tabs"><button class="leader-tab active">Weekly</button><button class="leader-tab">All time</button><span class="lob-pill">LOB <span>•</span> WEEK 42</span></div><div id="leaderboard-list" class="leaderboard-list"></div><button class="panel-footer" data-view-link="leaderboard">View full leaderboard <span>→</span></button></section>
+            <section class="panel rooms-panel" id="rooms"><div class="panel-heading"><div><div class="eyebrow">PLAY TOGETHER</div><h2>Rooms in play<span class="live-badge"><i></i> LIVE PREVIEW</span></h2></div><button class="icon-link" data-view-link="rooms" aria-label="View multiplayer rooms">↗</button></div><p class="panel-subtitle">Five rooms, five players max. Find a seat and jump in.</p><div id="rooms-list" class="rooms-list"></div><button class="panel-footer" data-view-link="rooms">Browse multiplayer games <span>→</span></button></section>
+          </section>
+          <footer class="page-footer"><span>Made for one more round.</span><span>Scores and rooms are local preview data until services are connected.</span></footer>
+        </div>
+      </main>
+    </div>
+    <dialog id="game-dialog" class="game-dialog"><button class="dialog-close" data-action="close-dialog" aria-label="Close">×</button><div id="dialog-content"></div></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
