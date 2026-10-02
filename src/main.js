@@ -11,6 +11,8 @@ const toast = $("#toast");
 let activeFilter = "all";
 let searchTerm = "";
 let toastTimer;
+let activeGameCleanup = null;
+let gameLaunch = 0;
 
 function renderGames() {
   const matches = games.filter((game) => (activeFilter === "all" || game.category === activeFilter) && `${game.title} ${categoryLabels[game.category]}`.toLowerCase().includes(searchTerm));
@@ -55,11 +57,42 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("visible"), 3000);
 }
 
-function showGame(game) {
+async function showGame(game) {
+  const launch = ++gameLaunch;
+  activeGameCleanup?.();
+  activeGameCleanup = null;
+  if (game.id === "circuit-break") {
+    $("#dialog-content").innerHTML = `<div class="circuit-loading">Preparing a fresh circuit…</div>`;
+    dialog.showModal();
+    try {
+      const { mountCircuitBreak } = await import("./games/circuit-break/game.js");
+      if (!dialog.open || launch !== gameLaunch) return;
+      activeGameCleanup = mountCircuitBreak($("#dialog-content"), {
+        onComplete(points) {
+          const profile = getProfile();
+          updateProfile({ points: profile.points + points });
+          renderProfile();
+          renderLeaderboard();
+          showToast(`Circuit Break complete: +${points} preview points.`);
+        },
+      });
+    } catch (error) {
+      if (launch !== gameLaunch || !dialog.open) return;
+      $("#dialog-content").innerHTML = `<p class="circuit-loading">Couldn’t load Circuit Break. Close this panel and try again.</p>`;
+      console.error("Circuit Break failed to load", error);
+    }
+    return;
+  }
   const multiplayer = game.category === "multiplayer";
   $("#dialog-content").innerHTML = `<div class="dialog-art art-${game.art}" style="--accent:${game.accent}"><span>${game.icon}</span></div><div class="eyebrow">${categoryLabels[game.category]} · ${game.format}</div><h2>${game.title}</h2><p>${game.description}</p><div class="dialog-note"><span class="status-dot"></span>${multiplayer ? "Room preview is running locally. Live multiplayer arrives when the room server is connected." : "Game slot is ready. This game is next in the build queue."}</div><button class="button button-primary dialog-action" ${multiplayer ? `data-join="${game.id}"` : "data-action=\"demo-score\""}>${multiplayer ? "Join an open room" : "Add 25 demo points"}<span>↗</span></button>`;
   dialog.showModal();
 }
+
+dialog.addEventListener("close", () => {
+  gameLaunch += 1;
+  activeGameCleanup?.();
+  activeGameCleanup = null;
+});
 
 function navigate(view) {
   const targets = { home: "home", games: "games", rooms: "rooms", leaderboard: "leaderboard" };

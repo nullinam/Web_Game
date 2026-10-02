@@ -20,7 +20,7 @@ Then open `http://localhost:8000`.
 - Small modules for the game catalog, local profile storage, leaderboard preview, and room allocation.
 - A GitHub Actions workflow that publishes the static repository to GitHub Pages on pushes to `main`.
 
-The game cards are playable UI stubs, not completed games. Profile, points, leaderboard entries, and room occupancy are preview data stored or managed in the current browser. They do not represent online players, verified scores, or shared accounts. Replace the local adapters in `src/services/` with Supabase and an authenticated WebSocket service before treating scores or rooms as live. Never put a Supabase service-role key or other secret in the browser app.
+**Circuit Break** is the first playable game. Rotate its pipe tiles to connect the power source on the left to the core on the right. Fewer moves and a faster solve earn more preview points. Your profile total and best Circuit Break score stay in local browser storage. The other four cards are still game and room previews, not playable games. Leaderboard entries and room occupancy do not represent online players or shared accounts. Replace the local adapters in `src/services/` with Supabase and an authenticated WebSocket service before treating scores or rooms as live. Never put a Supabase service-role key or other secret in the browser app.
 
 ## GitHub Pages setup
 
