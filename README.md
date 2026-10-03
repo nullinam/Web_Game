@@ -1,27 +1,39 @@
 # Playground
 
-A modern, dark browser game hub built with plain HTML, CSS, and JavaScript modules. It is designed to deploy as a static site on GitHub Pages, with no build step, package install, API key, or server credential required.
+A static, single-player game hub designed for GitHub Pages. Built with vanilla JavaScript, Vite, and Three.js. No account, database, server, leaderboard, search, or score storage is used.
 
 ## Run locally
 
-Serve the repository root with any static file server. For example:
-
 ```sh
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then open `http://localhost:8000`.
+Create the GitHub Pages build with `npm run build`; Vite writes the site to `dist/`. The workflow in `.github/workflows/pages.yml` publishes that folder. `vite.config.js` uses `/Web_Game/` as the repository Pages base.
 
-## What is included
+## The collection
 
-- A responsive home screen with navigation, profile, points, leaderboard, and game filters.
-- Five reusable game cards: one arcade game, one competitive game, one puzzle, and two multiplayer games.
-- A shared preview pool of five rooms. Each room can hold up to five players and is assigned to a multiplayer game when a player joins.
-- Small modules for the game catalog, local profile storage, leaderboard preview, and room allocation.
-- A GitHub Actions workflow that publishes the static repository to GitHub Pages on pushes to `main`.
+All eleven games open in a modal over the softened catalog and ask for Easy, Medium, or Hard before play. Game state exists for the current session only.
 
-**Circuit Break** is the first playable game. Choose a 5×5, 6×6, 7×7, or 8×8 board. Rotate elbow, straight, T, and cross pipes to connect the power sources to every core. Obstacles block connections, each level has a countdown and a move limit, and later levels add obstacles. The board generator creates a connected solution and scrambles it so every level starts with the grid dark. Faster solves with more moves left earn more preview points. Your profile total and best score for each board size stay in local browser storage. The other four cards are still game and room previews, not playable games. Leaderboard entries and room occupancy do not represent online players or shared accounts. Replace the local adapters in `src/services/` with Supabase and an authenticated WebSocket service before treating scores or rooms as live. Never put a Supabase service-role key or other secret in the browser app.
+- **Circuit Break** — 5×5, 7×7, or 9×9 pipe-routing boards; obstacles, one or two power sources that start dark, one or two outputs, turn limits, and a countdown. Timer and move limits tighten by difficulty.
+- **Tic Tac Toe** — 3×3, 5×5, or 9×9 against the computer.
+- **Toon Toss** — choose the cat or dog side, set power and angle, and account for wind against a computer opponent.
+- **Long Snake** — classic continuous-growth snake with Easy, Medium, and Hard speed settings.
+- **Nuts & Bolts** — sort color stacks; later rounds add colors and pieces.
+- **Hangman** — word rounds against the scaffold, with difficulty-based word banks and mistake limits.
+- **Maze Chase** — collect every token while avoiding the chasers in an original 3D maze.
+- **Math Test** — 20 mixed arithmetic questions.
+- **Microsoft Trivia** — a short quiz about Microsoft products and history.
+- **Archery Range** — aim at targets while adjusting for wind.
+- **Stickman Survival** — move and attack through an arena with escalating enemy waves.
 
-## GitHub Pages setup
+3D scenes use simple, faceless stick-figure characters where characters fit the game. Circuit and other board-based modes use 3D game pieces.
 
-In the repository settings, set **Pages → Build and deployment → Source** to **GitHub Actions**. The workflow in `.github/workflows/pages.yml` then deploys the repository root. GitHub Pages hosts the frontend only; real-time multiplayer still needs a separate WebSocket backend.
+## Hub features
+
+- Eleven-game feature carousel and filterable game grid, without a search field.
+- Ten appearance themes: Midnight, Snow, Slate, Forest, Ocean, Sand, Plum, Ember, Mono, and Moss.
+- A break reminder after 30 minutes of page time; Snooze repeats it in 10 minutes, while Close disables reminders until the page is reloaded.
+- A DEV control that grows on repeated clicks, then opens a confetti card featuring the generated 3D portrait artwork labeled LOB.
+
+Everything is static frontend code. Do not put credentials or server secrets in this repository.
