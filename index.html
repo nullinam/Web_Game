@@ -3,40 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111820" />
-    <meta name="description" content="Playground — a collection of thirty-one 2D single-player games." />
-    <title>Playground — play your next round</title>
+    <meta name="theme-color" content="#11161a" />
+    <meta name="description" content="Five thoughtful puzzle games with tactile 2.5D boards." />
+    <title>Little Puzzles — a place to think</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./src/games/phaser/game.css" />
   </head>
   <body>
-    <div class="app-shell" id="home">
+    <main class="site-shell" id="home">
       <header class="site-header">
-        <a class="brand" href="#home" aria-label="Playground home"><span class="brand-mark"><span></span><span></span><span></span><span></span></span><span>PLAYGROUND<span class="brand-period">.</span></span></a>
-        <nav class="top-nav" aria-label="Main navigation"><a class="nav-link active" href="#home">Home</a><a class="nav-link" href="#games">Games <span class="nav-count">31</span></a></nav>
-        <div class="header-tools"><label class="theme-label" for="theme-select">THEME</label><select id="theme-select" aria-label="Choose website theme"><option value="midnight">Midnight</option><option value="snow">Snow</option><option value="slate">Slate</option><option value="forest">Forest</option><option value="ocean">Ocean</option><option value="sand">Sand</option><option value="plum">Plum</option><option value="ember">Ember</option><option value="mono">Mono</option><option value="moss">Moss</option></select><span class="header-note"><i></i> 31 SINGLE-PLAYER GAMES</span></div>
+        <a class="brand" href="#home" aria-label="Little Puzzles home"><span class="brand-gem" aria-hidden="true">✳</span><span>little<span>puzzles</span></span></a>
+        <nav aria-label="Main navigation"><a class="nav-current" href="#collection">Puzzle room <span>05</span></a></nav>
+        <a class="header-note" href="#collection"><span class="online-dot"></span> PICK A PUZZLE</a>
       </header>
-      <main class="page-wrap">
-        <section class="feature-section" aria-label="Featured games">
-          <div class="feature-topline"><span>THE PLAYGROUND COLLECTION</span><span>01 — 31</span></div>
-          <div class="feature-carousel" id="feature-carousel"><button class="feature-arrow feature-prev" aria-label="Previous featured game">‹</button><div id="feature-slide" aria-live="polite"></div><button class="feature-arrow feature-next" aria-label="Next featured game">›</button><div class="carousel-dots" id="carousel-dots"></div></div>
-        </section>
-        <section class="collection-section" id="games">
-          <div class="collection-heading"><div><span class="eyebrow">PICK YOUR NEXT ROUND</span><h1>Games <em>for the curious.</em></h1></div><span class="game-tally">31 WORLDS <b>·</b> 31 WAYS TO PLAY</span></div>
-          <div class="filter-row" role="group" aria-label="Filter games"><button class="filter-chip active" data-filter="all">All <span>31</span></button><button class="filter-chip" data-filter="puzzle">Puzzle</button><button class="filter-chip" data-filter="strategy">Strategy</button><button class="filter-chip" data-filter="arcade">Arcade</button><button class="filter-chip" data-filter="action">Action</button><button class="filter-chip" data-filter="word">Word</button><button class="filter-chip" data-filter="quiz">Quiz</button><button class="filter-chip" data-filter="sports">Sports</button></div>
-          <div class="game-grid" id="game-grid"></div>
-        </section>
-        <footer class="page-footer"><span>PLAY A LITTLE LONGER. TAKE A BREAK WHEN YOU NEED ONE.</span><span>PLAYGROUND · 2026</span></footer>
-      </main>
-    </div>
-    <button class="dev-trigger" id="dev-trigger" aria-label="Open developer card">DEV <span>✦</span></button>
-    <dialog id="game-dialog" class="game-dialog"><button class="dialog-close" data-action="close-dialog" aria-label="Close">×</button><div id="dialog-content"></div></dialog>
-    <dialog id="dev-dialog" class="dev-dialog"><button class="dialog-close" data-action="close-dev" aria-label="Close developer card">×</button><div class="dev-confetti" aria-hidden="true"></div><div class="dev-card"><div class="dev-card-image"><img src="./images/lob-portrait-3d.jpg" alt="Portrait artwork of LOB" /><span class="dev-stamp">THE DEVELOPER</span></div><div class="dev-card-copy"><span class="eyebrow">BEHIND THE PLAYGROUND</span><h2>LOB</h2><p>Building a little world to make every spare moment more fun.</p><div class="dev-card-rule"></div><div class="dev-meta"><span>CREATOR</span><strong>LOB</strong></div><div class="dev-meta"><span>STATUS</span><strong>WORK IN PROGRESS</strong></div><div class="dev-signature">Made with curiosity <span>✦</span></div></div></div></dialog>
-    <dialog id="break-dialog" class="break-dialog"><div class="break-symbol">Ⅱ</div><span class="eyebrow">A MOMENT FOR YOU</span><h2>That’s been a good run.</h2><p>You’ve been playing for 30 minutes. Want to stretch, get a drink, or keep going?</p><div class="break-actions"><button data-action="snooze-break">Snooze · 10 min</button><button data-action="close-break">Close reminder</button></div></dialog>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="./src/main.js?v=9"></script>
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span></span> A SMALL ROOM FOR A CLEAR MIND</p>
+          <h1 id="intro-title">One good puzzle.<br /><em>Then another.</em></h1>
+          <p class="intro-text">Five familiar ideas, rebuilt to feel tactile, clear, and satisfying. Take your time. There’s no timer chasing you.</p>
+          <a class="intro-cta" href="#collection">Choose a game <span>↓</span></a>
+        </div>
+        <div class="hero-board" aria-hidden="true">
+          <div class="hero-board-shadow"></div>
+          <div class="hero-board-face"><span class="hero-wire wire-a"></span><span class="hero-wire wire-b"></span><span class="hero-wire wire-c"></span><i class="hero-node node-a"></i><i class="hero-node node-b"></i><i class="hero-node node-c"></i><i class="hero-node node-d"></i><b class="hero-glint">✦</b></div>
+          <div class="hero-caption"><span>THE PUZZLE ROOM</span><b>01 — 05</b></div>
+        </div>
+      </section>
+      <section class="collection" id="collection" aria-labelledby="collection-title">
+        <div class="collection-heading"><div><p class="eyebrow">FIVE WAYS TO THINK</p><h2 id="collection-title">Pick up where curiosity leads.</h2></div><p class="collection-count">01 <span>—</span> 05</p></div>
+        <div class="game-grid" id="game-grid" aria-live="polite"></div>
+      </section>
+      <footer class="site-footer"><span>MADE FOR A FEW QUIET MINUTES</span><span>LITTLE PUZZLES <i>✳</i></span></footer>
+    </main>
+    <dialog id="game-dialog" class="game-dialog" aria-label="Puzzle game"><button class="dialog-close" data-action="close-dialog" aria-label="Close game">×</button><div id="dialog-content"></div></dialog>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>

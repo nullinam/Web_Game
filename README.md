@@ -1,6 +1,16 @@
-# Playground
+# Little Puzzles
 
-A static, single-player browser game hub built with HTML, CSS, TypeScript, Phaser, and Vite. All games use a 2D presentation and run locally in the browser. GitHub Pages hosts the static production build; there is no account, database, server, leaderboard, or saved score.
+A browser puzzle collection built with TypeScript, Phaser, HTML, CSS, and Vite. The games use clear 2D rules with layered, tactile visuals: raised pieces, soft shadows, highlights, and responsive motion. Everything runs client-side; progress is saved in the browser.
+
+## Games
+
+- **Circuit Break** — rotate wire pieces to connect the battery to the lamp.
+- **Nuts & Bolts** — sort colored nuts into matching bolt stacks.
+- **Flow Free** — connect matching colors without crossing paths and fill the board.
+- **Unblock Me** — slide the blocking pieces to clear a path for the red piece.
+- **Two Dots** — connect neighboring dots; closed loops clear every dot of that color.
+
+There is no difficulty-selection screen. Start a game directly, then use **Undo**, **Restart**, or **New puzzle**. New puzzles use a level-specific seed, and your level is stored locally in your browser.
 
 ## Run locally
 
@@ -9,36 +19,14 @@ npm install
 npm run dev
 ```
 
-Build for GitHub Pages with `npm run build`; Vite writes the site to `dist/`. The workflow in `.github/workflows/pages.yml` publishes that directory. `vite.config.js` uses `/Web_Game/` as the repository Pages base.
-
-## The collection
-
-All games open in a modal and offer Easy, Medium, and Hard. Twenty new games use per-game shuffled pattern decks with 256 distinct pattern seeds before a seed repeats during a session.
-
-### Original collection, rebuilt in 2D
-
-- Circuit Break, Tic Tac Toe, Toon Toss, Long Snake, Nuts & Bolts, Hangman, Maze Chase, Math Test, Microsoft Trivia, Archery Range, and Stickman Survival.
-
-### New games
-
-- Pixel Platformer, Bubble Pop, Brick Breaker, Space Shooter, Tower Defense, Memory Match, Minesweeper, 2048, Whack-a-Mole, and Fishing Frenzy.
-- Ghost Maze, Treasure Escape, Infinite Maze, Robot Hunt, Rising Lava, Shadow Chase, Bomb Maze, Color Hunter, Snake Arena, and Escape the Maze.
-
-Maze layouts and game setups are generated from each pattern seed. Use a new pattern after a round to get a different layout. Game progress and scores are session-only.
-
-## Hub features
-
-- A 31-game carousel and filterable catalog.
-- Ten appearance themes.
-- A break reminder after 30 minutes of page time.
-- A developer card in the catalog.
-
-Everything runs in the browser. Do not put credentials or server secrets in this repository.
+Create the production build with `npm run build`; Vite writes it to `dist/`. To preview that build locally, run `npm run preview`. GitHub Pages deployment is configured in `.github/workflows/pages.yml`, and `vite.config.js` sets the repository base path to `/Web_Game/`.
 
 ## Development references
 
-- [Phaser examples](https://phaser.io/examples/v3/) for the framework's scene, input, and rendering APIs.
-- [Bubble Shooter by kakorcal](https://github.com/kakorcal/bubble-shooter) as an open-source reference for a Phaser bubble-popping game.
-- [Labyrinth by luckyr13](https://github.com/luckyr13/labyrinth-game) as an open-source TypeScript and Phaser maze reference; its README describes depth-first maze generation.
+- [Phaser documentation](https://docs.phaser.io/) for scenes, input, graphics, and animation.
+- [Flow Free on Google Play](https://play.google.com/store/apps/details?id=com.bigduckgames.flow)
+- [Unblock Me on Google Play](https://play.google.com/store/apps/details?id=com.kiragames.unblockmefree)
+- [Two Dots on Google Play](https://play.google.com/store/apps/details?id=com.weplaydots.twodotsandroid)
+- [Nuts & Bolts puzzle on Google Play](https://play.google.com/store/apps/details?id=com.rollingpanda.nuts.bolts.screw.puzzle)
 
-These projects were consulted as design and API references; their code and art assets were not copied into Playground.
+Those pages were used to understand the puzzle concepts; this project has its own implementation and original presentation.

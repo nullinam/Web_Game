@@ -1,16 +1,68 @@
+import Phaser from "phaser";
 import { games } from "../../data/games";
-import type { Difficulty } from "./types";
-import { mountPhaserGame } from "./index";
+import { mountPuzzleScene } from "./index";
 
-const choices: { id: Difficulty; label: string; copy: string; number: string }[] = [
-  { id:"easy", label:"Easy", copy:"A relaxed round with more room to learn.", number:"01" },
-  { id:"medium", label:"Medium", copy:"A balanced run with a sharper challenge.", number:"02" },
-  { id:"hard", label:"Hard", copy:"A tougher round with less room for mistakes.", number:"03" },
-];
+const progressKey = (id: string) => `little-puzzles:${id}:level`;
+function seedFor(id: string, level: number) {
+  let hash = 2166136261;
+  for (const char of `${id}:${level}`) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  return hash >>> 0 || 1;
+}
+
 export function mountGame(root: HTMLElement, gameId: string) {
-  const game=games.find(item=>item.id===gameId); if(!game)throw new Error(`Unknown game: ${gameId}`);
-  let cleanup:(()=>void)|null=null, disposed=false;
-  const chooseDifficulty=()=>{cleanup?.();cleanup=null;root.innerHTML=`<section class="arcade-select phaser-select"><div class="arcade-select-art art-${game.art}"><div class="select-landscape"></div><span>${game.icon}</span></div><div class="arcade-select-copy"><span class="arcade-overline">PLAYGROUND ORIGINAL · 2D SINGLE PLAYER</span><h2>${game.title}</h2><p>${game.description}</p><div class="difficulty-title">Choose your challenge <small>DIFFICULTY AFFECTS THE GAMEPLAY</small></div><div class="difficulty-options">${choices.map(item=>`<button class="difficulty-option" data-difficulty="${item.id}"><span class="difficulty-number">${item.number}</span><span class="difficulty-option-copy"><b>${item.label}</b><small>${item.copy}</small></span><span class="difficulty-arrow">↗</span></button>`).join("")}</div><div class="arcade-select-foot"><span>NO ACCOUNTS · NO SCORE SAVES</span><span>ARROWS · SPACE · POINTER</span></div></div></section>`;root.querySelectorAll<HTMLButtonElement>("[data-difficulty]").forEach(button=>button.addEventListener("click",()=>{cleanup?.();cleanup=mountPhaserGame(root,{game,difficulty:button.dataset.difficulty as Difficulty,replay:chooseDifficulty,chooseDifficulty});}));};
-  chooseDifficulty();
-  return ()=>{if(disposed)return;disposed=true;cleanup?.();cleanup=null;root.innerHTML="";};
+  const gameInfo = games.find((item) => item.id === gameId);
+  if (!gameInfo) throw new Error(`Unknown puzzle: ${gameId}`);
+  let level = Math.max(1, Number(localStorage.getItem(progressKey(gameId)) || 1));
+  let seed = seedFor(gameId, level);
+  let instance: Phaser.Game | null = null;
+  let disposed = false;
+
+  root.innerHTML = `
+    <section class="puzzle-shell" style="--puzzle-accent:${gameInfo.accent}">
+      <header class="puzzle-header">
+        <div class="puzzle-title"><span class="puzzle-brand">LITTLE PUZZLES <i>✳</i></span><h2>${gameInfo.title}</h2></div>
+        <div class="puzzle-tools"><span class="puzzle-level" data-level>Puzzle ${String(level).padStart(3, "0")}</span><button class="puzzle-tool" data-undo title="Undo last move">↶ <span>Undo</span></button><button class="puzzle-tool" data-restart title="Restart this puzzle">↻ <span>Restart</span></button><button class="puzzle-next" data-next>New puzzle <b>→</b></button></div>
+      </header>
+      <div class="puzzle-instruction"><span class="instruction-mark">i</span><span>${gameInfo.instructions}</span><span class="puzzle-status" data-status>Take your time</span></div>
+      <div class="puzzle-stage" aria-label="${gameInfo.title} board"></div>
+      <footer class="puzzle-footer"><span>NO CLOCK · NO PRESSURE</span><span data-moves>0 moves</span><span>PROGRESS SAVES ON THIS DEVICE</span></footer>
+    </section>`;
+
+  const stage = root.querySelector<HTMLElement>(".puzzle-stage")!;
+  const label = root.querySelector<HTMLElement>("[data-level]")!;
+  const status = root.querySelector<HTMLElement>("[data-status]")!;
+  const moves = root.querySelector<HTMLElement>("[data-moves]")!;
+
+  const onLevel = (value: number) => {
+    level = value;
+    seed = seedFor(gameId, level);
+    localStorage.setItem(progressKey(gameId), String(level));
+    label.textContent = `Puzzle ${String(level).padStart(3, "0")}`;
+    status.textContent = "Take your time";
+    moves.textContent = "0 moves";
+    instance?.scene.start("puzzle", { game: gameInfo, level, seed, onMoves: (count: number) => { moves.textContent = `${count} move${count === 1 ? "" : "s"}`; }, onSolved: () => { status.textContent = "Solved · ready for another?"; } });
+  };
+
+  const launch = () => {
+    instance?.destroy(true);
+    instance = mountPuzzleScene(stage, { game: gameInfo, level, seed, onMoves: (count) => { moves.textContent = `${count} move${count === 1 ? "" : "s"}`; }, onSolved: () => { status.textContent = "Solved · ready for another?"; } });
+  };
+  const startNext = () => onLevel(level + 1);
+  const restart = () => onLevel(level);
+
+  root.querySelector("[data-next]")!.addEventListener("click", startNext);
+  root.querySelector("[data-restart]")!.addEventListener("click", restart);
+  root.querySelector("[data-undo]")!.addEventListener("click", () => {
+    const scene = instance?.scene.getScene("puzzle") as Phaser.Scene & { undo?: () => void };
+    scene?.undo?.();
+  });
+
+  launch();
+  return () => {
+    if (disposed) return;
+    disposed = true;
+    instance?.destroy(true);
+    instance = null;
+    root.replaceChildren();
+  };
 }
