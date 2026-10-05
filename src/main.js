@@ -1,4 +1,4 @@
-import { games, categoryLabels } from "./data/games.js";
+import { games, categoryLabels } from "./data/games.ts";
 
 const $ = (s, root = document) => root.querySelector(s);
 const gameGrid = $("#game-grid");
@@ -31,9 +31,9 @@ async function launchGame(game) {
   const id=++launchId; activeCleanup?.(); activeCleanup=null;
   dialog.classList.add("game-arcade-dialog"); $("#dialog-content").innerHTML="<div class='arcade-loading'>Preparing your game…</div>"; dialog.showModal();
   try {
-    const { mountArcadeGame } = await import("./games/arcade3d/index.js");
+    const { mountGame } = await import("./games/phaser/mount.ts");
     if(!dialog.open || id!==launchId) return;
-    activeCleanup=mountArcadeGame($("#dialog-content"), { gameId:game.id });
+    activeCleanup=mountGame($("#dialog-content"), game.id);
   } catch (error) {
     if(id!==launchId || !dialog.open) return;
     $("#dialog-content").innerHTML=`<div class="arcade-loading"><strong>${escapeHtml(game.title)} couldn’t start.</strong><p>Close the panel and try again.</p></div>`; console.error(`${game.title} failed to load`,error);
