@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "node --experimental-strip-types --test tests/pacman-engine.test.mjs",
+    "test": "node --experimental-strip-types --test tests/pacman-engine.test.mjs tests/casual-engine.test.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

@@ -15,9 +15,9 @@ function renderGames() {
   gameGrid.innerHTML = games.map((game, index) => `
     <article class="game-card game-card-${game.material}" style="--accent:${game.accent};--card-index:${index}">
       <button class="game-card-open" data-play="${game.id}" aria-label="Play ${escapeHtml(game.title)}">
-        <span class="card-number">ARCADE ${String(index + 1).padStart(2, "0")}</span>
+        <span class="card-number">${game.kind.toUpperCase()} ${String(index + 1).padStart(2, "0")}</span>
         <span class="game-art art-${game.material}" aria-hidden="true"><span class="art-floor"></span><span class="art-piece art-piece-a">${game.icon}</span><span class="art-piece art-piece-b"></span><span class="art-piece art-piece-c"></span><span class="art-light"></span></span>
-        <span class="game-card-copy"><span class="game-subtitle">${escapeHtml(game.subtitle)}</span><strong>${escapeHtml(game.title)}</strong><span class="game-description">${escapeHtml(game.description)}</span><span class="play-link">Play arcade <b>↗</b></span></span>
+        <span class="game-card-copy"><span class="game-subtitle">${escapeHtml(game.subtitle)}</span><strong>${escapeHtml(game.title)}</strong><span class="game-description">${escapeHtml(game.description)}</span><span class="play-link">Play game <b>↗</b></span></span>
       </button>
     </article>`).join("");
 }
