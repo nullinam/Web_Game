@@ -11,12 +11,13 @@ function escapeHtml(value = "") {
 }
 
 function renderGames() {
+  gameGrid.classList.toggle("single-game", games.length === 1);
   gameGrid.innerHTML = games.map((game, index) => `
     <article class="game-card game-card-${game.material}" style="--accent:${game.accent};--card-index:${index}">
       <button class="game-card-open" data-play="${game.id}" aria-label="Play ${escapeHtml(game.title)}">
-        <span class="card-number">PUZZLE ${String(index + 1).padStart(2, "0")}</span>
+        <span class="card-number">ARCADE ${String(index + 1).padStart(2, "0")}</span>
         <span class="game-art art-${game.material}" aria-hidden="true"><span class="art-floor"></span><span class="art-piece art-piece-a">${game.icon}</span><span class="art-piece art-piece-b"></span><span class="art-piece art-piece-c"></span><span class="art-light"></span></span>
-        <span class="game-card-copy"><span class="game-subtitle">${escapeHtml(game.subtitle)}</span><strong>${escapeHtml(game.title)}</strong><span class="game-description">${escapeHtml(game.description)}</span><span class="play-link">Play puzzle <b>↗</b></span></span>
+        <span class="game-card-copy"><span class="game-subtitle">${escapeHtml(game.subtitle)}</span><strong>${escapeHtml(game.title)}</strong><span class="game-description">${escapeHtml(game.description)}</span><span class="play-link">Play arcade <b>↗</b></span></span>
       </button>
     </article>`).join("");
 }
@@ -49,6 +50,10 @@ dialog.addEventListener("close", () => {
   disposeGame?.();
   disposeGame = null;
   dialogContent.replaceChildren();
+});
+
+window.addEventListener("game:return-to-work", () => {
+  if (dialog.open) dialog.close();
 });
 
 document.addEventListener("click", (event) => {

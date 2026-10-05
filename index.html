@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11161a" />
-    <meta name="description" content="Five thoughtful puzzle games with tactile 2.5D boards." />
+    <meta name="description" content="Play Pacman with fresh mazes, desktop controls, personal scores, and reminders to return to your day." />
     <title>Little Puzzles — a place to think</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,29 +16,29 @@
     <main class="site-shell" id="home">
       <header class="site-header">
         <a class="brand" href="#home" aria-label="Little Puzzles home"><span class="brand-gem" aria-hidden="true">✳</span><span>little<span>puzzles</span></span></a>
-        <nav aria-label="Main navigation"><a class="nav-current" href="#collection">Puzzle room <span>05</span></a></nav>
-        <a class="header-note" href="#collection"><span class="online-dot"></span> PICK A PUZZLE</a>
+        <nav aria-label="Main navigation"><a class="nav-current" href="#collection">Game room <span>01</span></a></nav>
+        <a class="header-note" href="#collection"><span class="online-dot"></span> PLAY PACMAN</a>
       </header>
       <section class="intro" aria-labelledby="intro-title">
         <div class="intro-copy">
           <p class="eyebrow"><span></span> A SMALL ROOM FOR A CLEAR MIND</p>
-          <h1 id="intro-title">One good puzzle.<br /><em>Then another.</em></h1>
-          <p class="intro-text">Five familiar ideas, rebuilt to feel tactile, clear, and satisfying. Take your time. There’s no timer chasing you.</p>
-          <a class="intro-cta" href="#collection">Choose a game <span>↓</span></a>
+          <h1 id="intro-title">One good game.<br /><em>Then back to your day.</em></h1>
+          <p class="intro-text">A familiar arcade chase with fresh mazes, clear controls, and a personal score for your next break.</p>
+          <a class="intro-cta" href="#collection">Play Pacman <span>↓</span></a>
         </div>
         <div class="hero-board" aria-hidden="true">
           <div class="hero-board-shadow"></div>
-          <div class="hero-board-face"><span class="hero-wire wire-a"></span><span class="hero-wire wire-b"></span><span class="hero-wire wire-c"></span><i class="hero-node node-a"></i><i class="hero-node node-b"></i><i class="hero-node node-c"></i><i class="hero-node node-d"></i><b class="hero-glint">✦</b></div>
-          <div class="hero-caption"><span>THE PUZZLE ROOM</span><b>01 — 05</b></div>
+          <div class="hero-board-face hero-arcade"><span class="hero-maze hero-maze-a"></span><span class="hero-maze hero-maze-b"></span><span class="hero-maze hero-maze-c"></span><span class="hero-pacman">◕</span><span class="hero-ghost"></span><span class="hero-dots"></span></div>
+          <div class="hero-caption"><span>THE ARCADE ROOM</span><b>01</b></div>
         </div>
       </section>
       <section class="collection" id="collection" aria-labelledby="collection-title">
-        <div class="collection-heading"><div><p class="eyebrow">FIVE WAYS TO THINK</p><h2 id="collection-title">Pick up where curiosity leads.</h2></div><p class="collection-count">01 <span>—</span> 05</p></div>
+        <div class="collection-heading"><div><p class="eyebrow">START WITH PACMAN</p><h2 id="collection-title">Your arcade break starts here.</h2></div><p class="collection-count">01 GAME</p></div>
         <div class="game-grid" id="game-grid" aria-live="polite"></div>
       </section>
-      <footer class="site-footer"><span>MADE FOR A FEW QUIET MINUTES</span><span>LITTLE PUZZLES <i>✳</i></span></footer>
+      <footer class="site-footer"><span>DESIGNED FOR A FOCUSED BREAK</span><span>LITTLE PUZZLES <i>✳</i></span></footer>
     </main>
-    <dialog id="game-dialog" class="game-dialog" aria-label="Puzzle game"><button class="dialog-close" data-action="close-dialog" aria-label="Close game">×</button><div id="dialog-content"></div></dialog>
+    <dialog id="game-dialog" class="game-dialog" aria-label="Game"><button class="dialog-close" data-action="close-dialog" aria-label="Close game">×</button><div id="dialog-content"></div></dialog>
     <script type="module" src="./src/main.js"></script>
   </body>
 </html>

@@ -1,10 +1,11 @@
 {
-  "name": "playground-game-hub",
+  "name": "web-game",
   "private": true,
   "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "node --experimental-strip-types --test tests/pacman-engine.test.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

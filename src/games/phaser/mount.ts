@@ -1,66 +1,295 @@
 import Phaser from "phaser";
 import { games } from "../../data/games";
-import { mountPuzzleScene } from "./index";
+import { mountPacmanScene } from "./pacman";
+import type { ArcadeStats, Run } from "./run";
 
-const progressKey = (id: string) => `little-puzzles:${id}:level`;
-function seedFor(id: string, level: number) {
+const levelKey = (id: string) => `little-puzzles:${id}:level`;
+const sizeKey = (id: string) => `little-puzzles:${id}:size`;
+const mixKey = (id: string) => `little-puzzles:${id}:mix`;
+const lockKey = "little-puzzles:play-lock-until";
+const sessionTimeKey = "little-puzzles:play-minutes";
+const breakDueKey = "little-puzzles:break-due";
+const HINTS_PER_PAGE_SESSION = 3;
+let hintsRemaining = HINTS_PER_PAGE_SESSION;
+
+function seedFor(id: string, level: number, size: number) {
   let hash = 2166136261;
-  for (const char of `${id}:${level}`) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  for (const char of `${id}:${level}:${size}`) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
   return hash >>> 0 || 1;
+}
+
+function getScene(instance: Phaser.Game | null) {
+  return instance?.scene.getScene("pacman") as Phaser.Scene & { hint?: () => void; lifeline?: () => void; getScore?: () => number } | undefined;
+}
+
+function escape(value: string) {
+  return value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
 }
 
 export function mountGame(root: HTMLElement, gameId: string) {
   const gameInfo = games.find((item) => item.id === gameId);
-  if (!gameInfo) throw new Error(`Unknown puzzle: ${gameId}`);
-  let level = Math.max(1, Number(localStorage.getItem(progressKey(gameId)) || 1));
-  let seed = seedFor(gameId, level);
+  if (!gameInfo) throw new Error(`Unknown game: ${gameId}`);
+  let level = Math.max(1, Number(localStorage.getItem(levelKey(gameId)) || 1));
+  let size = Number(localStorage.getItem(sizeKey(gameId)) || 25);
+  if (!gameInfo.sizes.includes(size)) size = gameInfo.sizes[0];
+  let mixer = localStorage.getItem(mixKey(gameId)) === "true";
   let instance: Phaser.Game | null = null;
   let disposed = false;
+  let solved = false;
+  let lifelineUsed = false;
+  let activePlayedMs = Number(localStorage.getItem(sessionTimeKey) || 0);
+  let lastClockTick = 0;
+  let sessionSolved = Number(sessionStorage.getItem("little-puzzles:solved") || 0);
+  let sessionScore = Number(sessionStorage.getItem("little-puzzles:score") || 0);
+  let breakVisible = false;
+  let lockVisible = false;
+  let lockTimerId = 0;
 
   root.innerHTML = `
     <section class="puzzle-shell" style="--puzzle-accent:${gameInfo.accent}">
       <header class="puzzle-header">
-        <div class="puzzle-title"><span class="puzzle-brand">LITTLE PUZZLES <i>✳</i></span><h2>${gameInfo.title}</h2></div>
-        <div class="puzzle-tools"><span class="puzzle-level" data-level>Puzzle ${String(level).padStart(3, "0")}</span><button class="puzzle-tool" data-undo title="Undo last move">↶ <span>Undo</span></button><button class="puzzle-tool" data-restart title="Restart this puzzle">↻ <span>Restart</span></button><button class="puzzle-next" data-next>New puzzle <b>→</b></button></div>
+        <div class="puzzle-title"><span class="puzzle-brand">LITTLE PUZZLES <i>✳</i></span><h2>${escape(gameInfo.title)}</h2></div>
+        <div class="puzzle-tools"><span class="puzzle-level" data-level></span><span class="puzzle-clock" data-clock>30:00 break</span><button class="puzzle-tool" data-hint hidden title="Use one of three session hints">? <span data-hint-count>Hint · 3</span></button><button class="puzzle-tool" data-lifeline title="${escape(gameInfo.lifeline)}">✦ <span>${escape(gameInfo.lifeline)}</span></button><button class="puzzle-tool" data-restart title="Restart this game">↻ <span>Restart</span></button></div>
       </header>
-      <div class="puzzle-instruction"><span class="instruction-mark">i</span><span>${gameInfo.instructions}</span><span class="puzzle-status" data-status>Take your time</span></div>
-      <div class="puzzle-stage" aria-label="${gameInfo.title} board"></div>
-      <footer class="puzzle-footer"><span>NO CLOCK · NO PRESSURE</span><span data-moves>0 moves</span><span>PROGRESS SAVES ON THIS DEVICE</span></footer>
+      <div class="puzzle-config">
+        <label>${gameInfo.sizeLabel} size <select data-size>${gameInfo.sizes.map((value) => `<option value="${value}"${value === size ? " selected" : ""}>${value} × ${value}</option>`).join("")}</select></label>
+        <label class="setup-mix"><input type="checkbox" data-mix${mixer ? " checked" : ""}> Mix sizes after each completed game</label>
+        <span class="combo-note">500+ seeded maze layouts</span>
+      </div>
+      <div class="puzzle-instruction"><span class="instruction-mark">i</span><span>${escape(gameInfo.instructions)}</span><span class="puzzle-status" data-status>Choose a maze to start</span></div>
+      <div class="puzzle-controls">${escape(gameInfo.controls)}</div>
+      <div class="puzzle-stage" aria-label="${escape(gameInfo.title)} maze">
+        <div class="puzzle-setup" data-setup>
+          <button class="puzzle-next" data-start>Start the chase <b>→</b></button>
+          <p>Clear every dot to unlock the next maze. Three lives per attempt.</p>
+        </div>
+        <div class="desktop-gate" data-desktop-gate hidden>For mouse and keyboard play, open this game on a desktop or laptop.</div>
+      </div>
+      <footer class="puzzle-footer"><span data-score>SESSION SCORE ${sessionScore.toLocaleString()}</span><span data-progress>3 lives</span><span data-streak>${sessionSolved} MAZES CLEARED</span></footer>
+      <div class="puzzle-notice" data-break hidden role="dialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">TIME TO RESET</span><h3>Take a short break</h3><p>You’ve played for 30 minutes. Step away and get back to your day.</p><div class="notice-actions"><button data-return>Back to work</button><button data-snooze>Snooze 15 minutes</button></div></div></div>
+      <div class="puzzle-notice" data-lock hidden role="alertdialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">BREAK WINDOW</span><h3>Play time is paused</h3><p>You’ve reached 90 minutes in this play session. This browser will unlock after the two-hour break.</p><strong data-unlock-time></strong></div></div>
+      <div class="puzzle-notice" data-win hidden role="dialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">MAZE COMPLETE</span><h3 data-win-title>Maze cleared!</h3><p data-win-copy>Your score has been added to this session.</p><button class="share-score" data-copy-score>Copy session score</button><label class="win-setting">Next maze <select data-next-size>${gameInfo.sizes.map((value) => `<option value="${value}"${value === size ? " selected" : ""}>${value} × ${value}</option>`).join("")}</select></label><label class="win-setting"><input type="checkbox" data-next-mix${mixer ? " checked" : ""}> Mix sizes after each completed game</label><button data-win-continue>Continue to the next maze</button></div></div>
     </section>`;
 
   const stage = root.querySelector<HTMLElement>(".puzzle-stage")!;
   const label = root.querySelector<HTMLElement>("[data-level]")!;
   const status = root.querySelector<HTMLElement>("[data-status]")!;
-  const moves = root.querySelector<HTMLElement>("[data-moves]")!;
+  const progress = root.querySelector<HTMLElement>("[data-progress]")!;
+  const sizeSelect = root.querySelector<HTMLSelectElement>("[data-size]")!;
+  const mixInput = root.querySelector<HTMLInputElement>("[data-mix]")!;
+  const setup = root.querySelector<HTMLElement>("[data-setup]")!;
+  const hintButton = root.querySelector<HTMLButtonElement>("[data-hint]")!;
+  const winNotice = root.querySelector<HTMLElement>("[data-win]")!;
+  const noticeScore = root.querySelector<HTMLElement>("[data-score]")!;
+  const unlockText = root.querySelector<HTMLElement>("[data-unlock-time]")!;
+  const nextSizeSelect = root.querySelector<HTMLSelectElement>("[data-next-size]")!;
+  const nextMixInput = root.querySelector<HTMLInputElement>("[data-next-mix]")!;
+  const restartButton = root.querySelector<HTMLButtonElement>("[data-restart]")!;
+  const lifelineButton = root.querySelector<HTMLButtonElement>("[data-lifeline]")!;
 
-  const onLevel = (value: number) => {
-    level = value;
-    seed = seedFor(gameId, level);
-    localStorage.setItem(progressKey(gameId), String(level));
-    label.textContent = `Puzzle ${String(level).padStart(3, "0")}`;
-    status.textContent = "Take your time";
-    moves.textContent = "0 moves";
-    instance?.scene.start("puzzle", { game: gameInfo, level, seed, onMoves: (count: number) => { moves.textContent = `${count} move${count === 1 ? "" : "s"}`; }, onSolved: () => { status.textContent = "Solved · ready for another?"; } });
+  const isHard = () => level >= 4 || size === gameInfo.sizes.at(-1);
+  const updateHeader = () => {
+    label.textContent = `MAZE ${String(level).padStart(3, "0")} · ${size}×${size}`;
+    hintButton.hidden = !isHard();
+    hintButton.disabled = hintsRemaining <= 0;
+    root.querySelector<HTMLElement>("[data-hint-count]")!.textContent = `Hint · ${hintsRemaining}`;
+  };
+  const setSolved = (arcadeScore?: number) => {
+    if (solved) return;
+    solved = true;
+    sizeSelect.disabled = false;
+    mixInput.disabled = false;
+    status.textContent = "Maze cleared · score added";
+    const roundScore = arcadeScore ?? getScene(instance)?.getScore?.() ?? 0;
+    sessionSolved += 1;
+    sessionScore += roundScore;
+    sessionStorage.setItem("little-puzzles:solved", String(sessionSolved));
+    sessionStorage.setItem("little-puzzles:score", String(sessionScore));
+    noticeScore.textContent = `SESSION SCORE ${sessionScore.toLocaleString()}`;
+    root.querySelector<HTMLElement>("[data-streak]")!.textContent = `${sessionSolved} MAZES CLEARED`;
+    root.querySelector<HTMLElement>("[data-win-copy]")!.textContent = `+${roundScore.toLocaleString()} points · every dot cleared · ${sessionSolved} mazes cleared this session`;
+    nextSizeSelect.value = String(size);
+    nextMixInput.checked = mixer;
+    winNotice.hidden = false;
+    updateHeader();
+  };
+  const onStats = (stats: ArcadeStats) => {
+    progress.textContent = stats.lives + " lives · " + stats.remaining + " dots left";
+    status.textContent = stats.state === "lost" ? "Game over · restart this maze" : stats.state === "paused" ? "Paused · press P to resume" : stats.state === "won" ? "Maze cleared" : stats.state === "dying" ? "Caught · ready to retry" : stats.powerSeconds > 0 ? "Power active · " + stats.powerSeconds + "s" : "Score " + stats.score.toLocaleString() + " · best " + stats.best.toLocaleString();
+    hintButton.disabled = hintsRemaining <= 0 || stats.state === "lost" || stats.state === "won";
+    lifelineButton.disabled = lifelineUsed || stats.state === "lost" || stats.state === "won";
+  };
+  const onLevel = (nextLevel: number, nextSize = size) => {
+    if (!solved && instance) return;
+    level = nextLevel;
+    size = nextSize;
+    solved = false;
+    lifelineUsed = false;
+    localStorage.setItem(levelKey(gameId), String(level));
+    localStorage.setItem(sizeKey(gameId), String(size));
+    localStorage.setItem(mixKey(gameId), String(mixer));
+    status.textContent = "Clear the maze · watch the ghosts";
+    progress.textContent = "3 lives";
+    sizeSelect.value = String(size);
+    sizeSelect.disabled = true;
+    mixInput.disabled = true;
+    setup.hidden = true;
+    winNotice.hidden = true;
+    root.querySelector<HTMLButtonElement>("[data-lifeline]")!.disabled = false;
+    updateHeader();
+    const run: Run = {
+      level,
+      size,
+      seed: seedFor(gameId, level, size),
+      onStats,
+      onSolved: setSolved,
+      onRestart: restart,
+    };
+    if (instance) instance.scene.start("pacman", run);
+    else instance = mountPacmanScene(stage, run);
+    restartButton.disabled = false;
+    lifelineButton.disabled = false;
+  };
+  const startFirst = () => {
+    if (!window.matchMedia("(pointer: fine) and (hover: hover)").matches) { status.textContent = "This game uses mouse and keyboard on a desktop or laptop."; return; }
+    if (Date.now() < Number(localStorage.getItem(lockKey) || 0)) return showLock();
+    localStorage.setItem(sizeKey(gameId), String(size));
+    localStorage.setItem(mixKey(gameId), String(mixer));
+    if (!localStorage.getItem(breakDueKey)) localStorage.setItem(breakDueKey, String(30 * 60 * 1000));
+    setup.hidden = true;
+    sizeSelect.disabled = true;
+    mixInput.disabled = true;
+    restartButton.disabled = false;
+    lifelineButton.disabled = false;
+    runClock();
+    onLevel(level, size);
+  };
+  const continueLevel = () => {
+    if (!solved) return;
+    level += 1;
+    let nextSize = Number(nextSizeSelect.value);
+    mixer = nextMixInput.checked;
+    mixInput.checked = mixer;
+    if (mixer && gameInfo.sizes.length > 1) {
+      const options = gameInfo.sizes.filter((value) => value !== size);
+      nextSize = options[seedFor(gameId, level, size) % options.length];
+    }
+    onLevel(level, nextSize);
+  };
+  function restart() {
+    if (!instance) return;
+    solved = false;
+    lifelineUsed = false;
+    winNotice.hidden = true;
+    sizeSelect.value = String(size);
+    sizeSelect.disabled = true;
+    mixInput.checked = mixer;
+    mixInput.disabled = true;
+    lifelineButton.disabled = false;
+    status.textContent = "Maze restarted · score and lives reset";
+    instance.scene.start("pacman", { level, size, seed: seedFor(gameId, level, size), onStats, onSolved: setSolved, onRestart: restart });
+  }
+  const showLock = () => {
+    const lockUntil = Number(localStorage.getItem(lockKey) || 0);
+    if (lockUntil > Date.now() && !lockVisible) {
+      lockVisible = true;
+      getScene(instance)?.scene.pause();
+      const lockPanel = root.querySelector<HTMLElement>("[data-lock]")!;
+      lockPanel.hidden = false;
+      const updateLock = () => {
+        const remaining = Math.max(0, lockUntil - Date.now());
+        unlockText.textContent = `Unlocks at ${new Date(lockUntil).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} · ${Math.ceil(remaining / 60000)} min remaining`;
+      };
+      updateLock();
+      lockTimerId = window.setInterval(() => {
+        updateLock();
+        if (Date.now() >= lockUntil) {
+          window.clearInterval(lockTimerId); lockTimerId = 0; lockPanel.hidden = true; lockVisible = false; localStorage.removeItem(lockKey);
+          root.querySelector<HTMLElement>("[data-break]")!.hidden = true; breakVisible = false;
+          activePlayedMs = 0; lastClockTick = 0; localStorage.setItem(sessionTimeKey, "0"); localStorage.setItem(breakDueKey, String(30 * 60 * 1000));
+          getScene(instance)?.scene.resume(); runClock();
+        }
+      }, 1000);
+    }
+  };
+  function runClock() {
+    if (lastClockTick) return;
+    lastClockTick = Date.now();
+    const clock = root.querySelector<HTMLElement>("[data-clock]")!;
+    const breakPanel = root.querySelector<HTMLElement>("[data-break]")!;
+    const timer = window.setInterval(() => {
+      if (disposed) { window.clearInterval(timer); return; }
+      const now = Date.now();
+      if (document.visibilityState === "visible") activePlayedMs += Math.max(0, Math.min(now - lastClockTick, 2000));
+      lastClockTick = now;
+      localStorage.setItem(sessionTimeKey, String(activePlayedMs));
+      if (activePlayedMs >= 90 * 60 * 1000) {
+        const until = Date.now() + 2 * 60 * 60 * 1000;
+        localStorage.setItem(lockKey, String(until));
+        showLock();
+        window.clearInterval(timer);
+        return;
+      }
+      const remaining = Math.max(0, Number(localStorage.getItem(breakDueKey) || 30 * 60 * 1000) - activePlayedMs);
+      clock.textContent = `${String(Math.floor(remaining / 60000)).padStart(2, "0")}:${String(Math.floor((remaining % 60000) / 1000)).padStart(2, "0")} break`;
+      if (remaining <= 0 && !breakVisible && !lockVisible) { breakVisible = true; getScene(instance)?.scene.pause(); breakPanel.hidden = false; root.querySelector<HTMLButtonElement>("[data-snooze]")!.focus(); }
+    }, 1000);
+  }
+
+  const callHelp = (kind: "hint" | "lifeline") => {
+    const scene = getScene(instance);
+    if (!scene || !instance || solved) return;
+    if (kind === "hint") {
+      if (!isHard() || hintsRemaining <= 0) return;
+      hintsRemaining -= 1;
+      scene.hint?.();
+      updateHeader();
+      return;
+    }
+    if (lifelineUsed) return;
+    lifelineUsed = true;
+    scene.lifeline?.();
+    root.querySelector<HTMLButtonElement>("[data-lifeline]")!.disabled = true;
   };
 
-  const launch = () => {
-    instance?.destroy(true);
-    instance = mountPuzzleScene(stage, { game: gameInfo, level, seed, onMoves: (count) => { moves.textContent = `${count} move${count === 1 ? "" : "s"}`; }, onSolved: () => { status.textContent = "Solved · ready for another?"; } });
-  };
-  const startNext = () => onLevel(level + 1);
-  const restart = () => onLevel(level);
+  const handleStorage = (event: StorageEvent) => { if (event.key === lockKey && Number(event.newValue || 0) > Date.now()) showLock(); };
+  window.addEventListener("storage", handleStorage);
 
-  root.querySelector("[data-next]")!.addEventListener("click", startNext);
-  root.querySelector("[data-restart]")!.addEventListener("click", restart);
-  root.querySelector("[data-undo]")!.addEventListener("click", () => {
-    const scene = instance?.scene.getScene("puzzle") as Phaser.Scene & { undo?: () => void };
-    scene?.undo?.();
+  sizeSelect.addEventListener("change", () => { size = Number(sizeSelect.value); });
+  mixInput.addEventListener("change", () => { mixer = mixInput.checked; });
+  root.querySelector("[data-start]")!.addEventListener("click", startFirst);
+  root.querySelector("[data-win-continue]")!.addEventListener("click", continueLevel);
+  root.querySelector<HTMLButtonElement>("[data-copy-score]")!.addEventListener("click", async (event) => {
+    const button = event.currentTarget as HTMLButtonElement;
+    try {
+      await navigator.clipboard.writeText(`Little Puzzles · ${sessionSolved} mazes cleared · ${sessionScore.toLocaleString()} points`);
+      button.textContent = "Score copied";
+    } catch {
+      button.textContent = `Session score: ${sessionScore.toLocaleString()}`;
+    }
   });
+  restartButton.disabled = true;
+  lifelineButton.disabled = true;
+  restartButton.addEventListener("click", restart);
+  hintButton.addEventListener("click", () => callHelp("hint"));
+  lifelineButton.addEventListener("click", () => callHelp("lifeline"));
+  root.querySelector("[data-snooze]")!.addEventListener("click", () => {
+    localStorage.setItem(breakDueKey, String(activePlayedMs + 15 * 60 * 1000));
+    root.querySelector<HTMLElement>("[data-break]")!.hidden = true;
+    breakVisible = false;
+    getScene(instance)?.scene.resume();
+  });
+  root.querySelector("[data-return]")!.addEventListener("click", () => window.dispatchEvent(new CustomEvent("game:return-to-work")));
+  root.querySelector<HTMLElement>("[data-desktop-gate]")!.hidden = window.matchMedia("(pointer: fine) and (hover: hover)").matches;
+  updateHeader();
+  showLock();
+  if (lockVisible) setup.hidden = true;
 
-  launch();
   return () => {
     if (disposed) return;
     disposed = true;
+    if (lockTimerId) window.clearInterval(lockTimerId);
+    window.removeEventListener("storage", handleStorage);
     instance?.destroy(true);
     instance = null;
     root.replaceChildren();
