@@ -1,9 +1,5 @@
-import { REFERENCE_ANSWERS, EXTRA_GUESSES, MEMORY_SYMBOLS, TYPING_WORDS } from "./reference-data.ts";
+import { MEMORY_SYMBOLS, TYPING_WORDS } from "./reference-data.ts";
 
-// Extra everyday answers extend the supplied list beyond 500 distinct words.
-const additional = `ABACK ABBEY ABBOT ABHOR ABIDE ABLED ABODE ABORT ABUSE ABYSS ACORN ACRID ACUTE AFFIX AFIRE AFOOT AGATE AGILE AGLOW AGONY AGORA AIDER ALGAE ALIBI AMASS AMBER AMBLE AMEND AMISS AMITY AMPLE AMUSE ANGEL ANIME ANKLE ANNEX ANNOY ANODE ANTIC ANVIL AORTA APHID APRON APTLY ARBOR ARDOR ARMOR AROMA ARROW ARSON ARTSY ASCOT ASHEN ATOLL ATONE ATTIC AUGUR AUNTY AVAIL AVERT AVIAN AXIAL AXIOM AZURE BACON BADGE BADLY BAGEL BAKER BALER BALMY BANAL BANJO BARGE BARON BASIL BASIN BASIS BATON BATTY BAYOU BEADY BEARD BEAST BEECH BEEFY BEFIT BEGET BELCH BELLE BELLY BENCH BERET BERRY BEVEL BIBLE BICEP BIDET BIGOT BILGE BINGE BIRTH BISON BITTY BLAST BLAZE BLEAK BLEED BLEEP BLIMP BLINK BLISS BLITZ BLOAT BLOND BLOOM BLOWN BLUER BLUFF BLUNT BLURB BLURT BLUSH BOAST BOBBY BONEY BONUS BOOTH BOOTY BORAX BORNE BOSOM BOTCH BOUND BOWEL BOXER BRACE BRAID BRAKE BRASH BRASS BRAVE BRAVO BRAWL BRAWN BREED BRIBE BRICK BRIDE BRINE BRINK BRISK BROIL BROOD BROOK BROOM BRUSH BRUTE BUDDY BUDGE BUGGY BUGLE BULGE BULKY BULLY BUNCH BURLY BURNT BURST BUSHY BUTTE CABIN CACAO CACHE CACTI CADDY CADET CAMEL CAMEO CANAL CANNY CANOE CANON CAPER CARAT CARGO CAROL CARVE CATER CAULK CAVIL CEDAR CELLO CHAFE CHAFF CHALK CHAMP CHANT CHARM CHEEK CHEER CHESS CHICK CHILI CHILL CHIMP CHIRP CHOCK CHOKE CHORE CHUCK CHURN CIDER CIGAR CINCH CIRCA CLACK CLAMP CLANG CLANK CLASH CLASP CLEFT CLERK CLICK CLIFF CLING CLOAK CLONE CLOTH CLOUT CLOVE CLOWN CLUCK CLUMP COCOA COLON COMET COMFY COMIC COMMA CONCH CORAL CORER CORNY COUCH COUPE COVET COWER COYLY CRACK CRAMP CRANK CRATE CRAWL CRAZE CREAK CREED CREEK CREEP CREPE CREPT CREST CRISP CROAK CRONY CROOK CRUMB CRUSH CRUST CUBIC CUMIN CURLY CURRY CURSE CURVE CYCLE DADDY DAISY DALLY DATUM DAUNT DEALT DEBIT DEBUG DECAL DECAY DECOR DECOY DEFER DEIGN DELTA DEMON DEMUR DENIM DENSE DEPOT DERBY DETOX DEVIL DIARY DICEY DIGIT DILLY DIMLY DINER DINGO DINGY DIODE DIRGE DIRTY DISCO DITCH DITTO DIVER DIZZY DODGE DOGMA DONOR DOWEL DOWRY DRAFT DRAIN DRAKE DRAMA DRANK DRAWL DRAWN DREAD DRESS DRIED DRIER DRIFT DRILL DROOP DROWN DRUID DRUNK DRYER DUMMY DUMPY DUNCE DUSKY DUSTY DUTCH DWARF DWELT EAGER EAGLE EASEL EATEN EBONY ECLAT EDICT EERIE EGRET EJECT ELBOW ELDER ELECT ELEGY ELFIN ELUDE EMAIL EMBER EMCEE ENDOW ENEMA ENSUE EPOCH EPOXY EQUIP ERASE ERECT ERUPT ESSAY ETHER ETHIC ETHOS EVADE EXALT EXCEL EXERT EXILE EXIST EXPEL EXTOL EXTRA EXULT FABLE FACET FAINT FAIRY FANCY FATAL FATTY FAUNA FEAST FECAL FEIGN FERRY FETAL FETCH FEVER FEWER FICUS FIERY FIFTH FIFTY FILER FILET FILLY FILMY FINCH FINER FIZZY FJORD FLAIR FLAKE FLAME FLANK FLARE FLASH FLASK FLEET FLESH FLICK FLIER FLING FLINT FLIRT FLOAT FLOCK FLOOD FLOOR FLORA FLOSS FLOUR FLOUT FLOWN FLUFF FLUID FLUKE FLUME FLUNG FLUSH FLUTE FOAMY FOCAL FOGGY FOLIO FOLLY FORAY FORGE FORGO FORTE FORTH FORTY FORUM FOUND FOYER FRAIL FRANK FRAUD FREAK FREED FREER FRIAR FRIED FRILL FRISK FROWN FUDGE FUGUE FULLY FUNGI FUNKY FUNNY FUZZY`.split(" ");
-export const ANSWERS = [...new Set([...REFERENCE_ANSWERS, ...additional])].filter(w => /^[A-Z]{5}$/.test(w));
-export const DICTIONARY = new Set([...ANSWERS, ...EXTRA_GUESSES]);
 export type State = "playing" | "won" | "lost";
 export function random(seed: number) {
   let value = seed >>> 0;
@@ -13,37 +9,6 @@ export function shuffle<T>(items: T[], rng: () => number): T[] {
   const result = [...items];
   for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; }
   return result;
-}
-export type LetterState = "correct" | "present" | "absent";
-export function evaluateGuess(guess: string, answer: string): LetterState[] {
-  const states: LetterState[] = Array(answer.length).fill("absent"), counts: Record<string, number> = {};
-  for (const c of answer) counts[c] = (counts[c] || 0) + 1;
-  for (let i = 0; i < answer.length; i++) if (guess[i] === answer[i]) { states[i] = "correct"; counts[guess[i]]--; }
-  for (let i = 0; i < answer.length; i++) if (states[i] !== "correct" && counts[guess[i]] > 0) { states[i] = "present"; counts[guess[i]]--; }
-  return states;
-}
-const answerOrder = shuffle(ANSWERS, random(0x57a4));
-export class WordleEngine {
-  answer: string; guesses: { word: string; states: LetterState[] }[] = []; state: State = "playing"; maxAttempts = 6;
-  message = "Guess a five-letter word. Green = exact, amber = elsewhere, gray = absent.";
-  revealed = new Map<number, string>(); lifelineUsed = false;
-  constructor(level: number) { this.answer = answerOrder[(level - 1) % answerOrder.length]; }
-  get score() { return this.state === "won" ? Math.max(100, 1200 - this.guesses.length * 130 - this.revealed.size * 70 - Number(this.lifelineUsed) * 80) : 0; }
-  submit(word: string) {
-    if (this.state !== "playing") return false;
-    word = word.toUpperCase();
-    if (!DICTIONARY.has(word)) { this.message = "Use a five-letter word in this game's offline dictionary."; return false; }
-    this.guesses.push({ word, states: evaluateGuess(word, this.answer) });
-    this.state = word === this.answer ? "won" : this.guesses.length >= this.maxAttempts ? "lost" : "playing";
-    this.message = this.state === "won" ? "Word found!" : this.state === "lost" ? `The word was ${this.answer}. Restart to try this word again.` : "Use the letter feedback for your next guess.";
-    return true;
-  }
-  hint() {
-    const index = [...this.answer].findIndex((_, i) => !this.revealed.has(i) && !this.guesses.some(g => g.states[i] === "correct"));
-    if (index >= 0) this.revealed.set(index, this.answer[index]);
-    this.message = index >= 0 ? `Hint: letter ${index + 1} is ${this.answer[index]}.` : "All positions have already been discovered.";
-  }
-  lifeline() { if (!this.lifelineUsed && this.state === "playing") { this.maxAttempts++; this.lifelineUsed = true; this.message = "Extra guess added. You now have seven attempts."; } }
 }
 export class MemoryEngine {
   cards: { symbol: string; matched: boolean }[]; selected: number[] = []; state: State = "playing";

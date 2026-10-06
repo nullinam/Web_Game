@@ -1,0 +1,1078 @@
+{
+  "repairs": [
+    {
+      "game": "fruit-merge",
+      "change": "Renamed inex.html to index.html"
+    },
+    {
+      "game": "6oct",
+      "missing": "assets/background.jpg",
+      "replacement": "Existing game asset: games/puzzle/6oct/assets/background.png",
+      "path": "assets/background.png"
+    },
+    {
+      "game": "6oct",
+      "missing": "assets/obj7.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj7.png",
+      "path": "assets/obj7.png"
+    },
+    {
+      "game": "6oct",
+      "missing": "assets/obj14.png",
+      "replacement": "games/casual/candy-crusher/assets/obj14.png",
+      "path": "assets/obj14.png"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/outfit.ttf",
+      "replacement": "games/3d/cosmic-cleaner/outfit.ttf",
+      "path": "assets/outfit.ttf"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/attack.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Attack.mp3",
+      "path": "assets/attack.mp3"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/collision.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Collision.mp3",
+      "path": "assets/collision.mp3"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/win.mp3",
+      "replacement": "games/arcade/bug-smasher/assets/win.mp3",
+      "path": "assets/win.mp3"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/hit.mp3",
+      "replacement": "games/3d/cosmic-cleaner/assets/hit.mp3",
+      "path": "assets/hit.mp3"
+    },
+    {
+      "game": "rock-paper-scissors",
+      "missing": "assets/collect.mp3",
+      "replacement": "games/3d/cosmic-cleaner/assets/collect.mp3",
+      "path": "assets/collect.mp3"
+    },
+    {
+      "game": "balance-stack",
+      "missing": "assets/player.png.png",
+      "replacement": "games/3d/planet-visitor/assets/player.png",
+      "path": "assets/player.png.png"
+    },
+    {
+      "game": "bird-shooter",
+      "missing": "assets/hero.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/hero.png",
+      "path": "assets/hero.png"
+    },
+    {
+      "game": "bird-shooter",
+      "missing": "assets/spritesheets/shard_break.png",
+      "replacement": "games/arcade/bomb-blast/assets/Spritesheet.png",
+      "path": "assets/spritesheets/shard_break.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/lane.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/lane.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/ui_btn.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/ui_btn.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/pin.mp3",
+      "replacement": "games/3d/cosmic-cleaner/assets/hit.mp3",
+      "path": "assets/pin.mp3"
+    },
+    {
+      "game": "bug-smasher",
+      "missing": "assets/obj21.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj21.png",
+      "path": "assets/obj21.png"
+    },
+    {
+      "game": "bug-smasher",
+      "missing": "assets/obj22.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj22.png",
+      "path": "assets/obj22.png"
+    },
+    {
+      "game": "bug-smasher",
+      "missing": "assets/obj23.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj23.png",
+      "path": "assets/obj23.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/arena_bg.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/images/arena_bg.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/left.png",
+      "replacement": "games/3d/planet-war/assets/left.png",
+      "path": "assets/images/left.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/right.png",
+      "replacement": "games/3d/planet-war/assets/right.png",
+      "path": "assets/images/right.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/jump.png",
+      "replacement": "games/arcade/collector/assets/jump.png",
+      "path": "assets/images/jump.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/attack.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/images/attack.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/special.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/images/special.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/dragon.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/images/dragon.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/images/griffin.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/images/griffin.png"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/audio/bgm_arena.mp3",
+      "replacement": "Existing game asset: games/board/chess/assets/audio/bgm.mp3",
+      "path": "assets/audio/bgm_arena.mp3"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/audio/attack.wav",
+      "replacement": "games/arcade/bomb-blast/assets/Attack.mp3",
+      "path": "assets/audio/attack.mp3"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/audio/special.wav",
+      "replacement": "games/arcade/bomb-blast/assets/Explosion.mp3",
+      "path": "assets/audio/special.mp3"
+    },
+    {
+      "game": "chess",
+      "missing": "assets/audio/win.wav",
+      "replacement": "games/arcade/bug-smasher/assets/win.mp3",
+      "path": "assets/audio/win.mp3"
+    },
+    {
+      "game": "catch-me-if-you-can",
+      "missing": "assets/spritesheet.png",
+      "replacement": "games/arcade/bomb-blast/assets/Spritesheet.png",
+      "path": "assets/spritesheet.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/lane.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/lane.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/action.png",
+      "replacement": "games/arcade/bug-smasher/assets/action.png",
+      "path": "assets/action.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/orb_red.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/orb_red.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/orb_blue.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/orb_blue.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/orb_yellow.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/orb_yellow.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/barrier_red.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/barrier_red.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/barrier_blue.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/barrier_blue.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/barrier_yellow.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/barrier_yellow.png"
+    },
+    {
+      "game": "color-dash",
+      "missing": "assets/player_colors.png",
+      "replacement": "Generated geometric fallback artwork",
+      "path": "assets/player_colors.png"
+    },
+    {
+      "game": "colour-pour",
+      "missing": "assets/player.png",
+      "replacement": "games/3d/planet-visitor/assets/player.png",
+      "path": "assets/player.png"
+    },
+    {
+      "game": "colour-pour",
+      "missing": "assets/obj5.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj5.png",
+      "path": "assets/obj5.png"
+    },
+    {
+      "game": "colour-pour",
+      "missing": "assets/obj12.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj12.png",
+      "path": "assets/obj12.png"
+    },
+    {
+      "game": "cooking",
+      "missing": "assets/platform1.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform1.png",
+      "path": "assets/platform1.png"
+    },
+    {
+      "game": "cooking",
+      "missing": "assets/platform3.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform3.png",
+      "path": "assets/platform3.png"
+    },
+    {
+      "game": "cooking",
+      "missing": "assets/platform4.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform4.png",
+      "path": "assets/platform4.png"
+    },
+    {
+      "game": "demon",
+      "missing": "assets/obj15.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj15.png",
+      "path": "assets/obj15.png"
+    },
+    {
+      "game": "demon",
+      "missing": "assets/obj22.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj22.png",
+      "path": "assets/obj22.png"
+    },
+    {
+      "game": "demon",
+      "missing": "assets/platform4.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform4.png",
+      "path": "assets/platform4.png"
+    },
+    {
+      "game": "demon",
+      "missing": "assets/akaza15.png",
+      "replacement": "Existing game asset: games/arcade/demon/assets/akaza.png",
+      "path": "assets/akaza15.png"
+    },
+    {
+      "game": "fighter-fury",
+      "missing": "assets/gameover_bg.png",
+      "replacement": "games/arcade/dodge-enemy/assets/gameover_bg.png",
+      "path": "assets/gameover_bg.png"
+    },
+    {
+      "game": "fighter-fury",
+      "missing": "assets/levelcomplete_bg.png",
+      "replacement": "games/arcade/dodge-enemy/assets/levelcomplete_bg.png",
+      "path": "assets/levelcomplete_bg.png"
+    },
+    {
+      "game": "fruit-cosmics",
+      "missing": "assets/htp.png",
+      "replacement": "games/arcade/balance-stack/assets/htp.png",
+      "path": "assets/htp.png"
+    },
+    {
+      "game": "gunman",
+      "missing": "assets/collectible.png",
+      "replacement": "games/arcade/collector/assets/collect.png",
+      "path": "assets/collectible.png"
+    },
+    {
+      "game": "gunman",
+      "missing": "assets/collect.mp3",
+      "replacement": "games/3d/cosmic-cleaner/assets/collect.mp3",
+      "path": "assets/collect.mp3"
+    },
+    {
+      "game": "hungry-player",
+      "missing": "assets/scorebox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/scorebar.png",
+      "path": "assets/scorebox.png"
+    },
+    {
+      "game": "hungry-player",
+      "missing": "assets/shark.png",
+      "replacement": "games/casual/fruit-cosmics/assets/shark.png",
+      "path": "assets/shark.png"
+    },
+    {
+      "game": "mario",
+      "missing": "assets/obj2.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj2.png",
+      "path": "assets/obj2.png"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/solar.png",
+      "replacement": "games/3d/planet-visitor/assets/platform.png",
+      "path": "assets/solar.png"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/station.png",
+      "replacement": "games/sports/cricket-123/assets/station.png",
+      "path": "assets/station.png"
+    },
+    {
+      "game": "red-light-green-light",
+      "missing": "assets/ball.png",
+      "replacement": "games/arcade/breakoid/assets/ball.png",
+      "path": "assets/ball.png"
+    },
+    {
+      "game": "road-fighter",
+      "missing": "assets/ovrbox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/ovrbox.png",
+      "path": "assets/ovrbox.png"
+    },
+    {
+      "game": "road-fighter",
+      "missing": "assets/Attack.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Attack.mp3",
+      "path": "assets/Attack.mp3"
+    },
+    {
+      "game": "shoot-enemy",
+      "missing": "assets/obj12.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj12.png",
+      "path": "assets/obj12.png"
+    },
+    {
+      "game": "shooter",
+      "missing": "assets/action.png",
+      "replacement": "games/arcade/bug-smasher/assets/action.png",
+      "path": "assets/action.png"
+    },
+    {
+      "game": "signal-circuit",
+      "missing": "assets/platformSand.png",
+      "replacement": "games/word-quiz/math-quest/assets/platformSand.png",
+      "path": "assets/platformSand.png"
+    },
+    {
+      "game": "signal-circuit",
+      "missing": "assets/ball.png",
+      "replacement": "games/arcade/breakoid/assets/ball.png",
+      "path": "assets/ball.png"
+    },
+    {
+      "game": "snake",
+      "missing": "assets/spritesheet.png",
+      "replacement": "games/arcade/bomb-blast/assets/Spritesheet.png",
+      "path": "assets/spritesheet.png"
+    },
+    {
+      "game": "table-tennis",
+      "missing": "assets/obj5.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj5.png",
+      "path": "assets/obj5.png"
+    },
+    {
+      "game": "unruly",
+      "missing": "assets/platformSand.png",
+      "replacement": "games/word-quiz/math-quest/assets/platformSand.png",
+      "path": "assets/platformSand.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/obj5.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj5.png",
+      "path": "assets/obj5.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/obj9.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj9.png",
+      "path": "assets/obj9.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/obj14.png",
+      "replacement": "games/casual/candy-crusher/assets/obj14.png",
+      "path": "assets/obj14.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/obj2.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj2.png",
+      "path": "assets/obj2.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/obj20.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj20.png",
+      "path": "assets/obj20.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/platform1.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform1.png",
+      "path": "assets/platform1.png"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Game_Background.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Game_Background.mp3",
+      "path": "assets/audio/Game_Background.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Attack.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Attack.mp3",
+      "path": "assets/audio/Attack.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Taking_a_Hit.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Taking_a_Hit.mp3",
+      "path": "assets/audio/Taking_a_Hit.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Collection.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Collection.mp3",
+      "path": "assets/audio/Collection.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Destroy.mp3",
+      "replacement": "games/3d/planet-war/assets/destroy.mp3",
+      "path": "assets/audio/Destroy.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Level_Complete.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Level_Complete.mp3",
+      "path": "assets/audio/Level_Complete.mp3"
+    },
+    {
+      "game": "vaccine-shooter",
+      "missing": "assets/audio/Game_Over.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Game_Over.mp3",
+      "path": "assets/audio/Game_Over.mp3"
+    },
+    {
+      "game": "words-of-wonder",
+      "missing": "assets/platform1.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform1.png",
+      "path": "assets/platform1.png"
+    },
+    {
+      "game": "words-of-wonder",
+      "missing": "assets/platform3.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform3.png",
+      "path": "assets/platform3.png"
+    },
+    {
+      "game": "words-of-wonder",
+      "missing": "assets/platform4.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform4.png",
+      "path": "assets/platform4.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/outfit.ttf",
+      "replacement": "games/3d/cosmic-cleaner/outfit.ttf",
+      "path": "assets/outfit.ttf"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/platform4.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform4.png",
+      "path": "assets/images/platform4.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/platform1.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform1.png",
+      "path": "assets/images/platform1.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/obj7.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj7.png",
+      "path": "assets/images/obj7.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/obj3.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj3.png",
+      "path": "assets/images/obj3.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/left.png",
+      "replacement": "games/3d/planet-war/assets/left.png",
+      "path": "assets/images/left.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/right.png",
+      "replacement": "games/3d/planet-war/assets/right.png",
+      "path": "assets/images/right.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/action.png",
+      "replacement": "games/arcade/bug-smasher/assets/action.png",
+      "path": "assets/images/action.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/htpbox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/htpbox.png",
+      "path": "assets/images/htpbox.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/ovrbox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/ovrbox.png",
+      "path": "assets/images/ovrbox.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/replay.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/replay.png",
+      "path": "assets/images/replay.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/lvl_replay.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/lvl_replay.png",
+      "path": "assets/images/lvl_replay.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/lvlbox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/lvlbox.png",
+      "path": "assets/images/lvlbox.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/next.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/next.png",
+      "path": "assets/images/next.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/images/playbtn.png",
+      "replacement": "games/3d/orbital-outpost/assets/playbtn.png",
+      "path": "assets/images/playbtn.png"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Game_Background.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Game_Background.mp3",
+      "path": "assets/audio/Game_Background.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Attack.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Attack.mp3",
+      "path": "assets/audio/Attack.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Collision.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Collision.mp3",
+      "path": "assets/audio/Collision.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Level_Complete.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Level_Complete.mp3",
+      "path": "assets/audio/Level_Complete.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Destroy.mp3",
+      "replacement": "games/3d/planet-war/assets/destroy.mp3",
+      "path": "assets/audio/Destroy.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Jump.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Jump.mp3",
+      "path": "assets/audio/Jump.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Taking_a_Hit.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Taking_a_Hit.mp3",
+      "path": "assets/audio/Taking_a_Hit.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Collection.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Collection.mp3",
+      "path": "assets/audio/Collection.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Explosion.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Explosion.mp3",
+      "path": "assets/audio/Explosion.mp3"
+    },
+    {
+      "game": "penalty",
+      "missing": "assets/audio/Game_Over.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Game_Over.mp3",
+      "path": "assets/audio/Game_Over.mp3"
+    },
+    {
+      "game": "swipe-assassin",
+      "missing": "assets/outfit.ttf",
+      "replacement": "games/3d/cosmic-cleaner/outfit.ttf",
+      "path": "assets/outfit.ttf"
+    },
+    {
+      "game": "abhita",
+      "missing": "./assets/play_button.png",
+      "replacement": "games/3d/orbital-outpost/assets/playbtn.png",
+      "path": "assets/play_button.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/background.png",
+      "replacement": "Existing game asset: assets/background.png",
+      "path": "assets/background.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj7.png",
+      "replacement": "Existing game asset: assets/obj7.png",
+      "path": "assets/obj7.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj11.png",
+      "replacement": "Existing game asset: assets/obj11.png",
+      "path": "assets/obj11.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj13.png",
+      "replacement": "Existing game asset: assets/obj13.png",
+      "path": "assets/obj13.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj20.png",
+      "replacement": "Existing game asset: assets/obj20.png",
+      "path": "assets/obj20.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj18.png",
+      "replacement": "Existing game asset: assets/obj18.png",
+      "path": "assets/obj18.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj22.png",
+      "replacement": "Existing game asset: assets/obj22.png",
+      "path": "assets/obj22.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/obj12.png",
+      "replacement": "Existing game asset: assets/obj12.png",
+      "path": "assets/obj12.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/platform1.png",
+      "replacement": "Existing game asset: assets/platform1.png",
+      "path": "assets/platform1.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/platform3.png",
+      "replacement": "Existing game asset: assets/platform3.png",
+      "path": "assets/platform3.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/left.png",
+      "replacement": "Existing game asset: assets/left.png",
+      "path": "assets/left.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/right.png",
+      "replacement": "Existing game asset: assets/right.png",
+      "path": "assets/right.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/action.png",
+      "replacement": "games/arcade/bug-smasher/assets/action.png",
+      "path": "assets/images/action.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/htpbox.png",
+      "replacement": "Existing game asset: assets/htpbox.png",
+      "path": "assets/htpbox.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/ovrbox.png",
+      "replacement": "Existing game asset: assets/ovrbox.png",
+      "path": "assets/ovrbox.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/replay.png",
+      "replacement": "Existing game asset: assets/replay.png",
+      "path": "assets/replay.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/lvl_replay.png",
+      "replacement": "Existing game asset: assets/lvl_replay.png",
+      "path": "assets/lvl_replay.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/images/lvlbox.png",
+      "replacement": "Existing game asset: assets/lvlbox.png",
+      "path": "assets/lvlbox.png"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Game_Background.mp3",
+      "replacement": "Existing game asset: assets/Game_Background.mp3",
+      "path": "assets/Game_Background.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Attack.mp3",
+      "replacement": "Existing game asset: assets/Attack.mp3",
+      "path": "assets/Attack.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Explosion.mp3",
+      "replacement": "Existing game asset: assets/Explosion.mp3",
+      "path": "assets/Explosion.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Destroy.mp3",
+      "replacement": "Existing game asset: assets/Destroy.mp3",
+      "path": "assets/Destroy.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Taking_a_Hit.mp3",
+      "replacement": "Existing game asset: assets/Taking_a_Hit.mp3",
+      "path": "assets/Taking_a_Hit.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Collection.mp3",
+      "replacement": "Existing game asset: assets/Collection.mp3",
+      "path": "assets/Collection.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Level_Complete.mp3",
+      "replacement": "Existing game asset: assets/Level_Complete.mp3",
+      "path": "assets/Level_Complete.mp3"
+    },
+    {
+      "game": "bomb-blast",
+      "missing": "assets/audio/Game_Over.mp3",
+      "replacement": "Existing game asset: assets/Game_Over.mp3",
+      "path": "assets/Game_Over.mp3"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/lane.png",
+      "replacement": "Existing game asset: assets/lane.png",
+      "path": "assets/lane.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/ball.png",
+      "replacement": "Existing game asset: assets/ball.png",
+      "path": "assets/ball.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/pin.png",
+      "replacement": "Existing game asset: assets/pin.png",
+      "path": "assets/pin.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/ui_btn.png",
+      "replacement": "Existing game asset: assets/ui_btn.png",
+      "path": "assets/ui_btn.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/htpbox.png",
+      "replacement": "Existing game asset: assets/htpbox.png",
+      "path": "assets/htpbox.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/playbtn.png",
+      "replacement": "Existing game asset: assets/playbtn.png",
+      "path": "assets/playbtn.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/ovrbox.png",
+      "replacement": "Existing game asset: assets/ovrbox.png",
+      "path": "assets/ovrbox.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/replay.png",
+      "replacement": "Existing game asset: assets/replay.png",
+      "path": "assets/replay.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/lvlbox.png",
+      "replacement": "Existing game asset: assets/lvlbox.png",
+      "path": "assets/lvlbox.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/next.png",
+      "replacement": "Existing game asset: assets/next.png",
+      "path": "assets/next.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/images/lvl_replay.png",
+      "replacement": "Existing game asset: assets/lvl_replay.png",
+      "path": "assets/lvl_replay.png"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/audio/roll.mp3",
+      "replacement": "Existing game asset: assets/roll.mp3",
+      "path": "assets/roll.mp3"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/audio/pin.mp3",
+      "replacement": "Existing game asset: assets/pin.mp3",
+      "path": "assets/pin.mp3"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/audio/strike.mp3",
+      "replacement": "Existing game asset: assets/strike.mp3",
+      "path": "assets/strike.mp3"
+    },
+    {
+      "game": "bowling",
+      "missing": "assets/audio/spare.mp3",
+      "replacement": "Existing game asset: assets/spare.mp3",
+      "path": "assets/spare.mp3"
+    },
+    {
+      "game": "bubble-shooter",
+      "missing": "./assets/htpbox.png",
+      "replacement": "games/3d/cosmic-cleaner/assets/htpbox.png",
+      "path": "assets/htpbox.png"
+    },
+    {
+      "game": "bubble-shooter",
+      "missing": "./assets/playbtn.png",
+      "replacement": "games/3d/orbital-outpost/assets/playbtn.png",
+      "path": "assets/playbtn.png"
+    },
+    {
+      "game": "bubble-shooter",
+      "missing": "./assets/eve_spritesheet.png",
+      "replacement": "games/arcade/bomb-blast/assets/Spritesheet.png",
+      "path": "assets/eve_spritesheet.png"
+    },
+    {
+      "game": "candy-crush",
+      "missing": "./assets/lvl2icon.png",
+      "replacement": "Existing game asset: assets/lvl1icon.png",
+      "path": "assets/lvl1icon.png"
+    },
+    {
+      "game": "dream-weaver",
+      "missing": "assets/images/background.png",
+      "replacement": "games/3d/planet-war/assets/bg.png",
+      "path": "assets/images/background.png"
+    },
+    {
+      "game": "dream-weaver",
+      "missing": "assets/images/platform.png",
+      "replacement": "games/3d/planet-visitor/assets/platform.png",
+      "path": "assets/images/platform.png"
+    },
+    {
+      "game": "dream-weaver",
+      "missing": "assets/images/spike.png",
+      "replacement": "games/arcade/bomb-blast/assets/obj1.png",
+      "path": "assets/images/spike.png"
+    },
+    {
+      "game": "dream-weaver",
+      "missing": "assets/images/gate.png",
+      "replacement": "games/arcade/bomb-blast/assets/platform1.png",
+      "path": "assets/images/gate.png"
+    },
+    {
+      "game": "flappy",
+      "missing": "./assets/characters.png",
+      "replacement": "games/arcade/bomb-blast/assets/Spritesheet.png",
+      "path": "assets/characters.png"
+    },
+    {
+      "game": "forest-runner",
+      "missing": "./assets/heart-icon.svg",
+      "replacement": "Generated UI symbol",
+      "path": "assets/heart-icon.svg"
+    },
+    {
+      "game": "forest-runner",
+      "missing": "./assets/magic-icon.svg",
+      "replacement": "Generated UI symbol",
+      "path": "assets/magic-icon.svg"
+    },
+    {
+      "game": "forest-runner",
+      "missing": "./assets/score-icon.svg",
+      "replacement": "Generated UI symbol",
+      "path": "assets/score-icon.svg"
+    },
+    {
+      "game": "memory",
+      "missing": "./assets/match.png",
+      "replacement": "games/arcade/collector/assets/collect.png",
+      "path": "assets/match.png"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/ovrg.png",
+      "replacement": "Existing game asset: assets/ovrbox.png",
+      "path": "assets/ovrbox.png"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/audio/music.mp3",
+      "replacement": "Existing game asset: assets/music.mp3",
+      "path": "assets/music.mp3"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/audio/alert.mp3",
+      "replacement": "Existing game asset: assets/alert.mp3",
+      "path": "assets/alert.mp3"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/audio/hit.mp3",
+      "replacement": "Existing game asset: assets/hit.mp3",
+      "path": "assets/hit.mp3"
+    },
+    {
+      "game": "orbital-outpost",
+      "missing": "assets/audio/collect.mp3",
+      "replacement": "Existing game asset: assets/collect.mp3",
+      "path": "assets/collect.mp3"
+    },
+    {
+      "game": "planet-visitor",
+      "missing": "./assets/shoot_button.png",
+      "replacement": "games/arcade/bug-smasher/assets/action.png",
+      "path": "assets/shoot_button.png"
+    },
+    {
+      "game": "red-light-green-light",
+      "missing": "./assets/hero.png",
+      "replacement": "Existing game asset: assets/player.png",
+      "path": "assets/player.png"
+    },
+    {
+      "game": "unruly",
+      "missing": "./assets/Destroy.mp3",
+      "replacement": "games/3d/planet-war/assets/destroy.mp3",
+      "path": "assets/Destroy.mp3"
+    },
+    {
+      "game": "unruly",
+      "missing": "./assets/Jump.mp3",
+      "replacement": "games/arcade/bomb-blast/assets/Jump.mp3",
+      "path": "assets/Jump.mp3"
+    }
+  ],
+  "removedUnused": [
+    "dream-weaver: unused empty config.json",
+    "games/platformer/devil-king/assets/index.html",
+    "games/platformer/doodle-jump/assets/characters.json",
+    "games/arcade/flappy/assets/characters.json",
+    "games/board/ludo/riseup.html",
+    "games/puzzle/memory/hdjdkd.html",
+    "games/puzzle/tetris/Scenes/BootScene.js",
+    "games/puzzle/tetris/Scenes/GameOverScene.js",
+    "games/puzzle/tetris/Scenes/GameScene.js",
+    "games/puzzle/tetris/Scenes/MainMenuScene.js",
+    "games/puzzle/tetris/Scenes/WinScene.js",
+    "games/shooter/window-shooter/manifest.json"
+  ]
+}

@@ -1,33 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ANSWERS, DICTIONARY, evaluateGuess, WordleEngine, MemoryEngine, ColorEngine, TypingEngine } from "../src/games/casual/engine.ts";
+import { MemoryEngine, ColorEngine, TypingEngine } from "../src/games/casual/engine.ts";
 
-test("Wordle has 500+ distinct valid answers and does not repeat before its library cycles", () => {
-  assert.ok(ANSWERS.length > 500);
-  assert.equal(new Set(ANSWERS).size, ANSWERS.length);
-  assert.ok(ANSWERS.every(word => /^[A-Z]{5}$/.test(word) && DICTIONARY.has(word)));
-  const stages = Array.from({ length: ANSWERS.length }, (_, i) => new WordleEngine(i + 1).answer);
-  assert.equal(new Set(stages).size, ANSWERS.length);
-  assert.equal(new WordleEngine(1).answer, new WordleEngine(ANSWERS.length + 1).answer);
-});
-test("Wordle duplicate letters consume only available copies after exact matches", () => {
-  assert.deepEqual(evaluateGuess("ALLEY", "APPLE"), ["correct", "present", "absent", "present", "absent"]);
-  assert.deepEqual(evaluateGuess("GEESE", "SPEED"), ["absent", "present", "correct", "present", "absent"]);
-});
-test("Wordle rejects invalid guesses without using an attempt, wins and loses explicitly", () => {
-  const game = new WordleEngine(1);
-  assert.equal(game.submit("ZZZZZ"), false); assert.equal(game.guesses.length, 0);
-  const wrong = ANSWERS.find(word => word !== game.answer);
-  for (let i = 0; i < 6; i++) assert.equal(game.submit(wrong), true);
-  assert.equal(game.state, "lost"); assert.equal(game.submit(game.answer), false);
-  const retry = new WordleEngine(1); assert.equal(retry.answer, game.answer);
-  retry.submit(retry.answer); assert.equal(retry.state, "won"); assert.ok(retry.score > 0);
-});
-test("Wordle hint reveals a new position; the extra guess can be added only once", () => {
-  const game = new WordleEngine(6); game.hint(); game.hint(); assert.equal(game.revealed.size, 2);
-  for (const [position, letter] of game.revealed) assert.equal(letter, game.answer[position]);
-  game.lifeline(); game.lifeline(); assert.equal(game.maxAttempts, 7);
-});
 test("Memory decks have exactly two of every symbol and 500+ repeatable arrangements per size", () => {
   for (const size of [4, 5, 6]) {
     const layouts = new Set();

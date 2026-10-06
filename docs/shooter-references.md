@@ -10,14 +10,3 @@ The standalone menus, shop, achievements, touch controls, and selectable endless
 
 Changes to the reference include: fix the undefined `swarm` roster entry (the `drone` supplies swarm behavior); direct boss fan shots downward; prevent consumed bullets hitting both an enemy and a boss; guard completion against duplicate delivery; clear score popups on restart; and run temporary power-up expiry on gameplay time, so it pauses and cannot affect a restarted mission.
 
-## Space Invaders
-
-Source: the user-supplied `space-invaders-main/space-invaders-main` project. Its MIT license is retained in `docs/licenses/space-invaders-MIT.txt` and alongside the deployed atlas as `public/games/space-invaders/LICENSE.txt` (copyright 2017 Richard Davey).
-
-The supplied atlas and pixel aesthetic are reused in a Phaser scene. The reference's arrow movement, Space shooting, five alien rows, two-frame alien animation, and 10-point kills are preserved. The scene replaces per-frame/event-dependent movement and collision with delta-time movement, swept bullet checks, and explicit removal of defeated enemies. This prevents duplicate scores and empty-formation firing.
-
-The adaptation adds 8 / 10 / 12-column options, seeded row arrangements, bunker wear, random bottom-column attacks, accelerating marches, descending at edges, a bonus saucer, three lives, a firing-lane hint, and a four-second emergency shield. There is no alternate menu or stage skip. Shared controls manage restart, progression, hints, session score, and break lockout.
-
-## Verification scope
-
-TypeScript checking, JavaScript syntax checking, and the production build are used for this integration. These are not a browser playthrough. The reference GIF and sprite atlas were inspected; live visual review remains to be done in a local browser.

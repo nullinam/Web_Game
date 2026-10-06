@@ -2,8 +2,6 @@ import { mountPacmanScene } from "./phaser/pacman";
 import type { Run } from "./phaser/run";
 import { mountCasualGame } from "./casual/mount";
 import { mountCosmic } from "./shooters/cosmic";
-import { mountInvaders } from "./shooters/invaders";
-import { mountBreakout } from "./phaser/breakout";
 
 export type GameController = {
   restart(run: Run): void; pause(): void; resume(): void;
@@ -11,9 +9,7 @@ export type GameController = {
 };
 
 export function createGameController(parent: HTMLElement, run: Run): GameController {
-  if (run.gameId === "breakout") return mountBreakout(parent, run);
   if (run.gameId === "cosmic-strike") return mountCosmic(parent, run);
-  if (run.gameId === "space-invaders") return mountInvaders(parent, run);
   if (run.gameId !== "pacman") return mountCasualGame(parent, run);
   const game = mountPacmanScene(parent, run);
   const scene = () => game.scene.getScene("pacman") as import("phaser").Scene & { hint(): void; lifeline(): void; getScore(): number };

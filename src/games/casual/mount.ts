@@ -1,12 +1,10 @@
-import { WordleEngine, MemoryEngine, ColorEngine, TypingEngine, COLORS, type LetterState } from "./engine";
+import { MemoryEngine, ColorEngine, TypingEngine, COLORS } from "./engine";
 import { Game2048Engine, type SlideDirection } from "./2048-engine";
 import type { Run } from "../phaser/run";
 import type { GameController } from "../controller";
 import "./style.css";
 
-type Engine = WordleEngine | MemoryEngine | ColorEngine | TypingEngine | Game2048Engine;
-const keyRows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
-const priority: Record<LetterState, number> = { absent: 0, present: 1, correct: 2 };
+type Engine = MemoryEngine | ColorEngine | TypingEngine | Game2048Engine;
 
 export function mountCasualGame(parent: HTMLElement, initial: Run): GameController {
   const host = document.createElement("section"); host.className = "casual-game"; parent.appendChild(host);
@@ -17,20 +15,18 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
   const active = () => !disposed && !paused() && engine.state === "playing";
   function build() {
     best = Number(localStorage.getItem(bestKey()) || 0); buffer = ""; manualPaused = false; externalPaused = false; notified = false; lastStatus = ""; boardMarkup = "";
-    engine = run.gameId === "2048" ? new Game2048Engine(run.size, run.seed) : run.gameId === "wordle" ? new WordleEngine(run.level) : run.gameId === "memory" ? new MemoryEngine(run.size, run.seed) : run.gameId === "color-match" ? new ColorEngine(run.size, run.seed, run.level) : new TypingEngine(run.size, run.seed, run.level);
+    engine = run.gameId === "2048" ? new Game2048Engine(run.size, run.seed) : run.gameId === "memory" ? new MemoryEngine(run.size, run.seed) : run.gameId === "color-match" ? new ColorEngine(run.size, run.seed, run.level) : new TypingEngine(run.size, run.seed, run.level);
     host.dataset.game = run.gameId;
     host.innerHTML = `<div class="casual-hud"><span data-round-score></span><span data-round-metric></span><button type="button" data-pause>Pause</button></div><div class="casual-board" data-board></div><div data-entry></div><p class="casual-feedback" data-feedback role="status"></p><div class="casual-paused" data-paused hidden><strong>Paused</strong><button type="button" data-resume>Resume play</button></div>`;
     if (engine instanceof Game2048Engine) {
       host.querySelector("[data-entry]")!.innerHTML = '<div class="number-controls" aria-label="Slide direction"><button type="button" data-slide="up" aria-label="Slide up">↑</button><button type="button" data-slide="left" aria-label="Slide left">←</button><button type="button" data-slide="down" aria-label="Slide down">↓</button><button type="button" data-slide="right" aria-label="Slide right">→</button></div>';
-    } else if (engine instanceof WordleEngine) {
-      host.querySelector("[data-entry]")!.innerHTML = `<form class="word-entry"><label>Five-letter guess <input data-word-input maxlength="5" autocomplete="off" spellcheck="false" aria-label="Five-letter guess"></label><button type="submit">Check guess</button></form><div class="word-keyboard">${keyRows.map((row, i) => `<div>${i === 2 ? '<button type="button" data-key="ENTER">Enter</button>' : ""}${[...row].map(c => `<button type="button" data-key="${c}">${c}</button>`).join("")}${i === 2 ? '<button type="button" data-key="BACKSPACE">⌫</button>' : ""}</div>`).join("")}</div><p class="word-legend">✓ Exact position · ↔ In the word · × Not in the word</p>`;
     } else if (engine instanceof TypingEngine) {
       host.querySelector("[data-entry]")!.innerHTML = `<form class="typing-entry"><label>Type a falling word <input data-word-input autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a falling word"></label><button type="submit">Submit</button></form>`;
     }
     const input = host.querySelector<HTMLInputElement>("[data-word-input]");
     input?.addEventListener("input", () => {
       if (!active()) return;
-      buffer = engine instanceof WordleEngine ? input.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 5) : input.value.toLowerCase().replace(/[^a-z]/g, "");
+      buffer = input.value.toLowerCase().replace(/[^a-z]/g, "");
       input.value = buffer;
       if (engine instanceof TypingEngine && engine.submit(buffer)) { buffer = ""; input.value = ""; }
       render();
@@ -40,23 +36,15 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
   }
   function submit() {
     if (!active()) return;
-    if (engine instanceof WordleEngine) { if (engine.submit(buffer)) buffer = ""; }
-    else if (engine instanceof TypingEngine) { if (engine.submit(buffer, true)) buffer = ""; }
+    if (engine instanceof TypingEngine) { if (engine.submit(buffer, true)) buffer = ""; }
     const input = host.querySelector<HTMLInputElement>("[data-word-input]"); if (input) input.value = buffer;
     render();
-  }
-  function wordKey(key: string) {
-    if (!active() || !(engine instanceof WordleEngine)) return;
-    if (key === "ENTER") return submit();
-    if (key === "BACKSPACE") buffer = buffer.slice(0, -1); else if (/^[A-Z]$/.test(key) && buffer.length < 5) buffer += key;
-    host.querySelector<HTMLInputElement>("[data-word-input]")!.value = buffer; render();
   }
   function click(event: MouseEvent) {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>("button"); if (!button) return;
     if (button.hasAttribute("data-pause") || button.hasAttribute("data-resume")) { if (externalPaused || engine.state !== "playing") return; manualPaused = !manualPaused; render(); if (!manualPaused) host.querySelector<HTMLInputElement>("[data-word-input]")?.focus(); return; }
     if (!active()) return;
     if (button.dataset.slide && engine instanceof Game2048Engine) { engine.move(button.dataset.slide as SlideDirection); render(); }
-    if (button.dataset.key) wordKey(button.dataset.key);
     if (button.dataset.card !== undefined && engine instanceof MemoryEngine) { engine.select(Number(button.dataset.card)); render(); }
     if (button.dataset.color !== undefined && engine instanceof ColorEngine) { engine.answer(Number(button.dataset.color)); render(); }
   }
@@ -64,7 +52,7 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
     if (event.ctrlKey || event.metaKey || event.altKey || event.key === "Escape") return;
     const target = event.target as HTMLElement, editing = ["INPUT", "SELECT", "TEXTAREA"].includes(target?.tagName);
     if (editing) return;
-    if (event.key.toLowerCase() === "p" && !(engine instanceof WordleEngine) && !(engine instanceof TypingEngine)) { if (!externalPaused && engine.state === "playing") { event.preventDefault(); manualPaused = !manualPaused; render(); } return; }
+    if (event.key.toLowerCase() === "p" && !(engine instanceof TypingEngine)) { if (!externalPaused && engine.state === "playing") { event.preventDefault(); manualPaused = !manualPaused; render(); } return; }
     if (engine instanceof Game2048Engine && event.key.toLowerCase() === "r" && !externalPaused && !manualPaused) { event.preventDefault(); run.onRestart?.(); return; }
     if (!active()) return;
     if (engine instanceof Game2048Engine) {
@@ -73,10 +61,7 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
       if (direction) { event.preventDefault(); engine.move(direction); render(); }
       return;
     }
-    if (engine instanceof WordleEngine && (/^[a-z]$/i.test(event.key) || ["Backspace", "Enter"].includes(event.key))) {
-      if (event.key === "Enter" && target?.tagName === "BUTTON") return;
-      event.preventDefault(); wordKey(event.key.toUpperCase());
-    } else if (engine instanceof ColorEngine && /^[1-8]$/.test(event.key)) { event.preventDefault(); engine.answer(Number(event.key) - 1); render(); }
+    if (engine instanceof ColorEngine && /^[1-8]$/.test(event.key)) { event.preventDefault(); engine.answer(Number(event.key) - 1); render(); }
     else if (engine instanceof MemoryEngine && event.key.startsWith("Arrow")) {
       const current = Number(target?.dataset.card ?? 0), cols = run.size === 5 ? 5 : run.size;
       const delta = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : event.key === "ArrowDown" ? cols : -cols;
@@ -105,16 +90,6 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
       }
       host.querySelectorAll<HTMLButtonElement>("[data-slide]").forEach(button => { button.disabled = !active() || e.animationMs > 0; button.classList.toggle("hinted", e.hintMs > 0 && button.dataset.slide === e.hintDirection); });
       metric.textContent = `${e.moves} moves · ${Math.floor(e.elapsed / 1000)}s · Highest ${e.highest} · Goal 2048`;
-    } else if (engine instanceof WordleEngine) {
-      const e = engine; board.className = "casual-board word-board";
-      setBoard(Array.from({ length: e.maxAttempts }, (_, row) => `<div class="word-row">${Array.from({ length: 5 }, (_, col) => {
-        const guess = e.guesses[row], state = guess?.states[col], c = guess?.word[col] ?? (row === e.guesses.length ? buffer[col] ?? "" : "");
-        return `<span class="word-tile ${state || ""}" aria-label="${c || 'Empty'}, ${state || 'unsubmitted'}">${c}<small>${state === "correct" ? "✓" : state === "present" ? "↔" : state === "absent" ? "×" : ""}</small></span>`;
-      }).join("")}</div>`).join(""));
-      const keyStates = new Map<string, LetterState>();
-      for (const guess of e.guesses) [...guess.word].forEach((c, i) => { const current = keyStates.get(c); if (!current || priority[guess.states[i]] > priority[current]) keyStates.set(c, guess.states[i]); });
-      host.querySelectorAll<HTMLButtonElement>("[data-key]").forEach(b => { b.dataset.state = keyStates.get(b.dataset.key!) ?? ""; b.disabled = !active(); });
-      metric.textContent = `${e.guesses.length} / ${e.maxAttempts} guesses`;
     } else if (engine instanceof MemoryEngine) {
       const e = engine; board.className = "casual-board memory-board"; board.style.setProperty("--columns", String(run.size));
       setBoard(e.cards.map((_, i) => `<button type="button" class="memory-tile" data-card="${i}"><span></span></button>`).join(""));
@@ -162,7 +137,7 @@ export function mountCasualGame(parent: HTMLElement, initial: Run): GameControll
   function loop(now: number) {
     if (disposed) return;
     const ms = Math.max(0, Math.min(100, now - lastFrame)); lastFrame = now;
-    if (active() && !document.hidden && !(engine instanceof WordleEngine)) engine.tick(ms);
+    if (active() && !document.hidden) engine.tick(ms);
     if (now - lastPaint >= (engine instanceof TypingEngine ? 16 : 100)) { lastPaint = now; render(); }
     frameId = requestAnimationFrame(loop);
   }

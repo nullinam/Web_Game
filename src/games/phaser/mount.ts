@@ -26,7 +26,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
   const gameInfo = games.find((item) => item.id === gameId);
   if (!gameInfo) throw new Error(`Unknown game: ${gameId}`);
   const pacman = gameId === "pacman";
-  const sizeText = (value: number) => gameId === "breakout" ? `${value} columns` : gameId === "cosmic-strike" ? `${value} waves + boss` : gameId === "space-invaders" ? `5 rows × ${value} columns` : gameId === "wordle" ? "5 letters" : gameId === "memory" ? (value === 5 ? "4 × 5 cards" : `${value} × ${value} cards`) : gameId === "color-match" ? `${value} colors` : gameId === "typing-speed" ? `${value} words` : `${value} × ${value}`;
+  const sizeText = (value: number) => gameId === "cosmic-strike" ? `${value} waves + boss` : gameId === "memory" ? (value === 5 ? "4 × 5 cards" : `${value} × ${value} cards`) : gameId === "color-match" ? `${value} colors` : gameId === "typing-speed" ? `${value} words` : `${value} × ${value}`;
   const stageName = pacman ? "Maze" : "Stage";
   let level = Math.max(1, Number(localStorage.getItem(levelKey(gameId)) || 1));
   let size = Number(localStorage.getItem(sizeKey(gameId)) || (gameId === "2048" ? 4 : 25));
@@ -43,6 +43,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
   let breakVisible = false;
   let lockVisible = false;
   let lockTimerId = 0;
+  let playTimerId = 0;
 
   root.innerHTML = `
     <section class="puzzle-shell" style="--puzzle-accent:${gameInfo.accent}">
@@ -53,7 +54,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
       <div class="puzzle-config">
         <label>${gameInfo.sizeLabel} <select data-size>${gameInfo.sizes.map((value) => `<option value="${value}"${value === size ? " selected" : ""}>${sizeText(value)}</option>`).join("")}</select></label>
         <label class="setup-mix" ${gameInfo.sizes.length === 1 ? "hidden" : ""}><input type="checkbox" data-mix${mixer ? " checked" : ""}> Mix sizes after completion</label>
-        <span class="combo-note">${gameId === "wordle" ? "500+ different answers" : "500+ seeded layouts / sequences"}</span>
+        <span class="combo-note">500+ seeded layouts / sequences</span>
       </div>
       <div class="puzzle-instruction"><span class="instruction-mark">i</span><span>${escape(gameInfo.instructions)}</span><span class="puzzle-status" data-status>Choose settings to start</span></div>
       <div class="puzzle-controls">${escape(gameInfo.controls)}</div>
@@ -100,13 +101,14 @@ export function mountGame(root: HTMLElement, gameId: string) {
     mixInput.disabled = false;
     status.textContent = "Completed · score added";
     const roundScore = arcadeScore ?? instance?.getScore() ?? 0;
-    sessionSolved += 1;
-    sessionScore += roundScore;
+    const creditKey = `little-puzzles:credited:${gameId}:${level}:${size}`;
+    const alreadyCredited = sessionStorage.getItem(creditKey) === "true";
+    if (!alreadyCredited) { sessionSolved += 1; sessionScore += roundScore; sessionStorage.setItem(creditKey, "true"); }
     sessionStorage.setItem("little-puzzles:solved", String(sessionSolved));
     sessionStorage.setItem("little-puzzles:score", String(sessionScore));
     noticeScore.textContent = `SESSION SCORE ${sessionScore.toLocaleString()}`;
     root.querySelector<HTMLElement>("[data-streak]")!.textContent = `${sessionSolved} STAGES COMPLETED`;
-    root.querySelector<HTMLElement>("[data-win-copy]")!.textContent = `+${roundScore.toLocaleString()} points · ${sessionSolved} stages completed this session`;
+    root.querySelector<HTMLElement>("[data-win-copy]")!.textContent = alreadyCredited ? "This stage's score has already been added to the session." : `+${roundScore.toLocaleString()} points · ${sessionSolved} stages completed this session`;
     nextSizeSelect.value = String(size);
     nextMixInput.checked = mixer;
     winNotice.hidden = false;
@@ -193,6 +195,8 @@ export function mountGame(root: HTMLElement, gameId: string) {
     const lockUntil = Number(localStorage.getItem(lockKey) || 0);
     if (lockUntil > Date.now() && !lockVisible) {
       lockVisible = true;
+      if (playTimerId) { window.clearInterval(playTimerId); playTimerId = 0; }
+      lastClockTick = 0;
       instance?.pause();
       const lockPanel = root.querySelector<HTMLElement>("[data-lock]")!;
       lockPanel.hidden = false;
@@ -207,18 +211,18 @@ export function mountGame(root: HTMLElement, gameId: string) {
           window.clearInterval(lockTimerId); lockTimerId = 0; lockPanel.hidden = true; lockVisible = false; localStorage.removeItem(lockKey);
           root.querySelector<HTMLElement>("[data-break]")!.hidden = true; breakVisible = false;
           activePlayedMs = 0; lastClockTick = 0; localStorage.setItem(sessionTimeKey, "0"); localStorage.setItem(breakDueKey, String(30 * 60 * 1000));
-          instance?.resume(); runClock();
+          if (instance) { instance.resume(); runClock(); } else { setup.hidden = false; }
         }
       }, 1000);
     }
   };
   function runClock() {
-    if (lastClockTick) return;
+    if (playTimerId || lockVisible || !instance && setup.hidden === false) return;
     lastClockTick = Date.now();
     const clock = root.querySelector<HTMLElement>("[data-clock]")!;
     const breakPanel = root.querySelector<HTMLElement>("[data-break]")!;
-    const timer = window.setInterval(() => {
-      if (disposed) { window.clearInterval(timer); return; }
+    playTimerId = window.setInterval(() => {
+      if (disposed || lockVisible) { window.clearInterval(playTimerId); playTimerId = 0; return; }
       const now = Date.now();
       if (document.visibilityState === "visible") activePlayedMs += Math.max(0, Math.min(now - lastClockTick, 2000));
       lastClockTick = now;
@@ -227,7 +231,6 @@ export function mountGame(root: HTMLElement, gameId: string) {
         const until = Date.now() + 2 * 60 * 60 * 1000;
         localStorage.setItem(lockKey, String(until));
         showLock();
-        window.clearInterval(timer);
         return;
       }
       const remaining = Math.max(0, Number(localStorage.getItem(breakDueKey) || 30 * 60 * 1000) - activePlayedMs);
@@ -289,6 +292,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
     if (disposed) return;
     disposed = true;
     if (lockTimerId) window.clearInterval(lockTimerId);
+    if (playTimerId) window.clearInterval(playTimerId);
     window.removeEventListener("storage", handleStorage);
     instance?.destroy();
     instance = null;
