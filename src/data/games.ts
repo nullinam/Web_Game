@@ -1,5 +1,4 @@
-import collection from "./collection.json";
-export type GameId = string;
+export type GameId = "pacman" | "memory" | "color-match" | "typing-speed" | "2048" | "cosmic-strike";
 
 export type GameInfo = {
   id: GameId;
@@ -14,13 +13,10 @@ export type GameInfo = {
   sizeLabel: string;
   lifeline: string;
   controls: string;
-  kind: string;
-  category?: string;
-  sourcePath?: string;
-  tags?: string[];
+  kind: "arcade" | "puzzle" | "reaction";
 };
 
-const nativeGames: GameInfo[] = [
+export const games: GameInfo[] = [
   { id: "pacman", title: "Pacman", kind: "arcade", subtitle: "The arcade chase", description: "Clear the maze, outsmart four ghosts, and turn the chase around with power pellets.", icon: "◕", accent: "#ffda73", material: "arcade", instructions: "Eat every dot to clear the maze. Power pellets let you catch ghosts; avoid them when the power runs out. You have three lives.", sizes: [19, 25, 31], sizeLabel: "Maze", lifeline: "Freeze ghosts", controls: "Arrow keys or WASD move · P / Space pauses · R restarts" },
   { id: "memory", title: "Memory Card Match", kind: "puzzle", subtitle: "A little focus goes far", description: "Flip, remember, and match every pair. Fresh card layouts put your attention to the test.", icon: "✳", accent: "#c3aff0", material: "memory", instructions: "Flip two cards. Matching pairs stay face up; different cards turn back. Match every pair within the move budget. One move is two flips.", sizes: [4, 5, 6], sizeLabel: "Cards", lifeline: "Peek at cards", controls: "Click cards · Arrow keys move between cards · Enter or Space flips · P pauses" },
   { id: "color-match", title: "Color Match", kind: "reaction", subtitle: "Trust your eyes", description: "A word says one thing; its ink says another. Choose the ink and keep your streak alive.", icon: "◉", accent: "#f4a98d", material: "color", instructions: "Choose the ink color, not the meaning of the word. Survive a 60-second round with three lives. Wrong answers and expired questions cost a life. Five-answer streaks earn bonuses.", sizes: [4, 6, 8], sizeLabel: "Palette", lifeline: "Freeze clocks", controls: "Click the color label · Keys 1–8 answer · P pauses" },
@@ -29,11 +25,3 @@ const nativeGames: GameInfo[] = [
   { id: "cosmic-strike", title: "Cosmic Strike", kind: "arcade", subtitle: "Into the nebula", description: "Weaving fighters, armored ships, and phase-changing bosses. Dodge, boost, and clear a sector.", icon: "▲", accent: "#8fa8ff", material: "cosmic", instructions: "Clear the selected number of waves, then defeat the sector boss. Watch your hull and regenerating shield. Collect dropped power-ups and hold fire. A destroyed hull requires restarting this mission; the boss unlocks the next sector.", sizes: [3, 5, 7], sizeLabel: "Mission", lifeline: "Emergency shield", controls: "WASD / arrows move · Hold Space or left mouse to fire · Shift boosts · E charged special · P pauses · R restarts", },
 ];
 
-export const categories = collection.categories;
-export const games: GameInfo[] = [...nativeGames, ...collection.games.map(game => ({
-  id: game.id, title: game.name + (["pacman", "memory", "2048"].includes(game.slug) ? " · Collection" : ""),
-  kind: game.category, category: game.category, sourcePath: game.path, tags: game.tags,
-  subtitle: "Games Hub collection", description: game.description, icon: collection.categories.find(c => c.id === game.category)?.emoji || "✳",
-  accent: collection.categories.find(c => c.id === game.category)?.color || "#9bc7a7", material: "collection",
-  instructions: game.instructions, sizes: [1], sizeLabel: "Game", lifeline: "", controls: "Use the mouse and the game’s on-screen keyboard instructions.",
-}))];

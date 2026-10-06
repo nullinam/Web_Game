@@ -1,24 +1,16 @@
-# Game room rules
+# Shared game rules
 
-## Shared launcher
+The collection contains only Pacman, Memory Card Match, Color Match, Typing Speed, 2048 and Cosmic Strike.
 
-- Desktop play: mouse clicks and each game's displayed keyboard controls.
-- Search and category filters select games from the room.
-- Instructions appear before starting.
-- Restart remains available; no common Undo or Skip button is added.
-- Both game groups use the same stored budget for a 30-minute break reminder, 15-minute snooze and two-hour browser lock after 90 minutes.
-- Clearing site data can remove the browser-only lock. It is not a server-enforced corporate access policy.
+## Controls and progression
 
-## Retained custom games
+- Desktop mouse and keyboard controls are displayed before play.
+- Each game has its own sizes, goals, scoring and limits.
+- Restart retries the same seeded challenge. There are no common Undo, Skip or New Game buttons.
+- Complete the current challenge to unlock the next stage. Size changes and the size mixer apply to the next stage.
+- Challenging stages share three hints per page session. Each game also has one additional lifeline.
+- Session score and completed-stage count are tracked. Replaying an already credited stage does not add its score twice.
 
-Pacman, Memory Card Match, Color Match, Typing Speed, 2048 and Cosmic Strike retain custom sizes, seeded restarts and completion-based progression. Challenging stages share three hints per page session. Each has one additional lifeline.
+## Break reminders
 
-These games maintain session score and completed-stage count. Replaying a completed stage does not credit it a second time. Goals, limits and controls are displayed in each game.
-
-## Imported Games Hub games
-
-The 141 imported titles retain their original menus, rules, scoring, levels and replay behavior. Controls vary; use mouse clicks for on-screen buttons and follow keyboard instructions. Source menus mentioning tapping can be operated with a mouse click.
-
-The parent supplies Pause/Resume, Restart and Fullscreen. Restart reloads the original setup and can randomize according to the source code. In-game helpers and selectors are preserved to replicate the supplied code. No artificial common progression, score or hint system is claimed. There is no guarantee of 500 combinations per imported title.
-
-Pausing suspends scheduled animation callbacks and timers, and pauses active audio contexts/media where supported. Switching away pauses imported games. Closing the dialog destroys their runtime. Fullscreen includes parent break notices.
+A reminder appears after 30 accumulated minutes, with a 15-minute snooze. At 90 minutes, this browser is locked for two hours. The timer and lock survive refresh through browser storage; clearing site data can remove them, as agreed for static GitHub Pages hosting.

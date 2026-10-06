@@ -6,4 +6,4 @@ These games use independent TypeScript engines and scoped HTML/CSS controls. Mem
 
 Restart preserves the native challenge; completing it enables the next stage. Each game has a shared hint and one additional lifeline. Shared word/symbol data are retained because these games use them.
 
-No license was found in that earlier reference folder. Its licensing status is not changed by the separate MIT-licensed Games Hub collection described in [the collection notes](games-hub-collection.md).
+No license was found in that earlier reference folder.
