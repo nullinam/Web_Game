@@ -6,15 +6,14 @@ import type { ArcadeStats, Run } from "./run";
 const levelKey = (id: string) => `little-puzzles:${id}:level`;
 const sizeKey = (id: string) => `little-puzzles:${id}:size`;
 const mixKey = (id: string) => `little-puzzles:${id}:mix`;
+const difficultyKey = (id: string) => `little-puzzles:${id}:difficulty`;
 const lockKey = "little-puzzles:play-lock-until";
 const sessionTimeKey = "little-puzzles:play-minutes";
 const breakDueKey = "little-puzzles:break-due";
-const HINTS_PER_PAGE_SESSION = 3;
-let hintsRemaining = HINTS_PER_PAGE_SESSION;
 
-function seedFor(id: string, level: number, size: number) {
+function seedFor(id: string, level: number, size: number, difficulty = 1) {
   let hash = 2166136261;
-  for (const char of `${id}:${level}:${size}`) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  for (const char of `${id}:${level}:${size}:${difficulty}`) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
   return hash >>> 0 || 1;
 }
 
@@ -26,12 +25,21 @@ export function mountGame(root: HTMLElement, gameId: string) {
   const gameInfo = games.find((item) => item.id === gameId);
   if (!gameInfo) throw new Error(`Unknown game: ${gameId}`);
   const pacman = gameId === "pacman";
-  const sizeText = (value: number) => gameId === "cosmic-strike" ? `${value} waves + boss` : gameId === "memory" ? (value === 5 ? "4 × 5 cards" : `${value} × ${value} cards`) : gameId === "color-match" ? `${value} colors` : gameId === "typing-speed" ? `${value} words` : `${value} × ${value}`;
+  const sizeText = (value: number) => {
+    if (["connect-four", "tic-tac-toe", "snake-ladder", "ludo", "chess"].includes(gameId)) return ["Casual", "Smart", "Expert"][value - 1];
+    if (["pacman", "2048", "slide-puzzle", "link"].includes(gameId)) return `${value} × ${value}`;
+    if (gameId === "memory") return value === 5 ? "4 × 5 cards" : `${value} × ${value} cards`;
+    const labels: Record<string, string> = { "cosmic-strike": "waves + boss", "trench-defence": "waves", "color-match": "colors", "typing-speed": "words", "words-of-wonder": "words", tetris: "lines", snake: "fruit", "fruit-merge": "points", "stack-tower": "blocks", sudoku: "clues", "whack-a-bug": "bugs", "two-cars": "pickups", "tee-shooter": "targets", "tap-target": "targets", "air-hockey": "goals", survivor: "seconds", "sky-high": "height", "math-quiz": "questions", flappy: "pipes", "chrome-dino": "distance" };
+    return `${value} ${labels[gameId] ?? gameInfo.sizeLabel.toLowerCase()}`;
+  };
   const stageName = pacman ? "Maze" : "Stage";
   let level = Math.max(1, Number(localStorage.getItem(levelKey(gameId)) || 1));
   let size = Number(localStorage.getItem(sizeKey(gameId)) || (gameId === "2048" ? 4 : 25));
   if (!gameInfo.sizes.includes(size)) size = gameInfo.sizes[0];
   let mixer = localStorage.getItem(mixKey(gameId)) === "true";
+  let difficulty = Math.max(0, Math.min(2, Number(localStorage.getItem(difficultyKey(gameId)) || 1)));
+  const sizeForDifficulty = (d: number) => gameId === "2048" ? gameInfo.sizes[2 - d] : gameInfo.sizes[d];
+  size = sizeForDifficulty(difficulty);
   let instance: GameController | null = null;
   let disposed = false;
   let solved = false;
@@ -49,23 +57,20 @@ export function mountGame(root: HTMLElement, gameId: string) {
     <section class="puzzle-shell" style="--puzzle-accent:${gameInfo.accent}">
       <header class="puzzle-header">
         <div class="puzzle-title"><span class="puzzle-brand">LITTLE PUZZLES <i>✳</i></span><h2>${escape(gameInfo.title)}</h2></div>
-        <div class="puzzle-tools"><span class="puzzle-level" data-level></span><span class="puzzle-clock" data-clock>30:00 break</span><button class="puzzle-tool" data-hint hidden title="Use one of three session hints">? <span data-hint-count>Hint · 3</span></button><button class="puzzle-tool" data-lifeline title="${escape(gameInfo.lifeline)}">✦ <span>${escape(gameInfo.lifeline)}</span></button><button class="puzzle-tool" data-restart title="Restart this game">↻ <span>Restart</span></button></div>
+        <div class="puzzle-tools"><span class="puzzle-level" data-level></span><span class="puzzle-clock" data-clock>30:00 break</span><button class="puzzle-tool" data-lifeline title="One lifeline per challenge: ${escape(gameInfo.lifeline)}">✦ <span>${escape(gameInfo.lifeline)}</span></button><button class="puzzle-tool" data-restart title="Restart this game">↻ <span>Restart</span></button><button class="puzzle-tool" data-fullscreen title="Full screen">⛶ <span>Full screen</span></button><a class="puzzle-tool" data-new-tab href="?game=${encodeURIComponent(gameId)}" target="_blank" rel="noopener" title="Open this game in another tab">↗ <span>New tab</span></a><button class="puzzle-tool" data-close title="Close game">× <span>Close</span></button></div>
       </header>
       <div class="puzzle-config">
         <label>${gameInfo.sizeLabel} <select data-size>${gameInfo.sizes.map((value) => `<option value="${value}"${value === size ? " selected" : ""}>${sizeText(value)}</option>`).join("")}</select></label>
         <label class="setup-mix" ${gameInfo.sizes.length === 1 ? "hidden" : ""}><input type="checkbox" data-mix${mixer ? " checked" : ""}> Mix sizes after completion</label>
-        <span class="combo-note">500+ seeded layouts / sequences</span>
+        <span class="combo-note">Fresh challenge every stage</span>
       </div>
       <div class="puzzle-instruction"><span class="instruction-mark">i</span><span>${escape(gameInfo.instructions)}</span><span class="puzzle-status" data-status>Choose settings to start</span></div>
       <div class="puzzle-controls">${escape(gameInfo.controls)}</div>
       <div class="puzzle-stage" aria-label="${escape(gameInfo.title)} play area">
-        <div class="puzzle-setup" data-setup>
-          <button class="puzzle-next" data-start>${pacman ? "Start the chase" : "Start playing"} <b>→</b></button>
-          <p>${pacman ? "Clear every dot to unlock the next maze. Three lives per attempt." : "Complete this stage to unlock the next. Restart retries the same challenge."}</p>
-        </div>
         <div class="desktop-gate" data-desktop-gate hidden>For mouse and keyboard play, open this game on a desktop or laptop.</div>
       </div>
       <footer class="puzzle-footer"><span data-score>SESSION SCORE ${sessionScore.toLocaleString()}</span><span data-progress>Ready to play</span><span data-streak>${sessionSolved} STAGES COMPLETED</span></footer>
+      <div class="puzzle-setup" data-setup role="dialog" aria-modal="true" aria-label="${escape(gameInfo.title)} instructions"><div class="puzzle-start-card"><span class="notice-kicker">BEFORE YOU PLAY</span><h3>${escape(gameInfo.title)}</h3><p>${escape(gameInfo.instructions)}</p><p class="setup-controls">${escape(gameInfo.controls)}</p><label class="difficulty-picker">Difficulty <strong data-difficulty-name>Medium</strong><input type="range" data-difficulty min="0" max="2" step="1" value="${difficulty}" aria-label="Difficulty"><span><small>Easy</small><small>Medium</small><small>Hard</small></span></label><p class="setup-lifeline">One lifeline: ${escape(gameInfo.lifeline)}</p><button class="puzzle-next" data-start>${pacman ? "Start the chase" : "Start playing"} <b>→</b></button></div></div>
       <div class="puzzle-notice" data-break hidden role="dialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">TIME TO RESET</span><h3>Take a short break</h3><p>You’ve played for 30 minutes. Step away and get back to your day.</p><div class="notice-actions"><button data-return>Back to work</button><button data-snooze>Snooze 15 minutes</button></div></div></div>
       <div class="puzzle-notice" data-lock hidden role="alertdialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">BREAK WINDOW</span><h3>Play time is paused</h3><p>You’ve reached 90 minutes in this play session. This browser will unlock after the two-hour break.</p><strong data-unlock-time></strong></div></div>
       <div class="puzzle-notice" data-win hidden role="dialog" aria-modal="true"><div class="notice-card"><span class="notice-kicker">${stageName.toUpperCase()} COMPLETE</span><h3 data-win-title>${pacman ? "Maze cleared!" : "Well played!"}</h3><p data-win-copy>Your score has been added to this session.</p><button class="share-score" data-copy-score>Copy session score</button><label class="win-setting">Next ${escape(gameInfo.sizeLabel.toLowerCase())} <select data-next-size>${gameInfo.sizes.map((value) => `<option value="${value}"${value === size ? " selected" : ""}>${sizeText(value)}</option>`).join("")}</select></label><label class="win-setting" ${gameInfo.sizes.length === 1 ? "hidden" : ""}><input type="checkbox" data-next-mix${mixer ? " checked" : ""}> Mix sizes after completion</label><button data-win-continue>Continue to the next ${stageName.toLowerCase()}</button></div></div>
@@ -78,7 +83,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
   const sizeSelect = root.querySelector<HTMLSelectElement>("[data-size]")!;
   const mixInput = root.querySelector<HTMLInputElement>("[data-mix]")!;
   const setup = root.querySelector<HTMLElement>("[data-setup]")!;
-  const hintButton = root.querySelector<HTMLButtonElement>("[data-hint]")!;
+  const difficultySlider = root.querySelector<HTMLInputElement>("[data-difficulty]")!;
   const winNotice = root.querySelector<HTMLElement>("[data-win]")!;
   const noticeScore = root.querySelector<HTMLElement>("[data-score]")!;
   const unlockText = root.querySelector<HTMLElement>("[data-unlock-time]")!;
@@ -87,12 +92,8 @@ export function mountGame(root: HTMLElement, gameId: string) {
   const restartButton = root.querySelector<HTMLButtonElement>("[data-restart]")!;
   const lifelineButton = root.querySelector<HTMLButtonElement>("[data-lifeline]")!;
 
-  const isHard = () => level >= 4 || (gameId === "2048" ? size === 3 : gameInfo.sizes.length > 1 && size === gameInfo.sizes.at(-1));
   const updateHeader = () => {
-    label.textContent = `${stageName.toUpperCase()} ${String(level).padStart(3, "0")} · ${sizeText(size)}`;
-    hintButton.hidden = !isHard();
-    hintButton.disabled = hintsRemaining <= 0;
-    root.querySelector<HTMLElement>("[data-hint-count]")!.textContent = `Hint · ${hintsRemaining}`;
+    label.textContent = `${stageName.toUpperCase()} ${String(level).padStart(3, "0")} · ${["EASY", "MEDIUM", "HARD"][difficulty]} · ${sizeText(size)}`;
   };
   const setSolved = (arcadeScore?: number) => {
     if (solved) return;
@@ -117,7 +118,6 @@ export function mountGame(root: HTMLElement, gameId: string) {
   const onStats = (stats: ArcadeStats) => {
     progress.textContent = stats.progress ?? (stats.lives + " lives · " + stats.remaining + " dots left");
     status.textContent = stats.state === "paused" ? "Paused · resume in the game" : stats.message ?? (stats.state === "lost" ? "Game over · restart this maze" : stats.state === "won" ? "Maze cleared" : stats.state === "dying" ? "Caught · ready to retry" : stats.powerSeconds > 0 ? "Power active · " + stats.powerSeconds + "s" : "Score " + stats.score.toLocaleString() + " · best " + stats.best.toLocaleString());
-    hintButton.disabled = hintsRemaining <= 0 || ["lost", "won", "paused"].includes(stats.state) || stats.canHelp === false;
     lifelineButton.disabled = lifelineUsed || ["lost", "won", "paused"].includes(stats.state) || stats.canHelp === false;
   };
   const onLevel = (nextLevel: number, nextSize = size) => {
@@ -142,7 +142,8 @@ export function mountGame(root: HTMLElement, gameId: string) {
       gameId,
       level,
       size,
-      seed: seedFor(gameId, level, size),
+      seed: seedFor(gameId, level, size, difficulty),
+      difficulty,
       onStats,
       onSolved: setSolved,
       onRestart: restart,
@@ -150,13 +151,13 @@ export function mountGame(root: HTMLElement, gameId: string) {
     if (instance) instance.restart(run);
     else instance = createGameController(stage, run);
     restartButton.disabled = false;
-    lifelineButton.disabled = false;
   };
   const startFirst = () => {
     if (!window.matchMedia("(pointer: fine) and (hover: hover)").matches) { status.textContent = "This game uses mouse and keyboard on a desktop or laptop."; return; }
     if (Date.now() < Number(localStorage.getItem(lockKey) || 0)) return showLock();
     localStorage.setItem(sizeKey(gameId), String(size));
     localStorage.setItem(mixKey(gameId), String(mixer));
+    localStorage.setItem(difficultyKey(gameId), String(difficulty));
     if (!localStorage.getItem(breakDueKey)) localStorage.setItem(breakDueKey, String(30 * 60 * 1000));
     setup.hidden = true;
     sizeSelect.disabled = true;
@@ -189,7 +190,7 @@ export function mountGame(root: HTMLElement, gameId: string) {
     mixInput.disabled = true;
     lifelineButton.disabled = false;
     status.textContent = "Restarted · same challenge";
-    instance.restart({ gameId, level, size, seed: seedFor(gameId, level, size), onStats, onSolved: setSolved, onRestart: restart });
+    instance.restart({ gameId, level, size, seed: seedFor(gameId, level, size, difficulty), difficulty, onStats, onSolved: setSolved, onRestart: restart });
   }
   const showLock = () => {
     const lockUntil = Number(localStorage.getItem(lockKey) || 0);
@@ -239,16 +240,9 @@ export function mountGame(root: HTMLElement, gameId: string) {
     }, 1000);
   }
 
-  const callHelp = (kind: "hint" | "lifeline") => {
+  const callHelp = () => {
     const scene = instance;
-    if (!scene || !instance || solved || breakVisible || lockVisible || hintButton.disabled && kind === "hint" || lifelineButton.disabled && kind === "lifeline") return;
-    if (kind === "hint") {
-      if (!isHard() || hintsRemaining <= 0) return;
-      hintsRemaining -= 1;
-      scene.hint?.();
-      updateHeader();
-      return;
-    }
+    if (!scene || solved || breakVisible || lockVisible || lifelineButton.disabled) return;
     if (lifelineUsed) return;
     lifelineUsed = true;
     scene.lifeline?.();
@@ -259,6 +253,8 @@ export function mountGame(root: HTMLElement, gameId: string) {
   window.addEventListener("storage", handleStorage);
 
   sizeSelect.addEventListener("change", () => { size = Number(sizeSelect.value); });
+  difficultySlider.addEventListener("input", () => { difficulty = Number(difficultySlider.value); size = sizeForDifficulty(difficulty); sizeSelect.value = String(size); root.querySelector<HTMLElement>("[data-difficulty-name]")!.textContent = ["Easy", "Medium", "Hard"][difficulty]; updateHeader(); });
+  root.querySelector<HTMLElement>("[data-difficulty-name]")!.textContent = ["Easy", "Medium", "Hard"][difficulty];
   mixInput.addEventListener("change", () => { mixer = mixInput.checked; });
   root.querySelector("[data-start]")!.addEventListener("click", startFirst);
   root.querySelector("[data-win-continue]")!.addEventListener("click", continueLevel);
@@ -274,8 +270,9 @@ export function mountGame(root: HTMLElement, gameId: string) {
   restartButton.disabled = true;
   lifelineButton.disabled = true;
   restartButton.addEventListener("click", restart);
-  hintButton.addEventListener("click", () => callHelp("hint"));
-  lifelineButton.addEventListener("click", () => callHelp("lifeline"));
+  lifelineButton.addEventListener("click", callHelp);
+  root.querySelector("[data-close]")!.addEventListener("click", () => window.dispatchEvent(new CustomEvent("game:return-to-work")));
+  root.querySelector("[data-fullscreen]")!.addEventListener("click", async () => { const panel = root.closest<HTMLElement>("#game-dialog") || root; if (document.fullscreenElement) await document.exitFullscreen(); else await panel.requestFullscreen(); });
   root.querySelector("[data-snooze]")!.addEventListener("click", () => {
     localStorage.setItem(breakDueKey, String(activePlayedMs + 15 * 60 * 1000));
     root.querySelector<HTMLElement>("[data-break]")!.hidden = true;

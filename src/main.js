@@ -66,3 +66,5 @@ document.addEventListener("keydown", (event) => {
 
 document.querySelectorAll("[data-game-count]").forEach(node => { node.textContent = String(games.length); });
 renderGames();
+const requestedGame = new URLSearchParams(window.location.search).get("game");
+if (requestedGame) launchGame(games.find((game) => game.id === requestedGame));

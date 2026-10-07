@@ -5,7 +5,7 @@ export type ArcadeStats = {
   canHelp?: boolean;
 };
 export type Run = {
-  gameId: string; level: number; size: number; seed: number;
+  gameId: string; level: number; size: number; seed: number; difficulty?: number;
   onStats?: (stats: ArcadeStats) => void;
   onSolved?: (score?: number) => void;
   onRestart?: () => void;
