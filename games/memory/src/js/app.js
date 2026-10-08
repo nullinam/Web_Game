@@ -1,7 +1,7 @@
 /* Lightweight game script implementing:
    - Easy: 60s, 12 tiles (6 pairs)
    - Medium: 60s, 16 tiles (8 pairs)
-   - Hard: 45s, 16 tiles (8 pairs) with hint disabled
+   - Hard: 180s, 64 tiles (32 pairs) with hint disabled
    - per-difficulty star thresholds
    - countdown progress bar
    - distinct Win / Lose modal layouts
@@ -9,16 +9,20 @@
 (() => {
   const uniqueImages = [
     'Agility.png', 'Boat.png', 'Citizenship.png', 'Hack.png',
-    'Nerd-Rage.png', 'Nuka-Cola.png', 'Robotics.png', 'Shock.png'
+    'Nerd-Rage.png', 'Nuka-Cola.png', 'Robotics.png', 'Shock.png',
+    '🚀', '🪐', '🌙', '☄️', '🛰️', '🔭', '🌟', '🛸',
+    '🧩', '🎲', '🎯', '🎨', '🎭', '🎸', '🎺', '🎻',
+    '🍀', '🌻', '🌵', '🍄', '🌈', '🔥', '💎', '🪄'
   ];
 
   const difficulties = {
     easy: { tiles: 12, time: 60, hideHint: false, stars: [10, 16] },   // 3 stars <=10 moves, 2 <=16 else 1
     medium: { tiles: 16, time: 60, hideHint: false, stars: [12, 18] },
-    hard: { tiles: 16, time: 45, hideHint: true, stars: [10, 15] }
+    hard: { tiles: 64, time: 180, hideHint: true, stars: [44, 64] }
   };
 
   let selectedDifficulty = 'medium';
+  document.body.dataset.memoryDifficulty = selectedDifficulty;
 
   // DOM
   const deckEl = document.getElementById('deck');
@@ -237,10 +241,11 @@
       const altText = imgSrc.split('.').slice(0, -1).join('.');
       // provide a descriptive alt and aria-label for better accessibility
       li.setAttribute('aria-label', `Card: ${altText}`);
+      const face = imgSrc.endsWith('.png') ? `<img src="img/${imgSrc}" alt="${altText}">` : `<span class="memory-symbol" aria-hidden="true">${imgSrc}</span>`;
       li.innerHTML = `
         <div class="card-inner">
           <div class="card-face card-back"><div class="logo">VT</div></div>
-          <div class="card-face card-front"><img src="img/${imgSrc}" alt="${altText}"></div>
+          <div class="card-face card-front">${face}</div>
         </div>`;
       deckEl.appendChild(li);
     });
@@ -294,7 +299,7 @@
 
   function updateUI() {
     movesEl.textContent = moves;
-    pairsEl.textContent = `${matched} / ${totalTiles}`;
+    pairsEl.textContent = `${matched / 2} / ${pairCount}`;
     // star logic per difficulty thresholds
     const [threeThresh, twoThresh] = difficulties[selectedDifficulty].stars;
     if (moves <= threeThresh) starCount = 3;
@@ -583,6 +588,7 @@
       const b = e.target.closest('button[data-diff]');
       if (!b) return;
       selectedDifficulty = b.getAttribute('data-diff');
+      document.body.dataset.memoryDifficulty = selectedDifficulty;
       Array.from(diffControls.querySelectorAll('button[data-diff]')).forEach(btn => btn.classList.remove('btn--active'));
       b.classList.add('btn--active');
       // apply and reset
