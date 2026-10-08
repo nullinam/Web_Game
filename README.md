@@ -1,8 +1,8 @@
 # lowkey.exe
 
-A quiet, offline-first collection of 13 browser games. The home page uses a monochrome terminal style with ten locally saved themes, a random game launcher, recent games, and a command bar.
+A quiet, offline-first collection of 13 browser games. The home page uses a monochrome terminal style with eleven locally saved, clickable themes, small game previews, a random game launcher, recent games, and a command bar. `void.exe` is the white theme with drifting black stars.
 
-Games run from the `games/` folder. The shared game toolbar provides pause, restart, focus mode, minimize, full screen, new tab, and close controls. Starfall and Deadblock keep their own game presentation.
+Games run from the `games/` folder. The shared game toolbar provides pause, restart, focus mode, minimize, full screen, new tab, and close controls. Starfall keeps its own controls; the other games use the shared toolbar. Flappy is centered and scaled to the available window height.
 
 ## Run locally
 

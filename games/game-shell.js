@@ -4,18 +4,33 @@
     window.HTMLMediaElement.prototype.play = function () { this.pause(); return Promise.resolve(); };
   }
   const siteRoot = new URL('../../', location.href).href;
+  const hubThemes = {
+    void: ['#fafaf8', '#ffffff', '#d5d8d6', '#17191a', '#202526'],
+    dark: ['#0a0a0a', '#111314', '#303536', '#dededb', '#aeb9bb'],
+    tokyo: ['#100b0c', '#1b1113', '#382528', '#e3d9d9', '#a86c73'],
+    ronin: ['#100d0c', '#191311', '#352723', '#e4ddda', '#ad7771'],
+    ghost: ['#0b1013', '#10171b', '#29353b', '#e0e8e9', '#a9c4cc'],
+    midnight: ['#080c14', '#0e1420', '#242d3b', '#dce3ed', '#8dabc7'],
+    akira: ['#10090a', '#1a0e0f', '#382021', '#e9dddd', '#a65d60'],
+    static: ['#0b0b0b', '#111111', '#30302d', '#d8d8d0', '#b2b2a7'],
+    sakura: ['#100c0e', '#191115', '#35252d', '#e8dce0', '#ae8494'],
+    eclipse: ['#0c0a11', '#14111b', '#302a3c', '#e1dcea', '#9589b1'],
+    offline: ['#0b0d0a', '#121610', '#293126', '#d2d8cc', '#91a88a']
+  };
+  const hubTheme = hubThemes[localStorage.getItem('lowkeyTheme') || 'dark'] || hubThemes.dark;
+  ['--hub-bg', '--hub-panel', '--hub-line', '--hub-text', '--hub-accent'].forEach((name, index) => document.documentElement.style.setProperty(name, hubTheme[index]));
   const style = document.createElement('style');
   style.textContent = `
-    body{padding-top:48px!important}
-    body button:not(.quickplay-bar button){border-radius:8px}
-    .quickplay-bar{position:fixed;z-index:2147483000;inset:0 0 auto;height:44px;display:flex;align-items:center;gap:7px;padding:5px 10px;background:#101112f2;color:#dededb;font:12px/1.2 ui-monospace,Consolas,monospace;box-shadow:0 2px 12px #0008;border-bottom:1px solid #292d2e}
-    .quickplay-bar .q-brand{font-weight:700;letter-spacing:-.03em;margin-right:auto;color:#aeb9bb;text-decoration:none}
-    .quickplay-bar button,.quickplay-bar a{height:32px;padding:0 11px;border:1px solid #ffffff20;border-radius:2px;background:#ffffff06;color:#d7dbd9;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font:inherit;cursor:pointer}
+    body{padding-top:48px!important;background:var(--hub-bg)!important;color:var(--hub-text)!important}
+    canvas#canvas,canvas#game{border-color:var(--hub-line)!important;box-shadow:0 18px 60px #0003!important}
+    .quickplay-bar{position:fixed;z-index:2147483000;inset:0 0 auto;height:44px;display:flex;align-items:center;gap:7px;padding:5px 10px;background:var(--hub-panel);color:var(--hub-text);font:12px/1.2 ui-monospace,Consolas,monospace;box-shadow:0 2px 12px #0002;border-bottom:1px solid var(--hub-line)}
+    .quickplay-bar .q-brand{font-weight:700;letter-spacing:-.03em;margin-right:auto;color:var(--hub-accent);text-decoration:none}
+    .quickplay-bar button,.quickplay-bar a{height:32px;padding:0 11px;border:1px solid var(--hub-line);border-radius:2px;background:transparent;color:var(--hub-text);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font:inherit;cursor:pointer}
     .quickplay-bar button:hover,.quickplay-bar a:hover{background:#ffffff24}
-    .quickplay-bar .q-timer{color:#d9e3df;padding:0 4px;white-space:nowrap}.quickplay-bar .q-timer b{color:#ffd99a}
-    .q-break,.q-pause{position:fixed;z-index:2147483001;inset:44px 0 0;background:#080909ed;color:#dededb;display:none;place-items:center;padding:20px;font:14px ui-monospace,Consolas,monospace}
-    .q-break.on,.q-pause.on{display:grid}.q-break-card,.q-pause-card{width:min(420px,100%);padding:24px;background:#111314;color:#dededb;border:1px solid #373c3d;box-shadow:0 25px 70px #0008}.q-break-card h2,.q-pause-card h2{margin:0 0 7px}.q-break-card p,.q-pause-card p{color:#929899;margin:0 0 16px}.q-break-card button,.q-pause-card button{padding:10px 13px;border-radius:2px;border:1px solid #414748;background:#171a1b;color:#dededb;margin-right:7px;cursor:pointer}.q-break-card .q-primary{background:#333a3b;color:#fff;border-color:#646b6d}
-    body.q-minimized>*:not(.quickplay-bar):not(.q-mini-notice){display:none!important}body.q-minimized{background:#0a0a0a!important}.q-mini-notice{position:fixed;z-index:2147482999;inset:44px 0 0;display:grid;place-items:center;background:#0a0a0a;color:#dededb;font:14px ui-monospace,Consolas,monospace}.q-mini-notice[hidden]{display:none!important}.q-mini-notice button{margin-left:8px;padding:9px 14px;border:1px solid #414748;border-radius:2px;background:#171a1b;color:#dededb;cursor:pointer}
+    .quickplay-bar .q-timer{color:var(--hub-text);padding:0 4px;white-space:nowrap}.quickplay-bar .q-timer b{color:var(--hub-accent)}
+    .q-break,.q-pause{position:fixed;z-index:2147483001;inset:44px 0 0;background:#080909ed;color:var(--hub-text);display:none;place-items:center;padding:20px;font:14px ui-monospace,Consolas,monospace}
+    .q-break.on,.q-pause.on{display:grid}.q-break-card,.q-pause-card{width:min(420px,100%);padding:24px;background:var(--hub-panel);color:var(--hub-text);border:1px solid var(--hub-line);box-shadow:0 25px 70px #0005}.q-break-card h2,.q-pause-card h2{margin:0 0 7px}.q-break-card p,.q-pause-card p{color:var(--hub-text);opacity:.72;margin:0 0 16px}.q-break-card button,.q-pause-card button{padding:10px 13px;border-radius:2px;border:1px solid var(--hub-line);background:transparent;color:var(--hub-text);margin-right:7px;cursor:pointer}.q-break-card .q-primary{background:var(--hub-accent);color:var(--hub-bg);border-color:var(--hub-accent)}
+    body.q-minimized>*:not(.quickplay-bar):not(.q-mini-notice){display:none!important}body.q-minimized{background:var(--hub-bg)!important}.q-mini-notice{position:fixed;z-index:2147482999;inset:44px 0 0;display:grid;place-items:center;background:var(--hub-bg);color:var(--hub-text);font:14px ui-monospace,Consolas,monospace}.q-mini-notice[hidden]{display:none!important}.q-mini-notice button{margin-left:8px;padding:9px 14px;border:1px solid var(--hub-line);border-radius:2px;background:transparent;color:var(--hub-text);cursor:pointer}
     body.q-focused{padding-top:0!important}body.q-focused .quickplay-bar{inset:8px 8px auto auto;width:auto;border:0;background:transparent;box-shadow:none}body.q-focused .quickplay-bar>:not(#qFocus){display:none}body.q-focused .quickplay-bar #qFocus{background:#101112e8}
     @media(max-width:580px){.quickplay-bar{gap:4px;padding:5px}.quickplay-bar .q-brand{font-size:10px}.quickplay-bar button,.quickplay-bar a{padding:0 7px;font-size:11px}.quickplay-bar .q-timer{font-size:10px}}
   `;
