@@ -468,8 +468,8 @@
   }
 
   function showWinModal() {
-    modalTitle.textContent = 'CONGRATULATIONS, Vault Dweller';
-    modalMessage.textContent = 'You matched all pairs — Vault‑Tec is proud.';
+    modalTitle.textContent = 'All pairs matched';
+    modalMessage.textContent = 'Nice work. You cleared the board.';
     modalStats.innerHTML = '';
     const elapsed = timeTotal - timeLeft;
     modalStats.appendChild(statCard('Time', formatTime(Math.floor(elapsed / 60), elapsed % 60)));
@@ -498,10 +498,10 @@
 
   function showLoseModal(reason) {
     if (reason === 'moves') {
-      modalTitle.textContent = "OUT OF MOVES — Vault-Tec Regrets the Loss";
+      modalTitle.textContent = 'Out of moves';
       modalMessage.textContent = 'You ran out of moves. Sharpen your memory and try again.';
     } else {
-      modalTitle.textContent = "TIME'S UP — Vault-Tec Regrets the Loss";
+      modalTitle.textContent = "Time's up";
       modalMessage.textContent = 'You ran out of time. Review your training and try again.';
     }
     modalStats.innerHTML = '';
@@ -617,13 +617,13 @@
     const data = getLeaderboard();
     const blob = new Blob([JSON.stringify({ difficulty: selectedDifficulty, data }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `vault-memory-leaderboard-${selectedDifficulty}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href = url; a.download = `memory-scores-${selectedDifficulty}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   });
   if (shareBtn) shareBtn.addEventListener('click', async () => {
     const data = getLeaderboard();
     if (data.length === 0) return alert('No leaderboard entries to share.');
     const top = data[0];
-    const text = `Vault‑Tec Memory — ${selectedDifficulty.toUpperCase()} best: ${top.time}, ${top.moves} moves, ${top.stars}★`;
+    const text = `Memory Match — ${selectedDifficulty.toUpperCase()} best: ${top.time}, ${top.moves} moves, ${top.stars}★`;
     try {
       await navigator.clipboard.writeText(text);
       alert('Summary copied to clipboard: ' + text);

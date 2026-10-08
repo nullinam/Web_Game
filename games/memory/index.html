@@ -5,9 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Memory Match</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/css/styles.css">
   <link rel="stylesheet" href="src/css/buttons.css">
 <style id="quickplay-memory-theme">
@@ -16,6 +13,15 @@
 <style>
 .score-box>div:nth-of-type(2){display:none!important}
 .app{display:flex!important;flex-direction:column!important;max-width:1160px!important;margin:18px auto!important;padding:14px!important;gap:14px!important}.panel{display:grid!important;grid-template-columns:minmax(180px,1fr) 2fr!important;align-items:center!important;gap:18px!important}.panel,.game{box-shadow:0 8px 28px #15251d0c!important}.theme-toggle,.page-container,.hint,#leaderboardList,.lb-controls,#openHighScores,#exportLb,#shareLb,#clearLb,#playDemo,.panel>div:last-child{display:none!important}.score-box{display:flex!important;align-items:center!important;gap:22px!important;background:transparent!important;border:0!important;padding:0!important}.score-row{gap:25px!important;margin:0!important}.score-big{color:#3d806c!important;font-size:1.5rem!important}.controls .btn:not(#restart){display:none!important}.top-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;flex-wrap:wrap!important}.deck{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:clamp(5px,1.2vw,12px)!important;max-width:900px!important;margin:18px auto!important}.card{width:100%!important;aspect-ratio:1!important;min-width:0!important;border-radius:12px!important;box-shadow:0 5px 15px #192b2315!important}.card-face{border-radius:12px!important}.card-back{background:linear-gradient(145deg,#12304a,#071827)!important}.card-back .logo{font-family:system-ui,sans-serif!important;color:#f0c65c!important}.card-front{background:#f5f7f5!important}.card-front img{max-width:70%!important;max-height:70%!important;object-fit:contain!important}.memory-symbol{font-size:clamp(22px,5vw,52px)!important;line-height:1!important}#restart-bottom,.bottom-controls{display:none!important}body[data-memory-difficulty="hard"] .deck{grid-template-columns:repeat(8,minmax(0,1fr))!important}body[data-memory-difficulty="hard"] .card-face,body[data-memory-difficulty="hard"] .card-back .logo{font-size:clamp(9px,1.3vw,15px)!important}@media(max-width:760px){.app{padding:10px!important}.panel{grid-template-columns:1fr!important;gap:12px!important}.game{padding:14px!important}.score-box{justify-content:space-between!important;gap:10px!important}body[data-memory-difficulty="hard"] .deck{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:3px!important}.top-row{align-items:flex-start!important}}
+</style>
+<style id="lowkey-memory-skin">
+:root{--bg:#0a0a0a;--card:#111314;--ink:#dededb;--muted:#8a9091;--accent:#aeb9bb;--line:#303536;--vault-blue:#111314;--vault-yellow:#aeb9bb;--vault-blue-rgb:174,185,187}
+body{background:#0a0a0a!important;color:#dededb!important;font-family:system-ui,sans-serif!important}
+.app{background:transparent!important}.panel,.game{background:#111314!important;border-color:#303536!important;box-shadow:0 8px 28px #0005!important}
+.title,.score-big,.star,.card-back .logo{color:#dededb!important}.subtitle,.progress,.label{color:#8a9091!important}
+.card-back{background:linear-gradient(145deg,#202526,#101213)!important}.card-front{background:#d5d8d5!important}
+.btn,.difficulty-btn{background:#171a1b!important;color:#dededb!important;border-color:#414748!important}.btn--active{background:#343a3b!important;color:#fff!important}
+.timer-bar{filter:grayscale(1)}.star{background:#303536!important}.controls .btn:not(#restart),#move-limit-toggle,#move-limit-display,.controls~div{display:none!important}
 </style></head>
 
 <body>

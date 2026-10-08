@@ -1,15 +1,19 @@
-# bored. rn !!
+# lowkey.exe
 
-A static collection of browser games for a quick break. Open `index.html` through a local web server or publish the repository with GitHub Pages.
+A quiet, offline-first collection of 13 browser games. The home page uses a monochrome terminal style with ten locally saved themes, a random game launcher, recent games, and a command bar.
 
-The home page provides category filters, a game carousel, ten colour themes, and a 30-minute break timer. Games share a compact toolbar for restart, minimize, fullscreen, opening a new tab, and returning home. Starfall and Deadblock keep their own presentation.
+Games run from the `games/` folder. The shared game toolbar provides pause, restart, focus mode, minimize, full screen, new tab, and close controls. Starfall and Deadblock keep their own game presentation.
 
-To preview locally from the repository root:
+## Run locally
+
+Open a terminal in this folder and run:
 
 ```powershell
 py -m http.server 4173
 ```
 
-Then open `http://localhost:4173/`.
+Then open `http://localhost:4173/`. Python's built-in server is used only to serve the local files; game play does not need a network connection.
 
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for source and license information.
+## Credits
+
+Third-party source and license details are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

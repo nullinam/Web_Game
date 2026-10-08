@@ -10258,9 +10258,6 @@ var aboutGameState = (function() {
             renderer.clearMapFrame();
             renderer.renderFunc(menu.draw,menu);
             gameTitleState.draw();
-            desc = getGameDescription();
-            numDescLines = desc.length;
-            renderer.renderFunc(drawDesc);
         },
         update: function() {
             gameTitleState.update();
