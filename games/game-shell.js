@@ -7,15 +7,14 @@
   const hubThemes = {
     void: ['#fafaf8', '#ffffff', '#d5d8d6', '#17191a', '#202526'],
     dark: ['#0a0a0a', '#111314', '#303536', '#dededb', '#aeb9bb'],
-    tokyo: ['#100b0c', '#1b1113', '#382528', '#e3d9d9', '#a86c73'],
-    ronin: ['#100d0c', '#191311', '#352723', '#e4ddda', '#ad7771'],
-    ghost: ['#0b1013', '#10171b', '#29353b', '#e0e8e9', '#a9c4cc'],
-    midnight: ['#080c14', '#0e1420', '#242d3b', '#dce3ed', '#8dabc7'],
-    akira: ['#10090a', '#1a0e0f', '#382021', '#e9dddd', '#a65d60'],
-    static: ['#0b0b0b', '#111111', '#30302d', '#d8d8d0', '#b2b2a7'],
-    sakura: ['#100c0e', '#191115', '#35252d', '#e8dce0', '#ae8494'],
-    eclipse: ['#0c0a11', '#14111b', '#302a3c', '#e1dcea', '#9589b1'],
-    offline: ['#0b0d0a', '#121610', '#293126', '#d2d8cc', '#91a88a']
+    naruto: ['#17100b', '#21160f', '#51331c', '#f2e8df', '#ff9b35'],
+    onepiece: ['#101624', '#172338', '#354b68', '#e7edf5', '#f0bd59'],
+    bleach: ['#101216', '#191c23', '#3a414d', '#e7ebef', '#8ed3e8'],
+    nebula: ['#100d20', '#19152b', '#40345e', '#ece8f5', '#68d9d2'],
+    asteroid: ['#11151a', '#1a2026', '#3c4851', '#e9e8e2', '#f0a45d'],
+    orbit: ['#0b1820', '#10232d', '#31515e', '#e4f1e9', '#81dfb0'],
+    sakura: ['#1c111b', '#271824', '#52384a', '#f2e6ec', '#f2a9c7'],
+    eclipse: ['#13111d', '#1d1929', '#413852', '#e8e3f0', '#c5a8ff']
   };
   const hubTheme = hubThemes[localStorage.getItem('lowkeyTheme') || 'dark'] || hubThemes.dark;
   ['--hub-bg', '--hub-panel', '--hub-line', '--hub-text', '--hub-accent'].forEach((name, index) => document.documentElement.style.setProperty(name, hubTheme[index]));

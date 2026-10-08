@@ -1,4 +1,4 @@
-# Penko Typing
+# Typing Game
 
 **Master non-Latin keyboard layouts through retro arcade-style typing games.**
 
@@ -6,7 +6,7 @@ A free, offline-first typing game designed to help you learn and practice typing
 
 ---
 
-## Why Penko Typing?
+## Why Typing Game?
 
 - **14 Keyboard Layouts** - Learn Korean, Russian, Ukrainian, Japanese, Chinese, Arabic, Hebrew, Turkish, and more
 - **100% Free & Open Source** - No subscriptions, no ads, no tracking
@@ -102,7 +102,7 @@ The host picks the layout and lesson level; everyone in the room gets the same w
 
 ### Install as PWA
 
-When running in a browser, you can install Penko Typing as a desktop or mobile app for offline use:
+When running in a browser, you can install Typing Game as a desktop or mobile app for offline use:
 1. Look for the install icon in your browser's address bar
 2. Click "Install" to add it to your device
 3. Launch it like any other application - no internet required!
@@ -153,7 +153,7 @@ Each language uses authentic keyboard layouts:
 
 ## License
 
-Penko Typing is licensed under the GNU General Public License v3.0. See [LICENSE.md](LICENSE.md) for details.
+Typing Game is licensed under the GNU General Public License v3.0. See [LICENSE.md](LICENSE.md) for details.
 
 This means you can:
 - Use it for any purpose
@@ -176,4 +176,4 @@ Please open an issue on GitHub.
 
 ---
 
-**Part of the Penko Software Suite** - Free, open-source, privacy-first productivity tools.
+**Typing Game** — an offline-first typing practice game.

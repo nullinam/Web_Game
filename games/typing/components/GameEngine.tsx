@@ -336,7 +336,7 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
               <PenkoMascot pose={mascotPose} size={56} className="w-10 h-10 sm:w-14 sm:h-14 lg:w-20 lg:h-20 short:w-8 short:h-8" />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="hidden sm:block short:hidden text-[9px] lg:text-xs font-retro text-cyan-400 animate-pulse uppercase tracking-wider">PENKO RACER</span>
+              <span className="hidden sm:block short:hidden text-[9px] lg:text-xs font-retro text-cyan-400 animate-pulse uppercase tracking-wider">TYPING GAME</span>
               <span className="text-white font-vt323 text-base sm:text-lg lg:text-3xl font-bold truncate">{language.name}</span>
             </div>
           </div>

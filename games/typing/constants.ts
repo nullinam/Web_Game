@@ -1121,15 +1121,15 @@ export const UI_STRINGS = Object.fromEntries(
 ) as Record<InterfaceLanguage, UIStrings>;
 
 const MANUAL_BASE: ManualContent = {
-    welcomeTitle: "Welcome to Penko Typing",
-    welcomeText: "Penko Typing is a tool designed to help you build muscle memory for foreign keyboard layouts without needing physical stickers or a new keyboard.",
+    welcomeTitle: "Welcome to Typing Game",
+    welcomeText: "Typing Game helps you build muscle memory for foreign keyboard layouts without needing physical stickers or a new keyboard.",
     howToPlayTitle: "How to Play",
     howToPlaySteps: [
         "Select a Language Layout from the main menu.",
         "Keep your physical hands on your standard keyboard (Home Row: ASDF JKL;).",
         "Look at the Screen, not your hands. The virtual keyboard highlights the key you need to press.",
         "The Ghost Hands will show you exactly which finger to use.",
-        "Type the letters to clear the Ice Blocks and keep Penko moving!"
+        "Type the letters to clear the Ice Blocks and keep moving!"
     ],
     tipsTitle: "Tips",
     tipsSteps: [
@@ -1144,15 +1144,15 @@ const MANUAL_BASE: ManualContent = {
 export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
     [InterfaceLanguage.ENGLISH]: MANUAL_BASE,
     [InterfaceLanguage.SPANISH]: {
-        welcomeTitle: "Bienvenido a Penko Typing",
-        welcomeText: "Penko Typing es una herramienta diseñada para ayudarte a desarrollar memoria muscular para teclados extranjeros sin necesitar pegatinas físicas.",
+        welcomeTitle: "Bienvenido a Typing Game",
+        welcomeText: "Typing Game es una herramienta diseñada para ayudarte a desarrollar memoria muscular para teclados extranjeros sin necesitar pegatinas físicas.",
         howToPlayTitle: "Cómo Jugar",
         howToPlaySteps: [
             "Selecciona un idioma en el menú principal.",
             "Mantén tus manos en tu teclado físico (Fila base: ASDF JKL;).",
             "Mira la pantalla, no tus manos. El teclado virtual resalta la tecla que debes presionar.",
             "Las manos fantasma te mostrarán exactamente qué dedo usar.",
-            "¡Escribe las letras para romper los bloques de hielo y mover a Penko!"
+            "¡Escribe las letras para romper los bloques de hielo y mover al personaje!"
         ],
         tipsTitle: "Consejos",
         tipsSteps: [
@@ -1164,7 +1164,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • MODO OFFLINE"
     },
     [InterfaceLanguage.FRENCH]: {
-        welcomeTitle: "Bienvenue sur Penko Typing",
+        welcomeTitle: "Bienvenue sur Typing Game",
         welcomeText: "Un outil conçu pour développer votre mémoire musculaire pour les claviers étrangers sans autocollants physiques.",
         howToPlayTitle: "Comment Jouer",
         howToPlaySteps: [
@@ -1184,7 +1184,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • MODE HORS LIGNE"
     },
     [InterfaceLanguage.GERMAN]: {
-        welcomeTitle: "Willkommen bei Penko Typing",
+        welcomeTitle: "Willkommen bei Typing Game",
         welcomeText: "Ein Werkzeug zum Aufbau des Muskelgedächtnisses für fremde Tastaturlayouts ohne physische Aufkleber.",
         howToPlayTitle: "Spielanleitung",
         howToPlaySteps: [
@@ -1204,7 +1204,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • OFFLINE MÖGLICH"
     },
     [InterfaceLanguage.ITALIAN]: {
-        welcomeTitle: "Benvenuto in Penko Typing",
+        welcomeTitle: "Benvenuto in Typing Game",
         welcomeText: "Uno strumento per sviluppare la memoria muscolare per tastiere straniere senza adesivi fisici.",
         howToPlayTitle: "Come Giocare",
         howToPlaySteps: [
@@ -1224,7 +1224,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • OFFLINE CAPACE"
     },
     [InterfaceLanguage.PORTUGUESE]: {
-        welcomeTitle: "Bem-vindo ao Penko Typing",
+        welcomeTitle: "Bem-vindo ao Typing Game",
         welcomeText: "Ferramenta para desenvolver memória muscular para teclados estrangeiros sem adesivos.",
         howToPlayTitle: "Como Jogar",
         howToPlaySteps: [
@@ -1244,7 +1244,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • MODO OFFLINE"
     },
     [InterfaceLanguage.RUSSIAN]: {
-        welcomeTitle: "Добро пожаловать в Penko Typing",
+        welcomeTitle: "Добро пожаловать в Typing Game",
         welcomeText: "Инструмент для развития мышечной памяти для иностранных клавиатур без наклеек.",
         howToPlayTitle: "Как играть",
         howToPlaySteps: [
@@ -1264,7 +1264,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "ВЕР 1.0 • ОФЛАЙН РЕЖИМ"
     },
     [InterfaceLanguage.KOREAN]: {
-        welcomeTitle: "Penko Typing에 오신 것을 환영합니다",
+        welcomeTitle: "Typing Game에 오신 것을 환영합니다",
         welcomeText: "스티커 없이 외국어 키보드 레이아웃의 근육 기억을 기르도록 돕는 도구입니다.",
         howToPlayTitle: "게임 방법",
         howToPlaySteps: [
@@ -1284,7 +1284,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • 오프라인 지원"
     },
     [InterfaceLanguage.JAPANESE]: {
-        welcomeTitle: "Penko Typingへようこそ",
+        welcomeTitle: "Typing Gameへようこそ",
         welcomeText: "ステッカーなしで外国語キーボードの筋肉の記憶を構築するためのツールです。",
         howToPlayTitle: "遊び方",
         howToPlaySteps: [
@@ -1304,7 +1304,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • オフライン対応"
     },
     [InterfaceLanguage.CHINESE]: {
-        welcomeTitle: "歡迎來到 Penko Typing",
+        welcomeTitle: "歡迎來到 Typing Game",
         welcomeText: "這是一個無需鍵盤貼紙即可幫助您建立外語鍵盤肌肉記憶的工具。",
         howToPlayTitle: "如何遊玩",
         howToPlaySteps: [
@@ -1324,7 +1324,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "VER 1.0 • 離線可用"
     },
     [InterfaceLanguage.ARABIC]: {
-        welcomeTitle: "مرحبًا بك في Penko Typing",
+        welcomeTitle: "مرحبًا بك في Typing Game",
         welcomeText: "أداة مصممة لمساعدتك على بناء الذاكرة العضلية للوحات المفاتيح الأجنبية دون الحاجة إلى ملصقات.",
         howToPlayTitle: "كيف تلعب",
         howToPlaySteps: [
@@ -1344,7 +1344,7 @@ export const MANUAL_CONTENT: Record<InterfaceLanguage, ManualContent> = {
         footerInfo: "الإصدار 1.0 • يعمل دون اتصال"
     },
     [InterfaceLanguage.HEBREW]: {
-        welcomeTitle: "ברוכים הבאים ל-Penko Typing",
+        welcomeTitle: "ברוכים הבאים ל-Typing Game",
         welcomeText: "כלי שנועד לעזור לכם לבנות זיכרון שריר למקלדות זרות ללא צורך במדבקות.",
         howToPlayTitle: "איך לשחק",
         howToPlaySteps: [

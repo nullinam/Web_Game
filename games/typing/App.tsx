@@ -289,7 +289,7 @@ const App: React.FC = () => {
                         <PenkoMascot pose="idle" size={96} className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32" />
                      </div>
                      <h1 className="text-2xl min-[400px]:text-3xl sm:text-5xl md:text-7xl font-retro text-transparent bg-clip-text bg-gradient-to-b from-cyan-200 to-cyan-600 glow-text mb-2 tracking-tight leading-tight" dir="ltr">
-                      PENKO TYPING
+                      TYPING GAME
                      </h1>
                      <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-cyan-400/80 font-vt323 tracking-widest uppercase">
                        {ui.subtitle}
