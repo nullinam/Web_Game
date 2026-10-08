@@ -4,21 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#03050b">
-<meta name="description" content="EMBERFALL — an accessible, instant-play orbital intercept shooter. Hold the last corridor. Plays offline, on anything.">
+<meta name="description" content="Starfall is an orbital defense game. Pilot through enemy waves and protect the last orbital yard.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="color-scheme" content="dark">
-<title>EMBERFALL — Orbital Intercept</title>
+<title>Starfall — Orbital Defense</title>
 <style>.opt:has(#rMas),.opt:has(#rMus),.opt:has(#rSfx){display:none!important}</style>
 <!-- v4.23: the game previews properly wherever a pilot shares it -->
-<meta property="og:title" content="EMBERFALL — Orbital Intercept">
-<meta property="og:description" content="A free, zero-install browser shoot-'em-up. Something came through the Kuiper gate and it has not stopped since. Click Launch — that's the whole tutorial.">
+<meta property="og:title" content="Starfall — Orbital Defense">
+<meta property="og:description" content="A free, zero-install browser shoot-'em-up. Pilot through shifting enemy waves. Collect alloy, upgrade your ship, and protect the last orbital yard. Click Launch — that's the whole tutorial.">
 <meta property="og:image" content="https://fahadibrahim93.github.io/emberfall/docs/press/hero.png">
 <meta property="og:url" content="https://fahadibrahim93.github.io/emberfall/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="EMBERFALL — Orbital Intercept">
+<meta name="twitter:title" content="Starfall — Orbital Defense">
 <meta name="twitter:description" content="A free, zero-install browser shoot-'em-up. The game's own CI plays it and proves it. 30 seconds to combat.">
 <meta name="twitter:image" content="https://fahadibrahim93.github.io/emberfall/docs/press/hero.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
@@ -570,7 +570,7 @@ body.needrotate #rotate{display:grid}
   #grain{animation:none}
 }
 </style>
-</head>
+<style>#btnNotes{display:none!important}</style></head>
 <body>
 <div id="stage"><canvas id="game" role="img" aria-label="Live game view — deep-range intercept. Keyboard: WASD or arrows fly, Space fires, Shift dashes, E pulses, P pauses."></canvas></div>
 <div id="vig"></div><div id="grain"></div><div id="scan"></div>
@@ -638,7 +638,7 @@ body.needrotate #rotate{display:grid}
 <!-- ════════ BOOT ════════ -->
 <section id="s-boot" class="screen on">
   <div class="boot">
-    <div class="mark">EMBER<em>FALL</em></div>
+    <div class="mark">STAR<em>FALL</em></div>
     <div id="bootTrack"><b id="bootBar"></b></div>
     <div id="bootMsg">Spinning up reactor</div>
     <div class="go hidden" id="bootGo">Tap or press any key to arm</div>
@@ -651,12 +651,12 @@ body.needrotate #rotate{display:grid}
   <div class="hero-tag" id="heroTag" aria-hidden="true"></div>
   <div class="title-grid">
     <div>
-      <p class="eyebrow">Sol Defense Command · deep-range intercept</p>
-      <h1><span class="a">EMBER</span><span class="b">FALL</span></h1>
-      <p class="oparthib">অপার্থিব — the otherworldly tide</p>
-      <p class="lede">Something came through the Kuiper gate and it has not stopped since.
-        You are the only hull between it and the last orbital yard. Fly the corridor.
-        Nothing gets past you.</p>
+      <p class="eyebrow">STARFALL · ORBITAL DEFENSE</p>
+      <h1><span class="a">STAR</span><span class="b">FALL</span></h1>
+      <p class="oparthib">Protect the last orbital yard</p>
+      <p class="lede">Pilot through shifting enemy waves. Collect alloy, upgrade your ship, and protect the last orbital yard.
+
+        </p>
       <div class="menu title-menu">
         <button class="btn key" id="btnLaunch">Launch intercept<span class="sub" id="launchSub">Endless · escalating waves</span></button>
         <button class="btn" id="btnHangar">Hangar<span class="sub" id="hangarSub">Hulls and refits</span></button>
@@ -666,8 +666,8 @@ body.needrotate #rotate{display:grid}
         <button class="btn" id="btnRush">Boss rush<span class="sub" id="rushSub">Four capitals, no warm-up</span></button>
         <button class="btn" id="btnTour">Solar Tour<span class="sub" id="tourSub">Eight worlds · one hull · checkpoints</span></button>
       </div>
-        <button class="btn hidden" id="btnInstall">Install app<span class="sub" id="installSubTxt">Add EMBERFALL to your home screen</span></button>
-        <button class="btn ghost" id="btnNotes">What's new<span class="sub" id="notesSub">Changelog</span></button>
+        <button class="btn hidden" id="btnInstall">Install app<span class="sub" id="installSubTxt">Add Starfall to your home screen</span></button>
+
         <button class="btn ghost" id="btnSettings">Settings</button>
       </div>
       <p class="creds">
@@ -720,7 +720,7 @@ body.needrotate #rotate{display:grid}
       </div>
     </aside>
   </div>
-  <div class="footline"><span>EMBERFALL v4.26.0</span><span>Hope Theory</span><span>Runs offline</span></div>
+  <div class="footline"><span>STARFALL</span><span>Orbital Defense</span><span>Runs offline</span></div>
 </section>
 
 <!-- ════════ HANGAR ════════ -->
@@ -1300,7 +1300,7 @@ const SCHOOL = {
         AU.unlock();
       } else {
         this.payBand = 'Drills clean. The corridor remembers.';
-      } 
+      }
       announce('SCHOOL COMPLETE', 'Welcome to the corridor', '');
       AU.waveClear();
       GAME.endT = 2.2;   // ride the normal run-end cinematics into the summary
@@ -9263,5 +9263,5 @@ function tryRegisterSW() {
   addEventListener('load', tryRegisterSW);
 })();
 </script>
-</body>
+<script src="../game-shell.js"></script></body>
 </html>

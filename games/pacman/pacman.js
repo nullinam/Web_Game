@@ -9980,10 +9980,6 @@ var preNewGameState = (function() {
         function() { 
             exitTo(cutSceneMenuState);
         });
-    menu.addTextButton("ABOUT",
-        function() { 
-            exitTo(aboutGameState);
-        });
     menu.addSpacer(0.5);
     menu.addTextButton("BACK",
         function() {

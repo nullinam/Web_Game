@@ -337,6 +337,7 @@ function draw(time){
         dt = Math.min((time - lastTime) / 1000, 0.05);
     }
     lastTime = time;
+    if(window.gameHubPaused) dt = 0;
     loopPending = false;
 
     if(!imagesReady()){

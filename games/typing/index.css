@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styling overlay matching Penko Vox aesthetics */
+:root {
+  --color-bg-dark: #070a13;
+  --color-panel-glass: rgba(15, 23, 42, 0.4);
+  --color-border-glass: rgba(34, 211, 238, 0.15);
+  --color-glow-cyan: 0 0 12px rgba(34, 211, 238, 0.4);
+  --color-glow-purple: 0 0 16px rgba(192, 132, 252, 0.3);
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent global scroll; views scroll internally */
+}
+
+/* Follow the visible viewport on mobile browsers (address bar collapse) */
+@supports (height: 100dvh) {
+  html, body, #root {
+    height: 100dvh;
+  }
+}
+
+body {
+  background: radial-gradient(circle at top left, #0e1220 0%, #05070d 100%);
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-family: 'VT323', monospace;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Glassmorphism panels */
+.glass-panel {
+  background: var(--color-panel-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-glass);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Keycap highlights and details */
+.key-highlight {
+  box-shadow: var(--color-glow-cyan);
+  border-color: #22d3ee !important;
+  color: #ffffff !important;
+  background-color: rgba(34, 211, 238, 0.15) !important;
+  transform: scale(1.04);
+  transition: all 0.12s ease-in-out;
+}
+
+.key-shift-highlight {
+  box-shadow: var(--color-glow-purple);
+  border-color: #c084fc !important;
+  color: #ffffff !important;
+  background-color: rgba(192, 132, 252, 0.2) !important;
+  transform: scale(1.02);
+  transition: all 0.12s ease-in-out;
+}
+
+/* Keyboard keys scale with the viewport height so the whole board fits on short screens */
+.kb-key {
+  height: clamp(1.75rem, 6.5dvh, 4rem);
+}
+
+.kb-space {
+  height: clamp(1.75rem, 5.5dvh, 3rem);
+}
+
+/* Big screens: taller keys */
+@media (min-width: 1024px) {
+  .kb-key {
+    height: clamp(1.75rem, 7dvh, 5.25rem);
+  }
+  .kb-space {
+    height: clamp(1.75rem, 6dvh, 3.75rem);
+  }
+}
+
+/* On short screens the hand guide would cover the keys */
+@media (max-height: 600px) {
+  .hand-overlay {
+    display: none !important;
+  }
+}
+
+/* Glow effects */
+.glow-text {
+  text-shadow: 0 0 4px rgba(34, 211, 238, 0.5);
+}
+
+/* Game canvas overlays */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.15) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 0, 255, 0.03)
+  );
+  background-size: 100% 4px, 3px 100%;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@keyframes mascotIdle {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+}
+
+.animate-mascot-idle {
+  animation: mascotIdle 3s ease-in-out infinite;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+@keyframes success-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes hint-bounce {
+  0%, 100% { transform: translateY(-15%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+  50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+.animate-success {
+  animation: success-pulse 0.25s ease-in-out;
+}
+
+.animate-bounce-slow {
+  animation: hint-bounce 2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-mascot-idle,
+  .animate-bounce-slow,
+  .animate-shake,
+  .animate-success {
+    animation: none;
+  }
+}
+
+/* Typography styles */
+.font-retro {
+  font-family: 'Press Start 2P', cursive;
+  letter-spacing: -0.05em;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #22d3ee;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #06b6d4;
+}

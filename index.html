@@ -3,31 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Web Game</title>
+  <meta name="theme-color" content="#f2f1eb">
+  <title>Quickplay — Web Game</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;background:#101319;color:#f4f5f7;font:16px system-ui,sans-serif;min-height:100vh}main{max-width:1000px;margin:auto;padding:48px 24px 80px}h1{font-size:clamp(2rem,5vw,3rem);margin:0 0 8px}p{color:#a7afbc;margin:0 0 34px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:12px}a{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:#f4f5f7;background:#1a202b;border:1px solid #343c4a;border-radius:10px;min-height:78px;padding:18px;font-weight:650}a:hover,a:focus-visible{border-color:#a8b8d6;background:#243042;outline:none}span{color:#93a7c6}
+    :root{color-scheme:light;--ink:#17242a;--muted:#66757b;--paper:#f2f1eb;--card:#fff;--line:#dce1dc;--accent:#e99b45;--green:#337c68}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,input{font:inherit}button{cursor:pointer}.site-header{background:#18262b;color:#fff;padding:18px max(22px,calc((100vw - 1160px)/2));display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px}.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--accent);color:#18262b;font-size:21px;font-weight:900}.brand strong{display:block;font-size:17px;letter-spacing:.03em}.brand small{display:block;color:#b9c5c7;font-size:12px}
+    .header-tools{display:flex;align-items:center;gap:10px}.timer-pill,.tool-button{border:1px solid #ffffff35;border-radius:999px;background:#ffffff0c;color:#fff;padding:9px 13px;font-size:13px}.timer-pill b{color:#ffd99a;margin-left:4px}.tool-button:hover{background:#ffffff1a}
+    main{max-width:1160px;margin:auto;padding:42px 22px 64px}.hero{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:26px}.hero h1{font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:-.04em;margin:0 0 8px}.hero p{color:var(--muted);margin:0}.find{width:min(300px,100%);position:relative}.find input{width:100%;border:1px solid #cbd3d0;border-radius:11px;background:#fff;padding:12px 14px 12px 40px;outline:none}.find input:focus{border-color:var(--green);box-shadow:0 0 0 3px #337c681c}.find span{position:absolute;left:14px;top:10px;color:#748287}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.filter{border:1px solid var(--line);border-radius:999px;background:transparent;color:#46575c;padding:7px 13px;font-size:13px}.filter.active,.filter:hover{background:#18262b;color:white;border-color:#18262b}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.game-card{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--card);box-shadow:0 4px 16px #18262b08;transition:transform .16s ease,box-shadow .16s ease}.game-card:hover{transform:translateY(-3px);box-shadow:0 12px 25px #18262b14}.thumb{height:154px;background:#e8ece7;overflow:hidden}.thumb svg{width:100%;height:100%;display:block}.card-body{padding:15px 16px 16px}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:start}.card-top h2{font-size:17px;line-height:1.2;margin:0}.category{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);font-weight:750;white-space:nowrap}.desc{font-size:13px;color:var(--muted);margin:8px 0 14px;min-height:39px}.actions{display:flex;align-items:center;gap:8px}.play{flex:1;text-align:center;border:0;border-radius:9px;background:#18262b;color:#fff;padding:10px 12px;text-decoration:none;font-size:13px;font-weight:700}.play:hover{background:#294047}.new-tab{width:40px;height:39px;border:1px solid var(--line);border-radius:9px;background:#fff;color:#33464c;font-size:17px}.new-tab:hover{border-color:#9aa9a5;background:#f8faf8}.empty{display:none;color:var(--muted);padding:45px;text-align:center;border:1px dashed #bfc8c4;border-radius:14px}
+    .break-overlay{position:fixed;inset:0;z-index:50;background:#101a1dd9;display:none;place-items:center;padding:20px}.break-overlay.on{display:grid}.break-card{width:min(440px,100%);background:#fff;border-radius:18px;padding:26px;box-shadow:0 28px 80px #0005}.break-card h2{margin:0 0 8px;font-size:25px}.break-card p{margin:0 0 20px;color:var(--muted)}.break-actions{display:flex;gap:9px;flex-wrap:wrap}.break-actions button{border:1px solid #cbd3d0;border-radius:9px;padding:10px 14px;background:#fff;color:var(--ink)}.break-actions .primary{background:var(--green);color:#fff;border-color:var(--green)}
+    footer{border-top:1px solid var(--line);padding:18px 22px;text-align:center;color:var(--muted);font-size:12px}
+    @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{align-items:start;flex-direction:column}.find{width:100%}.thumb{height:145px}}
+    @media(max-width:520px){.site-header{padding:14px 16px}.brand small{display:none}.header-tools{gap:6px}.timer-pill,.tool-button{padding:8px 10px;font-size:12px}.grid{grid-template-columns:1fr}.thumb{height:170px}main{padding:28px 15px 42px}.desc{min-height:unset}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
+<header class="site-header">
+  <div class="brand"><span class="brand-mark">Q</span><div><strong>QUICKPLAY</strong><small>A small break, well spent.</small></div></div>
+  <div class="header-tools"><span class="timer-pill">Break in <b id="timerReadout">30:00</b></span><button class="tool-button" id="pauseTimer" type="button" aria-pressed="false">Pause timer</button><button class="tool-button" id="fullscreen" type="button" aria-label="Toggle full screen">⛶</button></div>
+</header>
 <main>
-  <h1>Web Game</h1>
-  <p>Choose a game to play.</p>
-  <nav class="grid" aria-label="Games">
-    <a href="games/pacman/">Pacman <span>↗</span></a>
-    <a href="games/memory/">Memory Match <span>↗</span></a>
-    <a href="games/colour/">Colour Match <span>↗</span></a>
-    <a href="games/typing/">Typing <span>↗</span></a>
-    <a href="games/2048/">2048 <span>↗</span></a>
-    <a href="games/emberfall/">Emberfall <span>↗</span></a>
-    <a href="games/tetris/">Tetris <span>↗</span></a>
-    <a href="games/snake/">Snake <span>↗</span></a>
-    <a href="games/tic/">Tic Tac Toe <span>↗</span></a>
-    <a href="games/hockey/">Air Hockey <span>↗</span></a>
-    <a href="games/math/">Math Quiz <span>↗</span></a>
-    <a href="games/chess/">Chess <span>↗</span></a>
-    <a href="games/flappy/">Flappy <span>↗</span></a>
-    <a href="games/deadblock/">Deadblock <span>↗</span></a>
-  </nav>
+  <section class="hero"><div><h1>Pick a game.<br>Take a quick break.</h1><p>Simple browser games, ready when you are.</p></div><label class="find"><span>⌕</span><input id="search" type="search" placeholder="Find a game" autocomplete="off" aria-label="Find a game"></label></section>
+  <nav class="filters" aria-label="Filter games"><button class="filter active" data-filter="all">All games</button><button class="filter" data-filter="Arcade">Arcade</button><button class="filter" data-filter="Puzzle">Puzzle</button><button class="filter" data-filter="Strategy">Strategy</button><button class="filter" data-filter="Practice">Practice</button></nav>
+  <section class="grid" id="games" aria-label="Games"></section><div class="empty" id="empty">No games match that search.</div>
 </main>
+<footer>Runs in your browser. Your game progress stays on this device.</footer>
+<div class="break-overlay" id="breakOverlay" role="alertdialog" aria-modal="true" aria-labelledby="breakTitle">
+  <section class="break-card"><h2 id="breakTitle">Time for a short break</h2><p>You’ve been playing for 30 minutes. Rest your eyes, stretch, and come back when you’re ready.</p><div class="break-actions"><button class="primary" id="breakDone">Restart 30-minute timer</button><button id="snooze">Snooze 15 minutes</button></div></section>
+</div>
+<script>
+const games=[
+ {id:'pacman',name:'Pacman',category:'Arcade',desc:'Find your way through the maze and avoid the ghosts.',url:'games/pacman/',art:'pac'},
+ {id:'memory',name:'Memory Match',category:'Puzzle',desc:'Flip cards and remember where each pair is hiding.',url:'games/memory/',art:'mem'},
+ {id:'typing',name:'Typing',category:'Practice',desc:'Train your keyboard skills with arcade-style lessons.',url:'games/typing/',art:'type'},
+ {id:'2048',name:'2048',category:'Puzzle',desc:'Slide matching tiles together and reach the target.',url:'games/2048/',art:'2048'},
+ {id:'emberfall',name:'Starfall',category:'Arcade',desc:'Fly the corridor and hold off incoming waves.',url:'games/emberfall/',art:'star'},
+ {id:'tetris',name:'Tetris',category:'Puzzle',desc:'Fit falling shapes together and clear complete rows.',url:'games/tetris/',art:'tet'},
+ {id:'snake',name:'Snake',category:'Arcade',desc:'Collect food, grow longer, and avoid your own tail.',url:'games/snake/',art:'snake'},
+ {id:'tic',name:'Ultimate Tic Tac Toe',category:'Strategy',desc:'Win small boards to claim the larger board.',url:'games/tic/',art:'tic'},
+ {id:'hockey',name:'Air Hockey',category:'Arcade',desc:'Move your paddle, return the puck, and score.',url:'games/hockey/',art:'hockey'},
+ {id:'math',name:'Math Quiz',category:'Practice',desc:'Solve quick rounds and build a score streak.',url:'games/math/',art:'math'},
+ {id:'chess',name:'Chess',category:'Strategy',desc:'Plan your moves and challenge the computer.',url:'games/chess/',art:'chess'},
+ {id:'flappy',name:'Flappy',category:'Arcade',desc:'Flap through the gaps and keep your run going.',url:'games/flappy/',art:'flap'},
+ {id:'deadblock',name:'Deadblock',category:'Arcade',desc:'Survive zombie waves and collect supplies.',url:'games/deadblock/',art:'dead'}
+];
+const art=(kind)=>{const common='<rect width="720" height="300" rx="18" fill="BG"/><circle cx="620" cy="48" r="72" fill="GLOW" opacity=".7"/><path d="M0 245 Q180 210 360 250 T720 235 V300 H0Z" fill="GROUND"/>';let bg='#dcebe4',glow='#f7c88c',ground='#b5d8cb',scene='';
+switch(kind){
+case'pac':scene='<path d="M170 110a66 66 0 1 0 0 132l55-66z" fill="#efb33f"/><circle cx="189" cy="132" r="7" fill="#17242a"/><g fill="#e25f64"><path d="M360 162a39 39 0 1 0-78 0v55l20-14 19 14 20-14 19 14z"/></g><g fill="#9273bb"><path d="M486 162a39 39 0 1 0-78 0v55l20-14 19 14 20-14 19 14z"/></g><g fill="#fff"><circle cx="304" cy="158" r="7"/><circle cx="332" cy="158" r="7"/></g>';break;
+case'mem':scene='<g transform="rotate(-8 240 170)"><rect x="145" y="70" width="170" height="190" rx="18" fill="#fff" stroke="#668f83" stroke-width="8"/><path d="M230 120l14 25 28 4-20 19 5 28-27-13-26 13 5-28-20-19 28-4z" fill="#e99b45"/></g><g transform="rotate(8 490 170)"><rect x="405" y="55" width="170" height="190" rx="18" fill="#fff" stroke="#668f83" stroke-width="8"/><text x="490" y="178" text-anchor="middle" font-size="72" fill="#337c68">?</text></g>';break;
+case'type':scene='<rect x="140" y="74" width="440" height="168" rx="16" fill="#21343a"/><g fill="#f4f1e8"><rect x="165" y="99" width="48" height="35" rx="5"/><rect x="222" y="99" width="48" height="35" rx="5"/><rect x="279" y="99" width="48" height="35" rx="5"/><rect x="336" y="99" width="48" height="35" rx="5"/><rect x="393" y="99" width="48" height="35" rx="5"/><rect x="450" y="99" width="48" height="35" rx="5"/><rect x="507" y="99" width="48" height="35" rx="5"/><rect x="178" y="145" width="48" height="35" rx="5"/><rect x="235" y="145" width="48" height="35" rx="5"/><rect x="292" y="145" width="48" height="35" rx="5"/><rect x="349" y="145" width="48" height="35" rx="5"/><rect x="406" y="145" width="48" height="35" rx="5"/><rect x="463" y="145" width="80" height="35" rx="5"/><rect x="220" y="192" width="278" height="27" rx="8" fill="#e99b45"/></g>';break;
+case'2048':scene='<g font-family="system-ui" font-weight="800" text-anchor="middle"><rect x="230" y="45" width="110" height="95" rx="15" fill="#ede1cb"/><text x="285" y="105" font-size="44" fill="#7c715f">2</text><rect x="355" y="45" width="110" height="95" rx="15" fill="#efbd75"/><text x="410" y="105" font-size="44" fill="#fff">4</text><rect x="230" y="155" width="110" height="95" rx="15" fill="#e89a54"/><text x="285" y="215" font-size="40" fill="#fff">8</text><rect x="355" y="155" width="110" height="95" rx="15" fill="#e9cf75"/><text x="410" y="215" font-size="34" fill="#fff">16</text></g>';break;
+case'star':scene='<path d="M140 225l170-93 16 31-170 93z" fill="#f39b45"/><path d="M340 95l48 85-94-15-59 65 8-98-78-58 96-18 42-89z" fill="#5d94a0"/><circle cx="460" cy="90" r="4" fill="#fff"/><circle cx="540" cy="200" r="5" fill="#fff"/><circle cx="225" cy="65" r="3" fill="#fff"/>';break;
+case'tet':scene='<g fill="#54a496"><rect x="260" y="80" width="64" height="64"/><rect x="324" y="80" width="64" height="64"/><rect x="388" y="80" width="64" height="64"/></g><g fill="#e99b45"><rect x="324" y="144" width="64" height="64"/><rect x="388" y="144" width="64" height="64"/><rect x="452" y="144" width="64" height="64"/></g>';break;
+case'snake':scene='<path d="M190 205h112v-55h110v55h110v-65" fill="none" stroke="#337c68" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/><circle cx="522" cy="125" r="22" fill="#337c68"/><circle cx="515" cy="120" r="4" fill="#fff"/><circle cx="530" cy="120" r="4" fill="#fff"/><circle cx="210" cy="105" r="17" fill="#e77e5a"/>';break;
+case'tic':scene='<rect x="245" y="50" width="230" height="200" rx="13" fill="#fff" stroke="#344a4f" stroke-width="6"/><path d="M322 52v196M398 52v196M247 116h226M247 183h226" stroke="#a8b9b3" stroke-width="5"/><path d="M270 72l28 29m0-29l-28 29m82 65l28 29m0-29l-28 29m82-101a15 15 0 1 0 0 .1" stroke="#337c68" stroke-width="8" fill="none" stroke-linecap="round"/>';break;
+case'hockey':bg='#dcebed';glow='#b5dae0';ground='#c8e0e3';scene='<rect x="170" y="46" width="380" height="214" rx="28" fill="#f9ffff" stroke="#5d999d" stroke-width="8"/><path d="M360 50v206M360 110a48 48 0 1 0 0 1" stroke="#72aeb0" stroke-width="5" fill="none"/><circle cx="360" cy="154" r="14" fill="#202c31"/><circle cx="255" cy="150" r="33" fill="#e4776b"/><circle cx="466" cy="158" r="33" fill="#477f9f"/>';break;
+case'math':scene='<text x="360" y="177" text-anchor="middle" font-size="100" font-family="system-ui" font-weight="800" fill="#337c68">7 × 8</text><rect x="280" y="204" width="160" height="43" rx="12" fill="#fff" stroke="#adc3b7" stroke-width="4"/><text x="360" y="235" text-anchor="middle" font-size="30" font-family="system-ui" font-weight="700" fill="#e99b45">56</text>';break;
+case'chess':scene='<g fill="#34454a"><path d="M345 70h30v25h-30zM332 95h56v18h-56zM324 113h72v24h-72zM315 137h90v25h-90zM302 162h116v31H302zM290 193h140v26H290z"/></g><path d="M355 50h10v22h-10zM345 58h30" stroke="#34454a" stroke-width="7"/>';break;
+case'flap':scene='<path d="M145 0h65v115h-65zM145 190h65v110h-65zM520 0h65v92h-65zM520 170h65v130h-65z" fill="#5d9d83"/><path d="M330 154c0-28 42-35 57-12l-12 16 24 11-40 23c-18 8-29-10-29-38z" fill="#e9b24e"/><circle cx="361" cy="145" r="4" fill="#17242a"/>';break;
+case'dead':bg='#dfe5df';glow='#efc47d';ground='#becfc1';scene='<rect x="225" y="64" width="270" height="178" rx="12" fill="#c7c5b5" stroke="#687d70" stroke-width="8"/><path d="M280 88l52 28-20 47-48-18zM420 105l45 15-17 47-48-15zM350 184l42 10-11 35-47-9z" fill="#667c66"/><circle cx="360" cy="150" r="30" fill="#d5ddd4" stroke="#436e58" stroke-width="7"/><path d="M360 110v-23m0 126v-23m40-40h24m-128 0h24" stroke="#e78d4f" stroke-width="9"/>';break;
+}
+return '<svg viewBox="0 0 720 300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">'+common.replace('BG',bg).replace('GLOW',glow).replace('GROUND',ground)+scene+'</svg>'};
+const grid=document.getElementById('games'),search=document.getElementById('search'),empty=document.getElementById('empty');let filter='all';
+function beginSession(){if(!localStorage.getItem('quickplayStart'))localStorage.setItem('quickplayStart',String(Date.now()));if(!localStorage.getItem('quickplayNext'))localStorage.setItem('quickplayNext',String(Date.now()+30*60*1000))}
+function render(){const q=search.value.trim().toLowerCase();const visible=games.filter(g=>(filter==='all'||g.category===filter)&&(!q||(g.name+' '+g.category+' '+g.desc).toLowerCase().includes(q)));grid.innerHTML=visible.map(g=>'<article class="game-card"><div class="thumb">'+art(g.art)+'</div><div class="card-body"><div class="card-top"><h2>'+g.name+'</h2><span class="category">'+g.category+'</span></div><p class="desc">'+g.desc+'</p><div class="actions"><a class="play" href="'+g.url+'" data-play="'+g.id+'">Play game</a><button class="new-tab" type="button" data-new="'+g.id+'" aria-label="Open '+g.name+' in a new tab" title="Open in a new tab">↗</button></div></div></article>').join('');empty.style.display=visible.length?'none':'block';grid.style.display=visible.length?'grid':'none';grid.querySelectorAll('[data-play]').forEach(a=>a.addEventListener('click',beginSession));grid.querySelectorAll('[data-new]').forEach(b=>b.addEventListener('click',()=>{let g=games.find(x=>x.id===b.dataset.new);beginSession();window.open(g.url,'_blank','noopener,noreferrer')}))}
+document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()}));search.addEventListener('input',render);
+const readout=document.getElementById('timerReadout'),pauseBtn=document.getElementById('pauseTimer'),overlay=document.getElementById('breakOverlay');let paused=localStorage.getItem('quickplayPaused')==='1',remaining=0;
+function tick(){let next=Number(localStorage.getItem('quickplayNext')||0),start=Number(localStorage.getItem('quickplayStart')||0);if(!start){readout.textContent='30:00';return}if(paused){readout.textContent='Paused';return}remaining=Math.max(0,next-Date.now());readout.textContent=Math.floor(remaining/60000)+':'+String(Math.floor(remaining%60000/1000)).padStart(2,'0');if(remaining===0)overlay.classList.add('on')}
+pauseBtn.onclick=()=>{paused=!paused;localStorage.setItem('quickplayPaused',paused?'1':'0');pauseBtn.textContent=paused?'Resume timer':'Pause timer';pauseBtn.setAttribute('aria-pressed',String(paused));if(!paused){let next=Date.now()+Math.max(1000,remaining);localStorage.setItem('quickplayNext',String(next))}tick()};
+document.getElementById('snooze').onclick=()=>{localStorage.setItem('quickplayNext',String(Date.now()+15*60*1000));overlay.classList.remove('on');tick()};
+document.getElementById('breakDone').onclick=()=>{localStorage.setItem('quickplayStart',String(Date.now()));localStorage.setItem('quickplayNext',String(Date.now()+30*60*1000));overlay.classList.remove('on');tick()};
+document.getElementById('fullscreen').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+if(paused){pauseBtn.textContent='Resume timer';pauseBtn.setAttribute('aria-pressed','true')}render();tick();setInterval(tick,1000);
+</script>
 </body>
 </html>

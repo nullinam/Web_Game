@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vault-Tec Memory — Pip-Boy Edition</title>
+  <title>Memory Match</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
@@ -12,16 +12,18 @@
   <link rel="stylesheet" href="src/css/theme-toggle.css">
   <link rel="stylesheet" href="src/css/buttons.css">
   <script src="src/js/theme.js" defer></script>
-</head>
+<style id="quickplay-memory-theme">
+:root{--bg:#f2f4f1;--card:#fff;--ink:#263633;--muted:#667670;--accent:#3d806c;--line:#dce4df}body{background:#f2f4f1!important;color:#263633!important;font-family:system-ui,sans-serif!important}.app{max-width:1100px!important;margin:18px auto!important;padding:20px!important;display:grid!important;grid-template-columns:260px minmax(0,1fr)!important;gap:20px!important;background:transparent!important}.panel,.game{background:#fff!important;border:1px solid #dce4df!important;border-radius:16px!important;box-shadow:0 12px 34px #15251d12!important}.panel{padding:20px!important}.game{padding:22px!important}.title{color:#263633!important;font:700 1.7rem system-ui,sans-serif!important}.subtitle,.progress,.label{color:#667670!important;font-family:system-ui,sans-serif!important}.vault-badge,.page-container,.hint,#leaderboardList,.lb-controls,#openHighScores,#exportLb,#shareLb,#clearLb,#playDemo{display:none!important}.score-box{background:#f7f9f7!important;border:1px solid #e5ebe7!important;border-radius:12px!important;padding:14px!important}.btn,.difficulty-btn{border:1px solid #d2ddd6!important;border-radius:8px!important;background:#fff!important;color:#345b4d!important;font:600 .9rem system-ui,sans-serif!important}.btn--active{background:#3d806c!important;color:#fff!important}.deck{gap:12px!important}.card,.memory-card,.game-card{border-radius:13px!important;box-shadow:0 7px 17px #192b2318!important}.top-row{display:grid!important;gap:14px!important}.progress{font-size:1.1rem!important}.controls{gap:8px!important}.footer{display:none!important}@media(max-width:760px){.app{grid-template-columns:1fr!important;padding:10px!important}.game{padding:14px!important}}
+</style></head>
 
 <body onload="initTheme()">
-  <div class="app" role="application" aria-label="Vault-Tec Memory Game">
+  <div class="app" role="application" aria-label="Memory Match Game">
     <aside class="panel" aria-hidden="false">
       <div class="brand">
         <div class="vault-badge"><img src="img/LogoMain.png"></div>
         <div>
-          <h1 class="title">Vault-Tec Memory</h1>
-          <div class="subtitle">Pip-Boy Training — Find all Tech Pairs</div>
+          <h1 class="title">Memory Match</h1>
+          <div class="subtitle">Match each pair</div>
         </div>
       </div>
 
@@ -83,7 +85,7 @@
         </div>
 
         <div class="hint" style="margin-top:1rem;padding:0.8rem;background:rgba(137, 166, 207, 0.1);border-radius:4px">
-          Tip: Try to remember positions — the Pip-Boy rewards patience.
+
         </div>
 
         <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid rgba(137, 166, 207, 0.2)">
@@ -103,13 +105,13 @@
           <path d="M12 2v6" stroke="#ffd23f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M5 8c1-6 14-6 14 0" stroke="#89a6cf" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
-        <div>Designed with Vault-Tec aesthetics — blue panels, bold yellow accents and terminal fonts.</div>
+        <div></div>
       </div>
     </aside>
 
     <main class="game">
       <div class="top-row">
-        <div class="progress">Find all pairs — Good luck, Vault Dweller.</div>
+        <div class="progress">Find all matching pairs.</div>
         <div class="top-btns">
           <div id="difficultyControls" style="font-family:'Share Tech Mono',monospace;color:var(--muted);display:flex;gap:0.4rem;align-items:center">
             <div style="color:var(--muted)">Difficulty:</div>
@@ -134,20 +136,6 @@
     </main>
   </div>
 
-  <div class="page-container">
-    <div class="app" role="application" aria-label="Vault-Tec Memory Game"></div>
-    <footer class="footer">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <div class="vault-badge vault-badge--small"><img src="img/LogoMain.png"></div>
-          <span>Vault-Tec Memory Trainer | Pip-Boy Edition</span>
-        </div>
-        <div class="footer-info">
-          This App is designed and build for educational purposes
-        </div>
-      </div>
-    </footer>
-  </div>
   <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-box" role="document">
       <h2 id="modalTitle"></h2>
@@ -176,5 +164,5 @@
 
   <!-- ✅ Add your pause/resume logic in app.js -->
   <script src="src/js/app.js"></script>
-</body>
+<script src="../game-shell.js"></script></body>
 </html>
