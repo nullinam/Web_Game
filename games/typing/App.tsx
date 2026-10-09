@@ -206,11 +206,6 @@ const App: React.FC = () => {
               {gameState === GameState.MENU && (
                 <div className="flex-1 flex flex-col items-center px-3 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] space-y-5 md:space-y-8">
 
-                  {/* This game is configured for English only. */}
-                  <div className="w-full max-w-4xl lg:max-w-5xl 2xl:max-w-6xl flex justify-end">
-                    <span className="px-3 py-2 bg-slate-800/90 border border-orange-500/50 rounded text-sm font-bold text-orange-300">ENGLISH</span>
-                  </div>
-
                   {/* Logo Section */}
                   <div className="text-center flex flex-col items-center animate-mascot-idle relative">
                      <div className="mb-3 sm:mb-4 drop-shadow-[0_0_15px_rgba(251,146,60,0.3)] bg-slate-900/60 p-2 rounded-2xl border border-orange-500/20">
@@ -224,72 +219,9 @@ const App: React.FC = () => {
                      </p>
                   </div>
 
-                  <div className="w-full max-w-4xl lg:max-w-5xl 2xl:max-w-6xl space-y-4 sm:space-y-6">
-                    {/* Arcade-Style Language Selector */}
-                    <div className="glass-panel p-3 sm:p-6 shadow-[0_0_30px_rgba(251,146,60,0.15)] rounded-2xl border border-orange-500/20">
-                      <h2 className="text-center text-xs sm:text-lg md:text-xl lg:text-2xl font-retro text-amber-400 uppercase mb-4 sm:mb-6 tracking-widest leading-relaxed animate-pulse">
-                        {ui.selectLang}
-                      </h2>
-
-                      {/* Compact Grid */}
-                      <div className="grid grid-cols-4 min-[480px]:grid-cols-5 md:grid-cols-7 gap-2 sm:gap-2.5 lg:gap-4 mb-4">
-                        {SORTED_LANGUAGES.map((key) => {
-                          const lang = LANGUAGES[key];
-                          const isSelected = selectedLang === lang.id;
-
-                          return (
-                            <button
-                              key={lang.id}
-                              onClick={() => setSelectedLang(lang.id)}
-                              aria-pressed={isSelected}
-                              aria-label={lang.name}
-                              className={`relative aspect-square p-1 sm:p-2 border-2 transition-all duration-200 rounded-xl flex flex-col items-center justify-center
-                                ${isSelected
-                                  ? 'bg-gradient-to-br from-orange-400 to-orange-600 border-amber-400 text-slate-950 shadow-[0_0_18px_rgba(251,146,60,0.6)] scale-105 font-bold'
-                                  : 'bg-slate-950/60 border-slate-800 text-orange-300 hover:border-orange-500 hover:bg-slate-900/80 hover:text-white'
-                                }`}
-                            >
-                              {/* Script Sample - Large */}
-                              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-6xl mb-1 lg:mb-2 font-vt323 leading-none ${isSelected ? 'text-slate-950 font-bold' : 'text-orange-200 drop-shadow-[0_0_4px_rgba(251,146,60,0.3)]'}`}>
-                                {lang.mappings[0]?.char || 'A'}
-                              </div>
-
-                              {/* Language Code - Small */}
-                              <div className={`text-[8px] sm:text-[9px] lg:text-xs font-retro tracking-wider ${isSelected ? 'text-slate-950' : 'text-slate-500'}`}>
-                                {lang.id.slice(0, 3)}
-                              </div>
-
-                              {/* Selection Indicator */}
-                              {isSelected && (
-                                <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-400 rounded-full animate-ping"></div>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {/* Selected Language Name Display */}
-                      <div className="text-center py-3 px-2 bg-slate-950/80 border border-orange-500/20 rounded-xl">
-                        <div className="font-retro text-amber-400 text-[10px] sm:text-sm lg:text-lg uppercase tracking-widest leading-relaxed">
-                          ▶ {LANGUAGES[selectedLang].name} ◀
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Selected Language Info & Controls */}
-                    <div className="glass-panel p-3 sm:p-6 rounded-2xl border border-orange-500/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] space-y-4 sm:space-y-6">
-                      {/* Language Description */}
-                      <div className="p-3 sm:p-4 bg-slate-950/40 border border-orange-500/10 rounded-xl text-center">
-                        <p className="text-lg sm:text-xl lg:text-3xl text-slate-200 font-vt323 mb-3 leading-relaxed" dir="ltr">
-                          {LANGUAGES[selectedLang].description}
-                        </p>
-                        <div className="flex flex-wrap gap-2 sm:gap-2.5 justify-center opacity-95 mt-3">
-                           {LANGUAGES[selectedLang].mappings.slice(0, 8).map(m => (
-                             <span key={m.code} className="bg-slate-900/80 border border-orange-500/10 px-2.5 sm:px-3 lg:px-4 py-1 text-base lg:text-2xl text-orange-300 rounded-lg shadow-sm">{m.char}</span>
-                           ))}
-                           <span className="text-slate-500 px-2 py-1 font-retro text-[9px] flex items-center">...</span>
-                        </div>
-                      </div>
+                  <div className="w-full max-w-2xl mx-auto space-y-4 sm:space-y-5">
+                    <div className="glass-panel p-4 sm:p-6 rounded-2xl border border-orange-500/25 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] space-y-4 sm:space-y-5">
+                      <h2 className="text-center text-lg sm:text-2xl font-retro text-amber-400 uppercase tracking-widest">English practice</h2>
 
                       {/* Hand Toggle */}
                       <button
@@ -310,7 +242,7 @@ const App: React.FC = () => {
                          <div className="text-orange-300 font-retro text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider mb-3">
                             {levelLabels.title}
                          </div>
-                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                            {lessonOptions.map(({ mode, label }) => (
                              <button
                                key={mode}
@@ -329,7 +261,7 @@ const App: React.FC = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex gap-2 sm:gap-3">
+                      <div className="flex gap-2 sm:gap-3 justify-center">
                          <button
                             onClick={startGame}
                             className="flex-1 min-w-0 py-4 lg:py-6 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-retro text-sm sm:text-lg lg:text-2xl shadow-[0_4px_12px_rgba(245,158,11,0.2)] hover:shadow-[0_4px_20px_rgba(245,158,11,0.4)] transform active:scale-[0.98] transition-all rounded-xl"

@@ -9,7 +9,7 @@ The following games contain code and assets from the linked public repositories.
 | 2048 | [gabrielecirulli/2048](https://github.com/gabrielecirulli/2048) | MIT; see `games/2048/LICENSE.txt` |
 | Emberfall | [FahadIbrahim93/emberfall](https://github.com/FahadIbrahim93/emberfall) | MIT; see `games/emberfall/LICENSE` |
 | Math Quiz | [martinw500/Math-Quiz-Generator](https://github.com/martinw500/Math-Quiz-Generator) | MIT; see `games/math/LICENSE` |
-| Chess | [zeyu2001/chess-ai](https://github.com/zeyu2001/chess-ai) | MIT; see `games/chess/LICENSE` |
+| Chess | [Harshv2608/Chess_game](https://github.com/Harshv2608/Chess_game) | MIT, as stated by the source README; see games/chess/LICENSE |
 | Floppy Bird | [nebez/floppybird](https://github.com/nebez/floppybird) | Apache-2.0 for code; see `games/flappy/LICENSE`. README notes that game artwork belongs to its original creator. Audio and analytics were removed. |
 | Tetris | [ironman-29/tetris-game](https://github.com/ironman-29/tetris-game) | MIT; see `games/tetris/LICENSE` |
 
