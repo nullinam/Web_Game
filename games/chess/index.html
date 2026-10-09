@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script src="../no-audio.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0a0a0a">
@@ -29,6 +29,6 @@
     document.getElementById('restart').addEventListener('click',()=>{game.reset();history=[];selected=null;legal=[];thinking=false;paused=false;status.textContent='Your move.';render()});document.getElementById('flip').addEventListener('click',()=>{flipped=!flipped;render()});document.addEventListener('gamehub:pause',event=>{paused=event.detail.paused;status.textContent=paused?'Paused.':game.turn()==='w'?'Your move.':'Opponent to move.'});render();
   })();
   </script>
-  <script src="../game-shell.js"></script>
+
 </body>
 </html>

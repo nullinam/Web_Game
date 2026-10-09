@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script src="../no-audio.js"></script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ultimate Tic Tac Toe</title>
 <style>
@@ -15,4 +15,4 @@ function play(b,p){if(finished||paused||thinking||closed(b)||cells[b][p]||!allow
 function evalState(){let score=0;const weights=[0,2,15,1000];for(let i=0;i<9;i++){if(mini[i]==='O')score+=120;else if(mini[i]==='X')score-=120;else if(mini[i]!=='D'){for(const l of lines){let o=0,x=0;for(const p of l){o+=cells[i][p]==='O';x+=cells[i][p]==='X'}if(!x)score+=weights[o];if(!o)score-=weights[x]}score+=(cells[i][4]==='O'?2:cells[i][4]==='X'?-2:0)}}for(const l of lines){let o=0,x=0;for(const i of l){o+=mini[i]==='O';x+=mini[i]==='X'}if(!x)score+=o===2?90:o===1?12:0;if(!o)score-=x===2?110:x===1?12:0}return score}
 function chooseComputerMove(){let moves=[];for(const b of allowed())for(let p=0;p<9;p++)if(!cells[b][p])moves.push({b,p});let best=null,bestScore=-Infinity;for(const m of moves){const snap=cells.map(r=>r.slice()),oldMini=mini.slice(),oldForced=forced,oldFinished=finished;place(m.b,m.p,'O');let score=finished?(macro()==='O'?100000:0):evalState();if(!finished){let replies=[];for(const b of allowed())for(let p=0;p<9;p++)if(!cells[b][p])replies.push({b,p});let worst=Infinity;for(const r of replies){const s2=cells.map(a=>a.slice()),m2=mini.slice(),f2=forced,done2=finished;place(r.b,r.p,'X');const response=finished?(macro()==='X'?-100000:0):evalState();worst=Math.min(worst,response);cells=s2;mini=m2;forced=f2;finished=done2}score=score*.25+worst*.75}cells=snap;mini=oldMini;forced=oldForced;finished=oldFinished;score+=Math.random()*.12;if(score>bestScore){bestScore=score;best=m}}return best}
 function reset(){cells=Array.from({length:9},()=>Array(9).fill(''));mini=Array(9).fill('');forced=null;turn='X';finished=false;thinking=false;statusEl.textContent='Your turn. Choose any square.';render()}document.querySelector('#restart').onclick=reset;document.addEventListener('gamehub:pause',e=>{paused=e.detail.paused;if(!paused&&thinking){thinking=false;setTimeout(()=>{if(paused){thinking=true;return}const m=chooseComputerMove();if(m)place(m.b,m.p,'O');if(!finished)statusEl.textContent='Your turn.';render()},50)}render()});reset();
-</script><script src="../game-shell.js"></script></body></html>
+</script></body></html>
