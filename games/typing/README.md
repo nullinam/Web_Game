@@ -1,14 +1,14 @@
 # Typing Game
 
-**Master non-Latin keyboard layouts through retro arcade-style typing games.**
+**Build English typing speed and accuracy in a simple arcade-style game.**
 
-A free, offline-first typing game designed to help you learn and practice typing in Korean Hangul, Russian and Ukrainian Cyrillic, Japanese Kana, Chinese Bopomofo, Arabic, Hebrew, and more. Perfect for language learners, polyglots, and anyone wanting to expand their keyboard skills beyond QWERTY.
+A free, offline-first typing game for English QWERTY practice, with live speed feedback, accuracy tracking and local high scores.
 
 ---
 
 ## Why Typing Game?
 
-- **14 Keyboard Layouts** - Learn Korean, Russian, Ukrainian, Japanese, Chinese, Arabic, Hebrew, Turkish, and more
+- **English QWERTY** - Focus on one familiar keyboard layout
 - **100% Free & Open Source** - No subscriptions, no ads, no tracking
 - **Retro Arcade Aesthetic** - Nostalgic 8-bit gaming experience
 - **Offline-First** - Works completely offline as a PWA
@@ -20,21 +20,8 @@ A free, offline-first typing game designed to help you learn and practice typing
 
 ## Features
 
-### Keyboard Layouts (14 Languages)
-- **English** (QWERTY)
-- **Spanish** (Español - QWERTY with Ñ)
-- **French** (Français - AZERTY)
-- **German** (Deutsch - QWERTZ)
-- **Italian** (Italiano)
-- **Portuguese** (Português - ABNT2, accents as dead keys)
-- **Turkish** (Türkçe Q)
-- **Russian** (Русский - JCUKEN)
-- **Ukrainian** (Українська)
-- **Arabic** (العربية - RTL layout)
-- **Hebrew** (עברית - RTL layout)
-- **Korean** (한국어 - Hangul 2-Set)
-- **Japanese** (日本語 - JIS Kana input)
-- **Chinese** (中文 - Bopomofo)
+### Keyboard Layout
+- **English** (US QWERTY)
 
 ### Learning Tools
 - **Finger Mapping** - Visual guide showing which finger types each key
@@ -45,13 +32,13 @@ A free, offline-first typing game designed to help you learn and practice typing
 - **Score System** - Arcade-style points for correct typing
 
 ### Game Modes
-- **Free Practice** - Type common words in your chosen language
+- **Free Practice** - Type common English words
 - **Leaderboard** - Compete with yourself and track personal bests
-- **Manual/Tutorial** - Learn keyboard layouts and finger positions
+- **Manual/Tutorial** - Learn the keyboard and finger positions
 
 ### Interface
-- **Multilingual UI** - Interface available in English, Spanish, French, German, Italian, Portuguese, Russian, Korean, Japanese, Chinese, Arabic and Hebrew
-- **Retro Design** - Classic arcade terminal aesthetic with cyan/slate color scheme
+- **English UI** - A single language choice keeps the setup direct
+- **Retro Design** - Classic arcade terminal aesthetic with warm orange highlights
 - **Responsive** - Works on desktop, tablets and phones (tap the on-screen keyboard, or click it with a mouse)
 
 ---
@@ -111,7 +98,7 @@ When running in a browser, you can install Typing Game as a desktop or mobile ap
 
 ## How to Play
 
-1. **Select Language** - Choose which keyboard layout you want to practice
+1. **Choose a mode** - Select a typing lesson or free practice
 2. **Optional: Toggle Hands** - Show/hide hand visualization
 3. **Start Game** - Click "Start" to begin
 4. **Type Words** - Type the highlighted character; the virtual keyboard and hand guide show which key and finger to use
@@ -125,18 +112,9 @@ When running in a browser, you can install Typing Game as a desktop or mobile ap
 
 ---
 
-## Supported Keyboards
+## Keyboard
 
-Each language uses authentic keyboard layouts:
-- **QWERTY** - English, Spanish, Italian, Portuguese (ABNT2), Turkish (Q)
-- **AZERTY** - French
-- **QWERTZ** - German
-- **Hangul** - Korean (2-Set layout; compound vowels and consonants are typed as two keys)
-- **Cyrillic** - Russian (JCUKEN), Ukrainian
-- **Kana** - Japanese (JIS kana input; voiced kana are typed with the ゛/゜ key)
-- **Bopomofo** - Chinese (Zhuyin)
-- **Arabic Script** - Arabic (RTL)
-- **Hebrew Script** - Hebrew (RTL)
+The game uses a standard US English QWERTY keyboard.
 
 ---
 

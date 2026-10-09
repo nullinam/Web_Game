@@ -29,7 +29,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ entries, currentLanguage, uiL
 
         {/* Language Badge */}
         <div className="bg-slate-900 p-3 sm:p-4 border-b-2 border-slate-700">
-          <div className="text-center text-cyan-400 font-retro text-[10px] sm:text-sm md:text-base uppercase tracking-widest leading-relaxed">
+          <div className="text-center text-orange-400 font-retro text-[10px] sm:text-sm md:text-base uppercase tracking-widest leading-relaxed">
             {LANGUAGES[currentLanguage].name}
           </div>
         </div>
@@ -70,8 +70,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ entries, currentLanguage, uiL
                     <div className={`text-center font-retro text-xs sm:text-base ${medalColor} ${isTopThree ? 'font-bold' : ''}`}>
                       {idx < 3 ? ['🥇', '🥈', '🥉'][idx] : `#${idx + 1}`}
                     </div>
-                    <div className="uppercase tracking-widest text-cyan-200 pl-2 truncate">{entry.name}</div>
-                    <div className="text-right text-cyan-300 tabular-nums">{entry.wpm}</div>
+                    <div className="uppercase tracking-widest text-orange-200 pl-2 truncate">{entry.name}</div>
+                    <div className="text-right text-orange-300 tabular-nums">{entry.wpm}</div>
                     <div className="text-right text-white font-bold pr-2 tabular-nums">{entry.score}</div>
                   </div>
                 );

@@ -6,8 +6,8 @@
 :root {
   --color-bg-dark: #070a13;
   --color-panel-glass: rgba(15, 23, 42, 0.4);
-  --color-border-glass: rgba(34, 211, 238, 0.15);
-  --color-glow-cyan: 0 0 12px rgba(34, 211, 238, 0.4);
+  --color-border-glass: rgba(251, 146, 60, 0.22);
+  --color-glow-orange: 0 0 12px rgba(251, 146, 60, 0.42);
   --color-glow-purple: 0 0 16px rgba(192, 132, 252, 0.3);
 }
 
@@ -43,10 +43,10 @@ body {
 
 /* Keycap highlights and details */
 .key-highlight {
-  box-shadow: var(--color-glow-cyan);
-  border-color: #22d3ee !important;
+  box-shadow: var(--color-glow-orange);
+  border-color: #fb923c !important;
   color: #ffffff !important;
-  background-color: rgba(34, 211, 238, 0.15) !important;
+  background-color: rgba(251, 146, 60, 0.15) !important;
   transform: scale(1.04);
   transition: all 0.12s ease-in-out;
 }
@@ -170,7 +170,7 @@ body {
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #22d3ee;
+  background: #fb923c;
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {

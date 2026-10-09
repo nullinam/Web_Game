@@ -287,7 +287,7 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
       onClick={onClose}
     >
       <div
-        className="glass-panel w-full max-w-xl p-4 sm:p-6 rounded-2xl border border-cyan-500/20 shadow-[0_0_50px_rgba(34,211,238,0.25)] flex flex-col max-h-[calc(100dvh-1.5rem)] overflow-y-auto custom-scrollbar"
+        className="glass-panel w-full max-w-xl p-4 sm:p-6 rounded-2xl border border-orange-500/20 shadow-[0_0_50px_rgba(251,146,60,0.25)] flex flex-col max-h-[calc(100dvh-1.5rem)] overflow-y-auto custom-scrollbar"
         dir={isRTL ? 'rtl' : 'ltr'}
         role="dialog"
         aria-modal="true"
@@ -296,20 +296,20 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
       >
 
         {/* Title */}
-        <h2 id="mp-title" className="text-center font-retro text-base sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-200 to-cyan-500 glow-text mb-4 sm:mb-6 leading-relaxed">
+        <h2 id="mp-title" className="text-center font-retro text-base sm:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-orange-200 to-orange-500 glow-text mb-4 sm:mb-6 leading-relaxed">
           {ui.multiplayer}
         </h2>
 
         {/* Local Name Input */}
         <div className="mb-4">
-          <label htmlFor="mp-name" className="block text-cyan-400 font-retro text-[9px] uppercase tracking-wider mb-2">{t.playerName}</label>
+          <label htmlFor="mp-name" className="block text-orange-400 font-retro text-[9px] uppercase tracking-wider mb-2">{t.playerName}</label>
           <input
             id="mp-name"
             type="text"
             maxLength={3}
             value={playerName}
             onChange={(e) => onPlayerNameChange(e.target.value.toUpperCase().trim())}
-            className="w-full bg-slate-900 border border-cyan-500/20 rounded-xl px-4 py-2.5 text-center text-lg sm:text-xl font-retro text-amber-400 focus:outline-none focus:border-cyan-500 uppercase"
+            className="w-full bg-slate-900 border border-orange-500/20 rounded-xl px-4 py-2.5 text-center text-lg sm:text-xl font-retro text-amber-400 focus:outline-none focus:border-orange-500 uppercase"
             placeholder="PNK"
             autoComplete="off"
           />
@@ -323,8 +323,8 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
               onClick={() => switchTab(tab)}
               className={`py-3 px-1 font-retro text-[10px] sm:text-xs rounded-xl border transition ${
                 activeTab === tab
-                  ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-[0_0_12px_rgba(34,211,238,0.4)]'
-                  : 'bg-slate-900 border-slate-800 text-cyan-400 hover:text-white'
+                  ? 'bg-orange-500 text-slate-950 border-orange-400 font-bold shadow-[0_0_12px_rgba(251,146,60,0.4)]'
+                  : 'bg-slate-900 border-slate-800 text-orange-400 hover:text-white'
               }`}
             >
               {tab === 'host' ? t.host : t.join}
@@ -335,13 +335,13 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
         {/* HOST PANEL */}
         {activeTab === 'host' && (
           <div className="flex flex-col items-center space-y-4">
-            <div className="bg-slate-950/60 p-3 sm:p-4 border border-cyan-500/10 rounded-xl text-center w-full">
+            <div className="bg-slate-950/60 p-3 sm:p-4 border border-orange-500/10 rounded-xl text-center w-full">
               <span className="text-[10px] font-retro text-slate-500 block mb-2">{t.roomId}</span>
-              <span className="text-2xl sm:text-4xl font-retro text-cyan-400 font-bold tracking-widest select-all" dir="ltr">{hostRoomId}</span>
+              <span className="text-2xl sm:text-4xl font-retro text-orange-400 font-bold tracking-widest select-all" dir="ltr">{hostRoomId}</span>
             </div>
 
             {qrUrl && (
-              <div className="p-2 sm:p-3 bg-white rounded-xl border-4 border-cyan-500 shadow-lg">
+              <div className="p-2 sm:p-3 bg-white rounded-xl border-4 border-orange-500 shadow-lg">
                 <img src={qrUrl} alt={`${t.roomId} ${hostRoomId}`} className="w-32 h-32 sm:w-40 sm:h-40" />
               </div>
             )}
@@ -364,7 +364,7 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
                 maxLength={ROOM_ID_LENGTH}
                 value={joinInput}
                 onChange={(e) => setJoinInput(cleanRoomId(e.target.value))}
-                className="flex-1 min-w-0 bg-slate-900 border border-cyan-500/20 rounded-xl px-3 py-3 text-center text-lg sm:text-2xl font-retro text-cyan-300 focus:outline-none focus:border-cyan-500 uppercase tracking-widest placeholder:text-slate-600 placeholder:text-sm"
+                className="flex-1 min-w-0 bg-slate-900 border border-orange-500/20 rounded-xl px-3 py-3 text-center text-lg sm:text-2xl font-retro text-orange-300 focus:outline-none focus:border-orange-500 uppercase tracking-widest placeholder:text-slate-600 placeholder:text-sm"
                 placeholder={t.enterRoomId}
                 aria-label={t.enterRoomId}
                 autoComplete="off"
@@ -373,7 +373,7 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
               />
               <button
                 type="submit"
-                className="flex-none px-4 sm:px-6 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-retro text-[10px] sm:text-xs rounded-xl border border-cyan-400 transition"
+                className="flex-none px-4 sm:px-6 bg-orange-600 hover:bg-orange-500 text-slate-950 font-retro text-[10px] sm:text-xs rounded-xl border border-orange-400 transition"
               >
                 {t.joinButton}
               </button>
@@ -387,12 +387,12 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
                     setError(null);
                     setScanActive(true);
                   }}
-                  className="w-full py-3 bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-cyan-400 font-retro text-[10px] sm:text-xs rounded-xl transition"
+                  className="w-full py-3 bg-slate-900 border border-slate-800 hover:border-orange-500/50 text-orange-400 font-retro text-[10px] sm:text-xs rounded-xl transition"
                 >
                   📷 {t.scan}
                 </button>
               ) : (
-                <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-cyan-500/30">
+                <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-orange-500/30">
                   <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
                   <canvas ref={canvasRef} className="hidden" />
                   <button
@@ -413,7 +413,7 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
 
         {/* CONNECTION STATUS + PEERS */}
         {inRoom && (
-          <div className="mt-4 sm:mt-6 border-t border-cyan-500/10 pt-4 sm:pt-6">
+          <div className="mt-4 sm:mt-6 border-t border-orange-500/10 pt-4 sm:pt-6">
             <p className="text-center text-amber-400/90 font-retro text-[9px] leading-relaxed mb-3 animate-pulse">
               {activeTab === 'host'
                 ? (canStart ? '' : t.waitingPlayers)
@@ -440,10 +440,10 @@ export const MultiplayerDialog: React.FC<MultiplayerDialogProps> = ({
         )}
 
         {/* CONTROL ACTIONS */}
-        <div className="mt-4 sm:mt-6 flex gap-3 sm:gap-4 pt-4 border-t border-cyan-500/10">
+        <div className="mt-4 sm:mt-6 flex gap-3 sm:gap-4 pt-4 border-t border-orange-500/10">
           <button
             onClick={onClose}
-            className="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/20 font-retro text-[10px] sm:text-xs rounded-xl transition"
+            className="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 text-orange-400 border border-orange-500/20 font-retro text-[10px] sm:text-xs rounded-xl transition"
           >
             {t.close}
           </button>

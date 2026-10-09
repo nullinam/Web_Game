@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { GameState, Language, LeaderboardEntry, InterfaceLanguage, LessonMode } from './types';
 import { LANGUAGES, SORTED_LANGUAGES, UI_STRINGS } from './constants';
 import GameEngine from './components/GameEngine';
@@ -12,22 +12,6 @@ const MultiplayerDialog = lazy(() => import('./components/MultiplayerDialog'));
 
 const STORAGE_KEY = 'penko_leaderboard';
 const SETTINGS_KEY = 'penko_settings';
-
-// Language names for UI dropdown
-const INTERFACE_LANGUAGE_NAMES: Record<InterfaceLanguage, string> = {
-  [InterfaceLanguage.ENGLISH]: 'English',
-  [InterfaceLanguage.SPANISH]: 'Español',
-  [InterfaceLanguage.FRENCH]: 'Français',
-  [InterfaceLanguage.GERMAN]: 'Deutsch',
-  [InterfaceLanguage.ITALIAN]: 'Italiano',
-  [InterfaceLanguage.PORTUGUESE]: 'Português',
-  [InterfaceLanguage.RUSSIAN]: 'Русский',
-  [InterfaceLanguage.KOREAN]: '한국어',
-  [InterfaceLanguage.JAPANESE]: '日本語',
-  [InterfaceLanguage.CHINESE]: '中文',
-  [InterfaceLanguage.ARABIC]: 'العربية',
-  [InterfaceLanguage.HEBREW]: 'עברית'
-};
 
 const LEVEL_LABELS: Record<InterfaceLanguage, { title: string, home: string, noShift: string, all: string }> = {
   [InterfaceLanguage.ENGLISH]: { title: "LESSON LEVEL", home: "Level 1: Home Row Only", noShift: "Level 2: Basic Keys (No Shift)", all: "Level 3: Full Keyboard" },
@@ -84,8 +68,8 @@ const loadSettings = (): Settings => {
   const saved = readJson<Partial<Settings>>(SETTINGS_KEY) ?? {};
   const isOneOf = <T,>(values: T[], value: unknown): value is T => values.includes(value as T);
   return {
-    uiLang: isOneOf(Object.values(InterfaceLanguage), saved.uiLang) ? saved.uiLang : DEFAULT_SETTINGS.uiLang,
-    selectedLang: isOneOf(SORTED_LANGUAGES, saved.selectedLang) ? saved.selectedLang : DEFAULT_SETTINGS.selectedLang,
+    uiLang: DEFAULT_SETTINGS.uiLang,
+    selectedLang: DEFAULT_SETTINGS.selectedLang,
     showHands: typeof saved.showHands === 'boolean' ? saved.showHands : DEFAULT_SETTINGS.showHands,
     lessonMode: isOneOf(LESSON_MODES, saved.lessonMode) ? saved.lessonMode : DEFAULT_SETTINGS.lessonMode,
     mpName: typeof saved.mpName === 'string' ? saved.mpName.slice(0, 3) : DEFAULT_SETTINGS.mpName
@@ -112,7 +96,6 @@ const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(GameState.MENU);
   const [selectedLang, setSelectedLang] = useState<Language>(initialSettings.selectedLang);
   const [uiLang, setUiLang] = useState<InterfaceLanguage>(initialSettings.uiLang);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const [showManual, setShowManual] = useState(false);
 
   const [stats, setStats] = useState({ score: 0, wpm: 0 });
@@ -129,7 +112,6 @@ const App: React.FC = () => {
   const [pendingRoom, setPendingRoom] = useState(ROOM_FROM_URL);
   const [showMultiplayer, setShowMultiplayer] = useState(!!ROOM_FROM_URL && multiplayerService.isAvailable);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const ui = UI_STRINGS[uiLang];
   const isRTL = uiLang === InterfaceLanguage.ARABIC || uiLang === InterfaceLanguage.HEBREW;
@@ -141,21 +123,6 @@ const App: React.FC = () => {
   useEffect(() => {
     document.documentElement.lang = uiLang.toLowerCase();
   }, [uiLang]);
-
-  // Close the language dropdown on outside click or Escape
-  useEffect(() => {
-    if (!langDropdownOpen) return;
-    const onPointer = (e: PointerEvent) => {
-      if (!dropdownRef.current?.contains(e.target as Node)) setLangDropdownOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setLangDropdownOpen(false);
-    document.addEventListener('pointerdown', onPointer);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('pointerdown', onPointer);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [langDropdownOpen]);
 
   const saveScore = () => {
     if (!playerName) return;
@@ -194,7 +161,7 @@ const App: React.FC = () => {
 
   // Everyone in the room plays the host's layout, lesson and word list
   const handleMatchStart = (settings: MatchSettings) => {
-    setSelectedLang(settings.language);
+    setSelectedLang(Language.ENGLISH);
     setLessonMode(settings.lessonMode);
     setSeed(settings.seed);
     setPlayerName('');
@@ -212,7 +179,7 @@ const App: React.FC = () => {
   ];
 
   return (
-    <div className="h-full bg-slate-900 text-cyan-400 flex flex-col relative z-10 overflow-hidden">
+    <div className="h-full bg-slate-900 text-orange-400 flex flex-col relative z-10 overflow-hidden">
 
       {/* Manual Overlay (handled independently) */}
       {showManual && (
@@ -239,66 +206,27 @@ const App: React.FC = () => {
               {gameState === GameState.MENU && (
                 <div className="flex-1 flex flex-col items-center px-3 sm:px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] space-y-5 md:space-y-8">
 
-                  {/* Top Bar for UI Language */}
+                  {/* This game is configured for English only. */}
                   <div className="w-full max-w-4xl lg:max-w-5xl 2xl:max-w-6xl flex justify-end">
-                    <div className="relative" ref={dropdownRef}>
-                      <button
-                        onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-                        aria-haspopup="listbox"
-                        aria-expanded={langDropdownOpen}
-                        className="flex items-center gap-2 px-3 py-2 bg-slate-800/90 border border-cyan-500/50 rounded text-sm font-bold text-cyan-300 hover:bg-slate-700 hover:border-cyan-400 transition-all shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
-                      >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                        </svg>
-                        <span className="tracking-wide">{INTERFACE_LANGUAGE_NAMES[uiLang]}</span>
-                        <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-
-                      {/* Dropdown Menu */}
-                      {langDropdownOpen && (
-                        <div role="listbox" className="absolute end-0 mt-2 w-44 z-50 bg-slate-800 border border-cyan-500/50 rounded shadow-[4px_4px_0_rgba(0,0,0,0.5)] overflow-hidden max-h-80 overflow-y-auto custom-scrollbar">
-                          {Object.values(InterfaceLanguage).map((lang) => (
-                            <button
-                              key={lang}
-                              role="option"
-                              aria-selected={uiLang === lang}
-                              onClick={() => {
-                                setUiLang(lang);
-                                setLangDropdownOpen(false);
-                              }}
-                              className={`w-full text-start px-3 py-2 text-base font-medium transition-colors ${
-                                uiLang === lang
-                                  ? 'bg-cyan-600 text-white'
-                                  : 'text-cyan-300 hover:bg-slate-700 hover:text-cyan-100'
-                              }`}
-                            >
-                              {INTERFACE_LANGUAGE_NAMES[lang]}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <span className="px-3 py-2 bg-slate-800/90 border border-orange-500/50 rounded text-sm font-bold text-orange-300">ENGLISH</span>
                   </div>
 
                   {/* Logo Section */}
                   <div className="text-center flex flex-col items-center animate-mascot-idle relative">
-                     <div className="mb-3 sm:mb-4 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] bg-slate-900/60 p-2 rounded-2xl border border-cyan-500/20">
+                     <div className="mb-3 sm:mb-4 drop-shadow-[0_0_15px_rgba(251,146,60,0.3)] bg-slate-900/60 p-2 rounded-2xl border border-orange-500/20">
                         <PenkoMascot pose="idle" size={96} className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32" />
                      </div>
-                     <h1 className="text-2xl min-[400px]:text-3xl sm:text-5xl md:text-7xl font-retro text-transparent bg-clip-text bg-gradient-to-b from-cyan-200 to-cyan-600 glow-text mb-2 tracking-tight leading-tight" dir="ltr">
+                     <h1 className="text-2xl min-[400px]:text-3xl sm:text-5xl md:text-7xl font-retro text-transparent bg-clip-text bg-gradient-to-b from-orange-200 to-orange-600 glow-text mb-2 tracking-tight leading-tight" dir="ltr">
                       TYPING GAME
                      </h1>
-                     <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-cyan-400/80 font-vt323 tracking-widest uppercase">
+                     <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-orange-400/80 font-vt323 tracking-widest uppercase">
                        {ui.subtitle}
                      </p>
                   </div>
 
                   <div className="w-full max-w-4xl lg:max-w-5xl 2xl:max-w-6xl space-y-4 sm:space-y-6">
                     {/* Arcade-Style Language Selector */}
-                    <div className="glass-panel p-3 sm:p-6 shadow-[0_0_30px_rgba(34,211,238,0.15)] rounded-2xl border border-cyan-500/20">
+                    <div className="glass-panel p-3 sm:p-6 shadow-[0_0_30px_rgba(251,146,60,0.15)] rounded-2xl border border-orange-500/20">
                       <h2 className="text-center text-xs sm:text-lg md:text-xl lg:text-2xl font-retro text-amber-400 uppercase mb-4 sm:mb-6 tracking-widest leading-relaxed animate-pulse">
                         {ui.selectLang}
                       </h2>
@@ -317,12 +245,12 @@ const App: React.FC = () => {
                               aria-label={lang.name}
                               className={`relative aspect-square p-1 sm:p-2 border-2 transition-all duration-200 rounded-xl flex flex-col items-center justify-center
                                 ${isSelected
-                                  ? 'bg-gradient-to-br from-cyan-400 to-cyan-600 border-amber-400 text-slate-950 shadow-[0_0_18px_rgba(34,211,238,0.6)] scale-105 font-bold'
-                                  : 'bg-slate-950/60 border-slate-800 text-cyan-300 hover:border-cyan-500 hover:bg-slate-900/80 hover:text-white'
+                                  ? 'bg-gradient-to-br from-orange-400 to-orange-600 border-amber-400 text-slate-950 shadow-[0_0_18px_rgba(251,146,60,0.6)] scale-105 font-bold'
+                                  : 'bg-slate-950/60 border-slate-800 text-orange-300 hover:border-orange-500 hover:bg-slate-900/80 hover:text-white'
                                 }`}
                             >
                               {/* Script Sample - Large */}
-                              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-6xl mb-1 lg:mb-2 font-vt323 leading-none ${isSelected ? 'text-slate-950 font-bold' : 'text-cyan-200 drop-shadow-[0_0_4px_rgba(34,211,238,0.3)]'}`}>
+                              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-6xl mb-1 lg:mb-2 font-vt323 leading-none ${isSelected ? 'text-slate-950 font-bold' : 'text-orange-200 drop-shadow-[0_0_4px_rgba(251,146,60,0.3)]'}`}>
                                 {lang.mappings[0]?.char || 'A'}
                               </div>
 
@@ -341,7 +269,7 @@ const App: React.FC = () => {
                       </div>
 
                       {/* Selected Language Name Display */}
-                      <div className="text-center py-3 px-2 bg-slate-950/80 border border-cyan-500/20 rounded-xl">
+                      <div className="text-center py-3 px-2 bg-slate-950/80 border border-orange-500/20 rounded-xl">
                         <div className="font-retro text-amber-400 text-[10px] sm:text-sm lg:text-lg uppercase tracking-widest leading-relaxed">
                           ▶ {LANGUAGES[selectedLang].name} ◀
                         </div>
@@ -349,15 +277,15 @@ const App: React.FC = () => {
                     </div>
 
                     {/* Selected Language Info & Controls */}
-                    <div className="glass-panel p-3 sm:p-6 rounded-2xl border border-cyan-500/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] space-y-4 sm:space-y-6">
+                    <div className="glass-panel p-3 sm:p-6 rounded-2xl border border-orange-500/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] space-y-4 sm:space-y-6">
                       {/* Language Description */}
-                      <div className="p-3 sm:p-4 bg-slate-950/40 border border-cyan-500/10 rounded-xl text-center">
+                      <div className="p-3 sm:p-4 bg-slate-950/40 border border-orange-500/10 rounded-xl text-center">
                         <p className="text-lg sm:text-xl lg:text-3xl text-slate-200 font-vt323 mb-3 leading-relaxed" dir="ltr">
                           {LANGUAGES[selectedLang].description}
                         </p>
                         <div className="flex flex-wrap gap-2 sm:gap-2.5 justify-center opacity-95 mt-3">
                            {LANGUAGES[selectedLang].mappings.slice(0, 8).map(m => (
-                             <span key={m.code} className="bg-slate-900/80 border border-cyan-500/10 px-2.5 sm:px-3 lg:px-4 py-1 text-base lg:text-2xl text-cyan-300 rounded-lg shadow-sm">{m.char}</span>
+                             <span key={m.code} className="bg-slate-900/80 border border-orange-500/10 px-2.5 sm:px-3 lg:px-4 py-1 text-base lg:text-2xl text-orange-300 rounded-lg shadow-sm">{m.char}</span>
                            ))}
                            <span className="text-slate-500 px-2 py-1 font-retro text-[9px] flex items-center">...</span>
                         </div>
@@ -368,18 +296,18 @@ const App: React.FC = () => {
                         type="button"
                         role="switch"
                         aria-checked={showHands}
-                        className="w-full flex items-center justify-between gap-3 bg-slate-950/40 p-3 sm:p-4 rounded-xl border border-cyan-500/10 hover:bg-slate-900/60 transition duration-200"
+                        className="w-full flex items-center justify-between gap-3 bg-slate-950/40 p-3 sm:p-4 rounded-xl border border-orange-500/10 hover:bg-slate-900/60 transition duration-200"
                         onClick={() => setShowHands(!showHands)}
                       >
-                         <span className="text-cyan-300 font-retro text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider text-start leading-relaxed">{ui.showHands}</span>
-                         <div className={`flex-none w-12 h-6 rounded-full p-1 transition-colors duration-200 ${showHands ? 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-slate-700'}`} dir="ltr">
+                         <span className="text-orange-300 font-retro text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider text-start leading-relaxed">{ui.showHands}</span>
+                         <div className={`flex-none w-12 h-6 rounded-full p-1 transition-colors duration-200 ${showHands ? 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.5)]' : 'bg-slate-700'}`} dir="ltr">
                             <div className={`w-4 h-4 bg-slate-950 rounded-full shadow-md transform transition-transform duration-200 ${showHands ? 'translate-x-6' : 'translate-x-0'}`}></div>
                          </div>
                       </button>
 
                       {/* Lesson Level Selector */}
-                      <div className="bg-slate-950/40 p-3 sm:p-4 rounded-xl border border-cyan-500/10">
-                         <div className="text-cyan-300 font-retro text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider mb-3">
+                      <div className="bg-slate-950/40 p-3 sm:p-4 rounded-xl border border-orange-500/10">
+                         <div className="text-orange-300 font-retro text-[10px] sm:text-xs lg:text-sm uppercase tracking-wider mb-3">
                             {levelLabels.title}
                          </div>
                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -390,8 +318,8 @@ const App: React.FC = () => {
                                aria-pressed={lessonMode === mode}
                                className={`px-3 py-2 lg:py-3 text-base lg:text-2xl font-vt323 tracking-wide border rounded-lg transition-all ${
                                  lessonMode === mode
-                                   ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-bold shadow-[0_0_8px_rgba(34,211,238,0.4)]'
-                                   : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/50'
+                                   ? 'bg-orange-500 text-slate-950 border-orange-400 font-bold shadow-[0_0_8px_rgba(251,146,60,0.4)]'
+                                   : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-orange-300 hover:border-orange-500/50'
                                }`}
                              >
                                {label}
@@ -420,7 +348,7 @@ const App: React.FC = () => {
                           )}
                           <button
                             onClick={() => setGameState(GameState.LEADERBOARD)}
-                            className="flex-none px-4 sm:px-6 lg:px-8 py-4 lg:py-6 bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 text-xl lg:text-3xl shadow-lg transform active:scale-[0.98] transition-all rounded-xl"
+                            className="flex-none px-4 sm:px-6 lg:px-8 py-4 lg:py-6 bg-slate-800 hover:bg-slate-700 text-orange-300 border border-orange-500/30 text-xl lg:text-3xl shadow-lg transform active:scale-[0.98] transition-all rounded-xl"
                             title={ui.leaderboard}
                             aria-label={ui.leaderboard}
                           >
@@ -433,7 +361,7 @@ const App: React.FC = () => {
                   <div className="text-sm lg:text-lg text-slate-500 text-center flex flex-wrap justify-center gap-x-4 gap-y-1 items-center pb-2">
                      <span>{ui.offlineCapable}</span>
                      <span aria-hidden="true">•</span>
-                     <button onClick={() => setShowManual(true)} className="underline hover:text-cyan-400 font-retro text-[9px] tracking-wider uppercase transition">
+                     <button onClick={() => setShowManual(true)} className="underline hover:text-orange-400 font-retro text-[9px] tracking-wider uppercase transition">
                         {ui.manual}
                      </button>
                   </div>
@@ -445,13 +373,13 @@ const App: React.FC = () => {
                 <div className="flex-1 flex flex-col items-center justify-center bg-slate-900/95 p-4 sm:p-6 md:p-8 text-center">
 
                   {/* Title */}
-                  <h2 className="text-xl min-[400px]:text-2xl sm:text-4xl md:text-6xl font-retro text-cyan-400 glow-text mb-6 sm:mb-12 leading-relaxed">
+                  <h2 className="text-xl min-[400px]:text-2xl sm:text-4xl md:text-6xl font-retro text-orange-400 glow-text mb-6 sm:mb-12 leading-relaxed">
                     {ui.sessionComplete}
                   </h2>
 
                   {/* Stats Panel */}
                   <form
-                    className="w-full max-w-2xl bg-slate-800 border-4 border-cyan-600 shadow-[8px_8px_0_rgba(0,0,0,0.5)] p-4 sm:p-8 mb-6 sm:mb-8"
+                    className="w-full max-w-2xl bg-slate-800 border-4 border-orange-600 shadow-[8px_8px_0_rgba(0,0,0,0.5)] p-4 sm:p-8 mb-6 sm:mb-8"
                     onSubmit={(e) => {
                       e.preventDefault();
                       saveScore();
@@ -462,15 +390,15 @@ const App: React.FC = () => {
                         <p className="text-slate-400 text-base font-vt323 uppercase mb-2">{ui.score}</p>
                         <p className="text-2xl sm:text-4xl md:text-6xl text-amber-400 font-retro tabular-nums">{stats.score}</p>
                       </div>
-                      <div className="bg-slate-900/50 p-3 sm:p-6 border-2 border-cyan-500/50 rounded min-w-0">
+                      <div className="bg-slate-900/50 p-3 sm:p-6 border-2 border-orange-500/50 rounded min-w-0">
                         <p className="text-slate-400 text-base font-vt323 uppercase mb-2">{ui.wpm}</p>
-                        <p className="text-2xl sm:text-4xl md:text-6xl text-cyan-400 font-retro tabular-nums">{stats.wpm}</p>
+                        <p className="text-2xl sm:text-4xl md:text-6xl text-orange-400 font-retro tabular-nums">{stats.wpm}</p>
                       </div>
                     </div>
 
                     {/* Initials Input */}
                     <div className="border-t-2 border-slate-700 pt-4 sm:pt-6">
-                       <label htmlFor="initials" className="block text-cyan-300 font-vt323 text-lg uppercase mb-3 sm:mb-4 tracking-wider">{ui.enterInitials}</label>
+                       <label htmlFor="initials" className="block text-orange-300 font-vt323 text-lg uppercase mb-3 sm:mb-4 tracking-wider">{ui.enterInitials}</label>
                        <input
                          id="initials"
                          autoFocus

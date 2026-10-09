@@ -329,14 +329,14 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
 
       {/* 🎛️ Unified Arcade Bezel (Center Dashboard) */}
       <header className="flex-none relative z-40 px-2 sm:px-4 pt-[max(0.5rem,env(safe-area-inset-top))] sm:pt-6 short:pt-1">
-        <div className="glass-panel mx-auto w-full max-w-2xl lg:max-w-4xl 2xl:max-w-6xl p-2 sm:p-4 lg:px-6 short:py-1 rounded-2xl flex items-center justify-between gap-2 sm:gap-4 shadow-[0_0_30px_rgba(34,211,238,0.15)] border border-cyan-500/20">
+        <div className="glass-panel mx-auto w-full max-w-2xl lg:max-w-4xl 2xl:max-w-6xl p-2 sm:p-4 lg:px-6 short:py-1 rounded-2xl flex items-center justify-between gap-2 sm:gap-4 shadow-[0_0_30px_rgba(251,146,60,0.15)] border border-orange-500/20">
           {/* Mascot Sidecar */}
           <div className="flex items-center gap-2 sm:gap-3.5 min-w-0">
-            <div className="flex-none bg-slate-950/60 p-1 sm:p-1.5 rounded-xl border border-cyan-500/20 drop-shadow-[0_4px_8px_rgba(34,211,238,0.25)]">
+            <div className="flex-none bg-slate-950/60 p-1 sm:p-1.5 rounded-xl border border-orange-500/20 drop-shadow-[0_4px_8px_rgba(251,146,60,0.25)]">
               <PenkoMascot pose={mascotPose} size={56} className="w-10 h-10 sm:w-14 sm:h-14 lg:w-20 lg:h-20 short:w-8 short:h-8" />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="hidden sm:block short:hidden text-[9px] lg:text-xs font-retro text-cyan-400 animate-pulse uppercase tracking-wider">TYPING GAME</span>
+              <span className="hidden sm:block short:hidden text-[9px] lg:text-xs font-retro text-orange-400 animate-pulse uppercase tracking-wider">TYPING GAME</span>
               <span className="text-white font-vt323 text-base sm:text-lg lg:text-3xl font-bold truncate">{language.name}</span>
             </div>
           </div>
@@ -349,7 +349,7 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
             </div>
             <div className="text-center">
               <div className="text-[8px] sm:text-[9px] lg:text-xs font-retro text-slate-500 uppercase">{ui.wpm}</div>
-              <div className="text-xl sm:text-2xl lg:text-5xl font-vt323 font-bold text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)] tabular-nums">
+              <div className="text-xl sm:text-2xl lg:text-5xl font-vt323 font-bold text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.5)] tabular-nums">
                 {calcWpm(typedChars, startTime)}
               </div>
             </div>
@@ -371,7 +371,7 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
         {/* Retro Grid Background */}
         <div className="absolute inset-0 opacity-10 pointer-events-none"
              style={{
-               backgroundImage: 'linear-gradient(to right, #22d3ee 1px, transparent 1px), linear-gradient(to bottom, #22d3ee 1px, transparent 1px)',
+               backgroundImage: 'linear-gradient(to right, #fb923c 1px, transparent 1px), linear-gradient(to bottom, #fb923c 1px, transparent 1px)',
                backgroundSize: '60px 60px',
                transform: 'perspective(400px) rotateX(15deg) scale(1.1)'
              }}>
@@ -411,11 +411,11 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
                     transition-all duration-200
                     ${cardFlash === 'success' ? '!border-green-400 !bg-green-950/20 !shadow-[0_0_30px_rgba(34,197,94,0.3)] animate-success' :
                       cardFlash === 'error' ? '!border-red-500 !bg-red-950/30 !shadow-[0_0_30px_rgba(239,68,68,0.3)] animate-shake' :
-                      isActive ? 'bg-slate-900/60 border-cyan-500/30 shadow-[0_0_30px_rgba(34,211,238,0.15)]' : 'bg-slate-950/40 border-slate-900'}
+                      isActive ? 'bg-slate-900/60 border-orange-500/30 shadow-[0_0_30px_rgba(251,146,60,0.15)]' : 'bg-slate-950/40 border-slate-900'}
                   `}>
                     {/* Main Text */}
                     <div className={`${wordSizeClass(word.text.length)} font-bold tracking-wider text-center leading-tight break-all`} dir={language.isRTL ? "rtl" : "ltr"}>
-                        <span className="text-cyan-400 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">{word.typed}</span>
+                        <span className="text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.5)]">{word.typed}</span>
                         <span className={`inline-block border-b-2 min-w-[0.6em] ${cardFlash === 'error' ? "text-red-400 border-red-500 animate-pulse" : "text-white border-amber-400 bg-white/10 rounded px-1"}`}>
                             {word.text.slice(word.typed.length, word.typed.length + 1)}
                         </span>
@@ -439,13 +439,13 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
 
       {/* Opponent Progress Tracks in Multiplayer */}
       {multiplayers.length > 1 && (
-        <div className="flex-none bg-slate-950/60 border-t border-cyan-500/10 px-3 sm:px-6 py-2 sm:py-3 w-full flex flex-col gap-1.5 z-30 relative backdrop-blur-md max-h-[22dvh] overflow-y-auto custom-scrollbar">
-           <div className="text-[9px] font-retro text-cyan-400/80 uppercase tracking-widest text-center md:text-left">{ui.liveRacers}</div>
+        <div className="flex-none bg-slate-950/60 border-t border-orange-500/10 px-3 sm:px-6 py-2 sm:py-3 w-full flex flex-col gap-1.5 z-30 relative backdrop-blur-md max-h-[22dvh] overflow-y-auto custom-scrollbar">
+           <div className="text-[9px] font-retro text-orange-400/80 uppercase tracking-widest text-center md:text-left">{ui.liveRacers}</div>
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5 sm:gap-2">
              {multiplayers.map(p => {
                const isLocal = p.id === localId;
                return (
-                 <div key={p.id} className={`flex items-center justify-between px-2 py-1.5 rounded-xl border ${isLocal ? 'border-cyan-500/25 bg-cyan-950/20' : 'border-slate-800 bg-slate-950/40'}`}>
+                 <div key={p.id} className={`flex items-center justify-between px-2 py-1.5 rounded-xl border ${isLocal ? 'border-orange-500/25 bg-orange-950/20' : 'border-slate-800 bg-slate-950/40'}`}>
                     <div className="flex items-center gap-2 flex-none">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }} />
                       <span className="font-retro text-[9px] text-slate-200 uppercase">{p.name} {isLocal && `(${ui.you})`}</span>
@@ -454,7 +454,7 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
                        <div className="w-full max-w-[6rem] bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800">
                           <div className="h-full rounded-full transition-all duration-300" style={{ width: `${p.progress}%`, backgroundColor: p.color }} />
                        </div>
-                       <span className="font-vt323 text-cyan-300 text-xs w-14 text-right flex-none">{p.isFinished ? '🏁 ' : ''}{p.wpm} {ui.wpm}</span>
+                       <span className="font-vt323 text-orange-300 text-xs w-14 text-right flex-none">{p.isFinished ? '🏁 ' : ''}{p.wpm} {ui.wpm}</span>
                     </div>
                  </div>
                );
@@ -464,7 +464,7 @@ const GameEngine: React.FC<GameEngineProps> = ({ language, showHands, uiLanguage
       )}
 
       {/* Bottom Keyboard Area */}
-      <div className="flex-none bg-[#05070d]/80 border-t border-cyan-500/10 backdrop-blur-md relative z-30 w-full flex justify-center pt-1 sm:pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] sm:pb-4">
+      <div className="flex-none bg-[#05070d]/80 border-t border-orange-500/10 backdrop-blur-md relative z-30 w-full flex justify-center pt-1 sm:pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] sm:pb-4">
          <div className="w-full max-w-5xl lg:max-w-6xl 2xl:max-w-[90rem]">
             <VirtualKeyboard
                 mappings={language.mappings}

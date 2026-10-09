@@ -50,7 +50,7 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ mappings, activeKeyCo
               const isPressed = lastPressedCode === code || (isShiftKey && lastPressedCode?.startsWith('Shift'));
 
               let bgClass = "bg-slate-950/60 border-slate-800 shadow-sm";
-              let textClass = mapping || isShiftKey ? "text-cyan-400/80" : "text-slate-600";
+              let textClass = mapping || isShiftKey ? "text-orange-400/80" : "text-slate-600";
 
               if (isShiftActive) {
                 bgClass = "key-shift-highlight z-20";
@@ -59,7 +59,7 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ mappings, activeKeyCo
                 bgClass = "key-highlight z-20";
                 textClass = "text-white";
               } else if (isPressed) {
-                bgClass = "bg-cyan-600 border-cyan-400 transform translate-y-[2px]";
+                bgClass = "bg-orange-600 border-orange-400 transform translate-y-[2px]";
                 textClass = "text-white";
               }
 
@@ -124,7 +124,7 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ mappings, activeKeyCo
                 kb-space w-1/2 max-w-md lg:max-w-xl 2xl:max-w-2xl border border-b-2 rounded-lg bg-slate-950/60 border-slate-800
                 flex items-center justify-center text-slate-500 text-[10px] md:text-xs lg:text-sm tracking-[0.2em] font-bold transition-all duration-75
                 cursor-pointer active:scale-95 touch-manipulation select-none
-                ${lastPressedCode === 'Space' ? 'bg-cyan-700 border-cyan-500 text-white transform translate-y-[2px]' : ''}
+                ${lastPressedCode === 'Space' ? 'bg-orange-700 border-orange-500 text-white transform translate-y-[2px]' : ''}
                 ${activeKeyCode === 'Space' ? 'key-highlight text-white' : ''}
               `}
               onPointerDown={(e) => handleTap(e, 'Space')}

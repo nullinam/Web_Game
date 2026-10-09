@@ -9,7 +9,7 @@ interface PenkoMascotProps {
 
 // Color palette matching the standard Penko sprite guidelines:
 // 0=transparent, 1=black, 2=white, 3=blue-gray, 4=orange,
-// 5=red, 6=yellow/gold, 7=blue, 8=green, 9=purple, 10=pink, 11=brown, 12=cyan, 13=gray
+// 5=red, 6=yellow/gold, 7=blue, 8=green, 9=purple, 10=pink, 11=brown, 12=orange, 13=gray
 const COLORS = {
   0: 'transparent',
   1: '#1e293b',  // Slate-800 (Outline)
@@ -23,7 +23,7 @@ const COLORS = {
   9: '#c084fc',  // Purple-400
   10: '#f472b6', // Pink-400
   11: '#a16207', // Brown
-  12: '#22d3ee', // Cyan-400
+  12: '#fb923c', // Cyan-400
   13: '#94a3b8', // Gray
 };
 

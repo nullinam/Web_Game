@@ -64,7 +64,7 @@ const Manual: React.FC<ManualProps> = ({ uiLanguage, onClose }) => {
            </section>
 
            <div className="flex justify-center mt-8">
-              <div className="bg-slate-800 text-cyan-400 px-4 py-2 rounded text-[9px] sm:text-sm font-retro text-center leading-relaxed">
+              <div className="bg-slate-800 text-orange-400 px-4 py-2 rounded text-[9px] sm:text-sm font-retro text-center leading-relaxed">
                  {content.footerInfo}
               </div>
            </div>

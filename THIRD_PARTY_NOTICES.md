@@ -11,9 +11,10 @@ The following games contain code and assets from the linked public repositories.
 | Math Quiz | [martinw500/Math-Quiz-Generator](https://github.com/martinw500/Math-Quiz-Generator) | MIT; see `games/math/LICENSE` |
 | Chess | [zeyu2001/chess-ai](https://github.com/zeyu2001/chess-ai) | MIT; see `games/chess/LICENSE` |
 | Floppy Bird | [nebez/floppybird](https://github.com/nebez/floppybird) | Apache-2.0 for code; see `games/flappy/LICENSE`. README notes that game artwork belongs to its original creator. Audio and analytics were removed. |
+| Tetris | [ironman-29/tetris-game](https://github.com/ironman-29/tetris-game) | MIT; see `games/tetris/LICENSE` |
 
 | Typing | [NA-Ag/penko-typing](https://github.com/NA-Ag/penko-typing) | GPL-3.0; see `games/typing/LICENSE.md` |
 
-Tetris, Snake, Tic Tac Toe, and Air Hockey are independent implementations based on gameplay and controls from the user-supplied references. Their source repositories did not include a reuse license when inspected.
+Snake, Tic Tac Toe, and Air Hockey are independent implementations based on gameplay and controls from the user-supplied references. Their source repositories did not include a reuse license when inspected.
 
 Audio playback has been disabled for the integrated games.

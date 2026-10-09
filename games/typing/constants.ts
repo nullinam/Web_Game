@@ -1,7 +1,7 @@
 
 import { Language, LanguageConfig, InterfaceLanguage, ManualContent } from './types';
 
-// Penko SVG
+// Typing game mascot icon path.
 export const PENKO_SVG_PATH = "M6 2C4 2 3 3 3 5V19C3 21 4 22 6 22H18C20 22 21 21 21 19V5C21 3 20 2 18 2H6M8 6H10V8H8V6M14 6H16V8H14V6M11 10H13V12H11V10M6 14H18V18H6V14Z";
 
 // --- FINGER MAPPING ---
@@ -690,45 +690,19 @@ const hebrewMap: LanguageConfig = {
   ]
 };
 
-export const LANGUAGES: Record<Language, LanguageConfig> = {
+export const LANGUAGES = {
   [Language.ENGLISH]: englishMap,
-  [Language.SPANISH]: spanishMap,
-  [Language.FRENCH]: frenchMap,
-  [Language.GERMAN]: germanMap,
-  [Language.ITALIAN]: italianMap,
-  [Language.PORTUGUESE]: portugueseMap,
-  [Language.TURKISH]: turkishMap,
-  [Language.RUSSIAN]: russianMap,
-  [Language.UKRAINIAN]: ukrainianMap,
-  [Language.ARABIC]: arabicMap,
-  [Language.HEBREW]: hebrewMap,
-  [Language.KOREAN]: koreanMap,
-  [Language.JAPANESE_KANA]: japaneseMap,
-  [Language.CHINESE_BOPOMOFO]: chineseMap,
-};
+} as Record<Language, LanguageConfig>;
 
 // Sorted by commonality/region
 export const SORTED_LANGUAGES = [
-    Language.ENGLISH,
-    Language.SPANISH,
-    Language.FRENCH,
-    Language.GERMAN,
-    Language.ITALIAN,
-    Language.PORTUGUESE,
-    Language.TURKISH,
-    Language.RUSSIAN,
-    Language.UKRAINIAN,
-    Language.ARABIC,
-    Language.HEBREW,
-    Language.KOREAN,
-    Language.JAPANESE_KANA,
-    Language.CHINESE_BOPOMOFO
+    Language.ENGLISH
 ];
 
 const UI_STRINGS_BASE = {
     leaderboard: "LEADERBOARD",
     manual: "MANUAL",
-    selectLang: "SELECT KEYBOARD LAYOUT",
+    selectLang: "ENGLISH KEYBOARD",
     showHands: "SHOW HAND GUIDES",
     quit: "QUIT",
     score: "SCORE",

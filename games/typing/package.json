@@ -1,10 +1,9 @@
 {
-  "name": "penko-typing",
+  "name": "typing-game",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Retro arcade-style typing game for learning non-Latin keyboard layouts. Master Korean, Russian, Japanese, and 10+ other scripts.",
-  "author": "Penko Team",
+  "description": "Offline English typing practice with arcade-style feedback, speed tracking and accuracy metrics.",
   "license": "GPL-3.0",
   "homepage": "https://typing.penkosoftware.org/",
   "repository": {
@@ -29,7 +28,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/publish-build.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },

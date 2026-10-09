@@ -20,6 +20,11 @@ const fontCache = (urlPattern: RegExp, cacheName: string) => ({
 
 export default defineConfig({
   base: './',
+  build: {
+    rollupOptions: {
+      input: path.resolve(__dirname, 'app.html')
+    }
+  },
   server: {
     port: 3000,
     host: '0.0.0.0',
@@ -30,11 +35,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['penko-typing-icon.svg', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Typing Speed',
+        name: 'Typing Game',
         short_name: 'Typing',
-        description: 'Typing practice with keyboard layouts, live speed feedback and accuracy tracking.',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        description: 'English typing practice with live speed feedback and accuracy tracking.',
+        theme_color: '#20120b',
+        background_color: '#100d10',
         display: 'standalone',
         orientation: 'any',
         start_url: './',
