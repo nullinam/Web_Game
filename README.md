@@ -1,6 +1,6 @@
 # lowkey.exe
 
-A quiet, offline-first collection of 13 browser games. The home page uses a monochrome terminal style with ten locally saved themes that advance from one glowing button, small game previews, a random game launcher, recent games, and a command bar. `void.exe` is the white theme with drifting black stars; the Uchiha, One Piece, and Bleach palettes have their own home-page backdrops or animation, while space palettes feature moving asteroids, ships, and comets.
+A quiet, offline-first collection of 12 browser games. The home page uses a monochrome terminal style with ten locally saved themes that advance from one glowing button, small game previews, a random game launcher, recent games, an animated command bar, a site manual, and a project information card. `void.exe` is the white theme with drifting black stars; the Uchiha, One Piece, and Bleach palettes have their own home-page backdrops or animation, while space palettes feature moving asteroids, ships, and comets.
 
 Games run from the `games/` folder. The shared game toolbar provides pause, restart, focus mode, minimize, full screen, new tab, and close controls. Starfall keeps its own controls; the other games use the shared toolbar. Flappy is centered and scaled to the available window height.
 
