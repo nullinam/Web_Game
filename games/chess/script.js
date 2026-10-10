@@ -55,8 +55,12 @@ function render(){
             sq.dataset.col = c;
 
             if(board[r][c]) {
-               sq.textContent = pieces[board[r][c]];
-               if(board[r][c][0] === "w")
+               const piece = board[r][c];
+               const glyph = document.createElement("span");
+               glyph.className = `piece-glyph${piece[1] === "p" ? " pawn-glyph" : ""}`;
+               glyph.textContent = pieces[piece];
+               sq.appendChild(glyph);
+               if(piece[0] === "w")
                    sq.classList.add("white-piece");
                else
                   sq.classList.add("black-piece");

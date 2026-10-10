@@ -7,3 +7,6 @@
 @media(max-width:780px){.shell{padding:15px}.game-container{grid-template-columns:minmax(0,1fr);gap:12px}.side-panel{min-height:unset;display:grid;grid-template-columns:1fr 1fr;gap:8px}.status-card,.difficulty{margin:0}.history-head{grid-column:1/-1;margin-top:8px}#history{grid-column:1/-1;max-height:110px}.help{grid-column:1/-1;margin:4px 0}.board-label{font-size:9px}}
 @media(max-width:480px){.topbar{grid-template-columns:1fr auto;row-gap:12px}.title{grid-column:1/-1;grid-row:1;justify-self:center}.home{grid-column:1;grid-row:1}.topbar .button{grid-column:2;grid-row:1}.square{font-size:clamp(25px,10vw,44px)}.side-panel{padding:12px}}
 .shell{width:min(1480px,100%);padding:20px 28px 30px}.game-container{grid-template-columns:minmax(0,840px) minmax(240px,300px);gap:28px}#board{max-width:840px}.square{font-size:clamp(34px,6.4vw,78px)}#undoBtn{display:none!important}@media(max-width:780px){.shell{padding:12px}.game-container{grid-template-columns:minmax(0,1fr)}.square{font-size:clamp(28px,10vw,56px)}}
+.square{font-size:clamp(48px,9.3vw,86px)}.piece-glyph{display:block;line-height:1;transform:scale(1.08);transform-origin:center}.piece-glyph.pawn-glyph{transform:scale(1.48)}
+@media(max-width:780px){.square{font-size:clamp(48px,11.8vw,82px)}.piece-glyph.pawn-glyph{transform:scale(1.42)}}
+@media(max-width:480px){.square{font-size:clamp(40px,11vw,62px)}}

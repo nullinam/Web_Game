@@ -9,13 +9,13 @@ body {
 }
 
 body {
-  padding-top: 48px !important;
+  padding-top: 0 !important;
 }
 
 .container {
   position: absolute;
   left: 50%;
-  top: calc(50% + 24px);
+  top: 50%;
   width: 500px;
   margin: 0 !important;
   transform: translate(-50%, -50%) scale(var(--board-scale, 1));
