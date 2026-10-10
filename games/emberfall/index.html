@@ -14,13 +14,10 @@
 <!-- v4.23: the game previews properly wherever a pilot shares it -->
 <meta property="og:title" content="Starfall — Orbital Defense">
 <meta property="og:description" content="A free, zero-install browser shoot-'em-up. Pilot through shifting enemy waves. Collect alloy, upgrade your ship, and protect the last orbital yard. Click Launch — that's the whole tutorial.">
-<meta property="og:image" content="https://fahadibrahim93.github.io/emberfall/docs/press/hero.png">
-<meta property="og:url" content="https://fahadibrahim93.github.io/emberfall/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Starfall — Orbital Defense">
 <meta name="twitter:description" content="A free, zero-install browser shoot-'em-up. The game's own CI plays it and proves it. 30 seconds to combat.">
-<meta name="twitter:image" content="https://fahadibrahim93.github.io/emberfall/docs/press/hero.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <!-- P0-7: brand fonts are SELF-HOSTED (fonts/, OFL licensed) so file:// and
@@ -570,7 +567,7 @@ body.needrotate #rotate{display:grid}
   #grain{animation:none}
 }
 </style>
-<style>#btnNotes{display:none!important}</style></head>
+<style>#btnNotes{display:none!important}</style><style id="hide-remote-deck-settings">#s-set .setgrid:has(#deckUrl),#s-set .setgrid:has(#lLan){display:none!important}</style></head>
 <body>
 <div id="stage"><canvas id="game" role="img" aria-label="Live game view — deep-range intercept. Keyboard: WASD or arrows fly, Space fires, Shift dashes, E pulses, P pauses."></canvas></div>
 <div id="vig"></div><div id="grain"></div><div id="scan"></div>

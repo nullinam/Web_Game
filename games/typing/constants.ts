@@ -714,7 +714,7 @@ const UI_STRINGS_BASE = {
     backToMenu: "BACK TO MENU",
     manualTitle: "INSTRUCTION MANUAL",
     manualClose: "CLOSE MANUAL",
-    subtitle: "MASTER FOREIGN KEYBOARDS",
+    subtitle: "ENGLISH TYPING PRACTICE",
     offlineCapable: "OFFLINE CAPABLE",
     difficultyBeginner: "BEGINNER",
     difficultyIntermediate: "INTERMEDIATE",

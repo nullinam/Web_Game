@@ -27,3 +27,5 @@ body {
     width: 280px;
   }
 }
+
+.container{--board-scale:min(1.2,calc((100vw - 40px)/500),calc((100dvh - 100px)/590))!important}

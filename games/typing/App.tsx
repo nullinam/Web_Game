@@ -3,7 +3,6 @@ import { GameState, Language, LeaderboardEntry, InterfaceLanguage, LessonMode } 
 import { LANGUAGES, SORTED_LANGUAGES, UI_STRINGS } from './constants';
 import GameEngine from './components/GameEngine';
 import Leaderboard from './components/Leaderboard';
-import Manual from './components/Manual';
 import PenkoMascot from './components/PenkoMascot';
 import { multiplayerService, MatchSettings } from './services/multiplayerService';
 
@@ -96,7 +95,6 @@ const App: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>(GameState.MENU);
   const [selectedLang, setSelectedLang] = useState<Language>(initialSettings.selectedLang);
   const [uiLang, setUiLang] = useState<InterfaceLanguage>(initialSettings.uiLang);
-  const [showManual, setShowManual] = useState(false);
 
   const [stats, setStats] = useState({ score: 0, wpm: 0 });
   const [showHands, setShowHands] = useState(initialSettings.showHands);
@@ -167,7 +165,6 @@ const App: React.FC = () => {
     setPlayerName('');
     setPendingRoom(undefined);
     setShowMultiplayer(false);
-    setShowManual(false);
     setGameState(GameState.PLAYING);
   };
 
@@ -181,10 +178,6 @@ const App: React.FC = () => {
   return (
     <div className="h-full bg-slate-900 text-orange-400 flex flex-col relative z-10 overflow-hidden">
 
-      {/* Manual Overlay (handled independently) */}
-      {showManual && (
-        <Manual uiLanguage={uiLang} onClose={() => setShowManual(false)} />
-      )}
 
       {/* Main Content Switch */}
       {gameState === GameState.PLAYING ? (
@@ -290,13 +283,7 @@ const App: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="text-sm lg:text-lg text-slate-500 text-center flex flex-wrap justify-center gap-x-4 gap-y-1 items-center pb-2">
-                     <span>{ui.offlineCapable}</span>
-                     <span aria-hidden="true">•</span>
-                     <button onClick={() => setShowManual(true)} className="underline hover:text-orange-400 font-retro text-[9px] tracking-wider uppercase transition">
-                        {ui.manual}
-                     </button>
-                  </div>
+                  <div className="text-sm lg:text-lg text-slate-500 text-center pb-2">{ui.offlineCapable}</div>
                 </div>
               )}
 
