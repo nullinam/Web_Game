@@ -90,8 +90,12 @@ function render(){
 function handleClick(e){
     if(pendingPromotion) return;
 
-    const r = +e.target.dataset.row;
-    const c = +e.target.dataset.col;
+    // Pieces are rendered in a child span, so e.target may be the glyph rather
+    // than the square. The square carrying the click handler is currentTarget.
+    const square = e.currentTarget;
+    if(!square || square.dataset.row === undefined || square.dataset.col === undefined) return;
+    const r = Number(square.dataset.row);
+    const c = Number(square.dataset.col);
 
     if(selected){
         if(isValidMove(selected[0],selected[1],r,c)){
