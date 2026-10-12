@@ -13,18 +13,19 @@ body {
 }
 
 .container {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   width: 500px;
-  margin: 0 !important;
-  transform: translate(-50%, -50%) scale(var(--board-scale, 1));
+  margin: 0 0 0 -250px !important;
+  transform: translateY(-50%) scale(var(--board-scale, 1));
   transform-origin: center;
 }
 
 @media (max-width: 520px) {
   .container {
     width: 280px;
+    margin-left: -140px !important;
   }
 }
 

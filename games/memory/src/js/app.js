@@ -34,14 +34,6 @@
   const restartBottom = document.getElementById('restart-bottom');
   const hintBtn = document.getElementById('hint');
   
-  // ✅ --- START OF PAUSE/RESUME FIX ---
-  // Get the correct buttons from the side panel
-  const pauseBtn = document.getElementById('pause-btn');
-  const resumeBtn = document.getElementById('resume-btn');
-  // ❌ Delete the old reference
-  // const pauseResumeBtn = document.getElementById('pauseResume');
-  // ✅ --- END OF PAUSE/RESUME FIX ---
-
   const modal = document.getElementById('modalOverlay');
   const playAgainBtn = document.getElementById('playAgain');
   const closeModalBtn = document.getElementById('closeModal');
@@ -69,11 +61,9 @@
   let timeLeft = 0;
   let timeTotal = 60;
   let started = false;
-  let paused = false; // ✅ This is the flag we will use
   let pairCount = Math.floor(difficulties[selectedDifficulty].tiles / 2);
   let totalTiles = pairCount * 2;
   const confettiCanvas = document.getElementById('confettiCanvas');
-  const muteBtn = document.getElementById('mute');
   const bestScoreKey = (diff) => `vt_best_${diff}`;
   const lbKey = (diff) => `vt_lb_${diff}`;
   const hsKey = 'vt_highscores_v1';
@@ -82,8 +72,6 @@
   const shareBtn = document.getElementById('shareLb');
   const clearBtn = document.getElementById('clearLb');
   const playDemoBtn = document.getElementById('playDemo');
-  let audioCtx = null;
-  let isMuted = true;
   let moveLimitEnabled = false;
   let moveLimitMax = 0;
   let remainingMoves = 0;
@@ -184,7 +172,6 @@
   function startTimer() {
     if (timerId) return;
     timerId = setInterval(() => {
-      if (paused) return; // ⏸️ ✅ This line will now work correctly
       if (timeLeft <= 0) { stopTimer(); onTimeUp(); return; }
       timeLeft--;
       timeEl.textContent = formatTime(Math.floor(timeLeft / 60), timeLeft % 60);
@@ -204,26 +191,6 @@
     timeLeft = timeTotal;
     timeEl.textContent = formatTime(Math.floor(timeLeft / 60), timeLeft % 60);
     timerBarFill.style.width = '100%';
-  }
-
-  // audio helpers (small tones using WebAudio)
-  function ensureAudio() {
-    if (isMuted) return;
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  function playTone(freq, dur = 0.08) {
-    try {
-      if (isMuted) return;
-      ensureAudio();
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.type = 'sine';
-      o.frequency.value = freq;
-      g.gain.value = 0.0025 * (dur * 10);
-      o.connect(g); g.connect(audioCtx.destination);
-      o.start();
-      setTimeout(() => { o.stop(); o.disconnect(); g.disconnect(); }, dur * 1000);
-    } catch (e) { /* ignore audio errors */ }
   }
 
   // deck
@@ -320,7 +287,6 @@
     starCount = 3;
     updateUI();
     started = false;
-    paused = false; // ✅ Reset pause state
     // enable hint based on difficulty
     hintBtn.style.display = difficulties[selectedDifficulty].hideHint ? 'none' : '';
     // ensure cards are interactive
@@ -330,12 +296,7 @@
       setMoveLimitForDifficulty(selectedDifficulty);
     }
     
-    // ✅ --- START OF PAUSE/RESUME FIX ---
-    // Reset button states
-    if (pauseBtn) pauseBtn.disabled = true; // Can't pause until game starts
-    if (resumeBtn) resumeBtn.disabled = true;
     deckEl.style.opacity = '1'; // Ensure deck is visible
-    // ✅ --- END OF PAUSE/RESUME FIX ---
   }
 
   // card interactions
@@ -378,7 +339,6 @@
   }
 
   function onCardClick(card) {
-    if (paused) return;
     // Prevent interaction while resolving a pair
     if (locked) return;
 
@@ -389,12 +349,10 @@
     if (!started) { 
       started = true; 
       startTimer(); 
-      if (pauseBtn) pauseBtn.disabled = false; // ✅ Enable pause button
     }
 
     // Flip this card
     card.classList.add('is-flip');
-    playTone(600, 0.06);
     opened.push(card);
 
     // Only act when 2 cards are open
@@ -429,7 +387,6 @@
         createMatchParticles(b);
         matched += 2;
         opened = [];
-        playTone(980, 0.12);
         updateUI();
         locked = false;
         checkWin();
@@ -444,7 +401,6 @@
         if (!b.classList.contains('matched')) b.classList.remove('is-flip');
         opened = [];
         locked = false;
-        playTone(220, 0.14);
       }, 700);
     }
   }
@@ -453,9 +409,6 @@
   function checkWin() {
     if (matched === totalTiles) {
       stopTimer();
-      // ✅ Disable buttons on win
-      if (pauseBtn) pauseBtn.disabled = true;
-      if (resumeBtn) resumeBtn.disabled = true;
       showWinModal();
     }
   }
@@ -477,8 +430,7 @@
     modalStats.appendChild(statCard('Stars', `${starCount} / 3`));
     modal.style.display = 'flex';
     modal.setAttribute('aria-hidden', 'false');
-    // play win tone and confetti
-    playTone(1200, 0.18);
+    // Confetti marks a completed board without adding audio.
     fireConfetti();
     // persist best score (legacy single best display)
     try {
@@ -516,10 +468,6 @@
     // disable further card clicks
     Array.from(deckEl.querySelectorAll('.card')).forEach(c => c.setAttribute('aria-disabled', 'true'));
     
-    // ✅ Disable buttons on time up
-    if (pauseBtn) pauseBtn.disabled = true;
-    if (resumeBtn) resumeBtn.disabled = true;
-
     showLoseModal();
   }
 
@@ -533,7 +481,7 @@
     if (!key) return;
     const [c1, c2] = grouped[key];
     c1.classList.add('is-flip'); c2.classList.add('is-flip');
-    setTimeout(() => { c1.classList.remove('is-flip'); c2.classList.remove('is-flip'); playTone(440, 0.08); }, 900);
+    setTimeout(() => { c1.classList.remove('is-flip'); c2.classList.remove('is-flip'); }, 900);
   });
 
   // restart & modal handlers
@@ -546,15 +494,6 @@
   });
   closeModalBtn.addEventListener('click', () => { modal.style.display = 'none'; modal.setAttribute('aria-hidden', 'true'); });
 
-  // mute toggle
-  muteBtn.addEventListener('click', () => {
-    isMuted = !isMuted;
-    muteBtn.setAttribute('aria-pressed', String(isMuted));
-    muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
-    if (isMuted && audioCtx && audioCtx.state !== 'closed') {
-      try { audioCtx.suspend(); } catch (e) { }
-    } else if (audioCtx) { try { audioCtx.resume(); } catch (e) { } }
-  });
 
   // confetti implementation (small)
   function fireConfetti() {
@@ -683,44 +622,6 @@
   if (playDemoBtn) playDemoBtn.addEventListener('click', () => { playDemo(); });
      
   
-  // ✅ --- START OF PAUSE/RESUME FIX ---
-  // Delete the old listener block for 'pauseResumeBtn'
-  
-  // Add listener for the new PAUSE button
-  if (pauseBtn) {
-    pauseBtn.addEventListener('click', () => {
-      if (!started || paused) return; // Ignore if not started or already paused
-      
-      paused = true;
-      
-      // Update UI
-      pauseBtn.disabled = true;
-      resumeBtn.disabled = false;
-      deckEl.style.opacity = '0.5';
-      Array.from(deckEl.querySelectorAll('.card')).forEach(c => {
-        c.setAttribute('aria-disabled', 'true');
-      });
-    });
-  }
-
-  // Add listener for the new RESUME button
-  if (resumeBtn) {
-    resumeBtn.addEventListener('click', () => {
-      if (!started || !paused) return; // Ignore if not started or not paused
-      
-      paused = false;
-
-      // Update UI
-      pauseBtn.disabled = false;
-      resumeBtn.disabled = true;
-      deckEl.style.opacity = '1';
-      Array.from(deckEl.querySelectorAll('.card:not(.matched)')).forEach(c => {
-        c.removeAttribute('aria-disabled');
-      });
-    });
-  }
-  // ✅ --- END OF PAUSE/RESUME FIX ---
-
 
   // init
   resetGame();
