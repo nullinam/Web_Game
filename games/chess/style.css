@@ -10,3 +10,24 @@
 .square{font-size:clamp(48px,9.3vw,86px)}.piece-glyph{display:block;line-height:1;transform:scale(1.08);transform-origin:center}.piece-glyph.pawn-glyph{transform:scale(1.48)}
 @media(max-width:780px){.square{font-size:clamp(48px,11.8vw,82px)}.piece-glyph.pawn-glyph{transform:scale(1.42)}}
 @media(max-width:480px){.square{font-size:clamp(40px,11vw,62px)}}
+# Chess board rows and columns are deliberately identical; never let piece glyphs size rows.
+@media (min-width: 781px) {
+  .game-container { grid-template-columns: minmax(0, min(840px, calc(100vh - 180px))) minmax(240px, 300px); gap: 28px; }
+}
+#board {
+  width: min(100%, 840px);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-content: stretch;
+  justify-content: stretch;
+}
+.square { width: 100%; height: 100%; min-width: 0; min-height: 0; aspect-ratio: 1 / 1; overflow: hidden; }
+.piece-glyph { max-width: 100%; max-height: 100%; font-size: .9em; }
+.piece-glyph.pawn-glyph { transform: scale(1.12); }
+@media (max-width: 780px) {
+  .game-container { grid-template-columns: minmax(0, 1fr); }
+  #board { width: min(100%, calc(100vw - 40px)); }
+}

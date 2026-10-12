@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pong — bored. rn !!</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="shell">
+    <header><a href="../../">‹ arcade</a><span>ARCADE / 01</span><button id="restart" type="button">Restart</button></header>
+    <section class="intro"><p>ONE PADDLE. ONE RIVAL.</p><h1>Pong</h1><p>Move with ↑ ↓ or W / S. First to 7 wins.</p></section>
+    <section class="game" aria-label="Pong game">
+      <div class="hud"><span>YOU <b id="playerScore">0</b></span><span id="message" aria-live="polite">Press Space to start</span><span>CPU <b id="cpuScore">0</b></span></div>
+      <canvas id="court" width="900" height="520" aria-label="Pong court. Use the arrow keys or W and S to move."></canvas>
+    </section>
+    <footer><span>Keyboard: ↑ ↓ or W / S</span><span>Move mouse over court to steer</span></footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
