@@ -1,4 +1,5 @@
-/* Keep the original 2048 board proportions while scaling the complete game to fit. */
+/* Center the entire game like Tetris, and scale it as one unit when the
+   available viewport is too small. The original board stays square. */
 html,
 body {
   width: 100%;
@@ -9,24 +10,30 @@ body {
 }
 
 body {
-  padding-top: 0 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
 }
 
 .container {
-  position: fixed;
-  left: 50%;
-  top: 50%;
+  position: relative;
+  inset: auto;
   width: 500px;
-  margin: 0 0 0 -250px !important;
-  transform: translateY(-50%) scale(var(--board-scale, 1));
+  margin: 0 !important;
+  transform: scale(var(--board-scale, 1));
   transform-origin: center;
+}
+
+/* The full desktop layout (heading, controls, board, and instructions) is
+   about 780px tall; reserve a little breathing room around it. */
+.container {
+  --board-scale: min(1, calc((100vw - 32px) / 500), calc((100dvh - 32px) / 780)) !important;
 }
 
 @media (max-width: 520px) {
   .container {
     width: 280px;
-    margin-left: -140px !important;
+    --board-scale: min(1, calc((100vw - 24px) / 280), calc((100dvh - 24px) / 500)) !important;
   }
 }
-
-.container{--board-scale:min(1.2,calc((100vw - 40px)/500),calc((100dvh - 100px)/590))!important}
