@@ -31,3 +31,9 @@
   .game-container { grid-template-columns: minmax(0, 1fr); }
   #board { width: min(100%, calc(100vw - 40px)); }
 }
+@media (min-width: 781px) and (max-width: 1200px) {
+  .game-container {
+    grid-template-columns: minmax(0, min(840px, calc(100vw - 340px), calc(100vh - 180px))) minmax(220px, 260px);
+    gap: 20px;
+  }
+}
