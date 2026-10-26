@@ -1,8 +1,8 @@
 # lowkey.exe
 
-A quiet, offline-first collection of 12 browser games. The home page uses a monochrome terminal style with ten locally saved themes that advance from one glowing button, small game previews, a random game launcher, recent games, an animated command bar, a site manual, and a project information card. `void.exe` is the white theme with drifting black stars; the Uchiha, One Piece, and Bleach palettes have their own home-page backdrops or animation, while space palettes feature moving asteroids, ships, and comets.
+A browser arcade with 15 games, a searchable and filterable library, featured picks, game guides, and original remix prompts. The home page has six locally saved themes: Dark, Void, Neon, Asteroid, Sakura, and Copper. Game details include controls, availability, and a copyable starting brief. Atmosphere effects stay on the home page and respect reduced-motion preferences.
 
-Games run from the `games/` folder. The shared game toolbar provides pause, restart, focus mode, minimize, full screen, new tab, and close controls. Starfall keeps its own controls; the other games use the shared toolbar. Flappy is centered and scaled to the available window height.
+The local games are served from `games/`; Balloon Pop links to its hosted version. Selecting Play opens the game in the arcade player, with an option to open it in a separate tab. The original game controls remain inside each game. No audio is added by the arcade interface.
 
 ## Run locally
 
